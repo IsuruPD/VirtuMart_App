@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_register_graph"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.unitytests.virtumarttest.fragments.logregpckg.introFragment"
+        android:label="introFragment"
+        tools:layout="@layout/fragment_intro">
+        <action
+            android:id="@+id/action_introFragment_to_accOptionsFragment"
+            app:destination="@id/accOptionsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.unitytests.virtumarttest.fragments.logregpckg.loginFragment"
+        android:label="loginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment2"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.unitytests.virtumarttest.fragments.logregpckg.RegisterFragment"
+        android:label="registerFragment"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accOptionsFragment"
+        android:name="com.unitytests.virtumarttest.fragments.logregpckg.accOptionsFragment"
+        android:label="accOptionsFragment"
+        tools:layout="@layout/fragment_acc_options">
+        <action
+            android:id="@+id/action_accOptionsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_accOptionsFragment_to_registerFragment2"
+            app:destination="@id/registerFragment" />
+    </fragment>
+</navigation>

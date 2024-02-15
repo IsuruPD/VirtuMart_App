@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">VirtuMartTest</string>
+    <string name="introTitle">AR Integrated \nDomestic Appliance Shopping</string>
+    <string name="introSubTitle">Where you experience your products \nright at home\!</string>
+    <string name="accopTitleTxt">Your AR Marketplace</string>
+    <string name="accopSubTitleTxt">Where you experience your products \nright at home\!</string>
+    <string name="loginTxt">Let\'s Login</string>
+    <string name="loginRegNowTxt">Don\'t have an account\? Register Here</string>
+    <string name="forgotPassTxt">Forgot password</string>
+    <string name="registerTxt">Signup Here\,</string>
+    <string name="registerLoginNowTxt">Already have an account\? Login Now</string>
+</resources>

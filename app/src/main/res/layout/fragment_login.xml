@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/blury_background1"
+        android:scaleType="centerCrop"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/logo_nobg"
+            app:layout_constraintBottom_toBottomOf="@+id/reglog_guide_ht2"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="@id/reglog_guide_vl"
+            app:layout_constraintTop_toTopOf="@+id/reglog_guide_ht" />
+
+        <TextView
+            android:id="@+id/accopTitle"
+            style="@style/h4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/loginTxt"
+            android:textSize="35sp"
+            app:layout_constraintStart_toStartOf="@+id/reglog_guide_vl"
+            app:layout_constraintTop_toBottomOf="@+id/reglog_guide_ht2" />
+
+        <TextView
+            android:id="@+id/accopSubTitle"
+            style="@style/h2"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/loginRegNowTxt"
+            app:layout_constraintStart_toStartOf="@+id/accopTitle"
+            app:layout_constraintTop_toBottomOf="@+id/accopTitle"
+            />
+
+        <EditText
+            android:id="@+id/loginEmailEdt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/editTextHeight"
+            app:layout_constraintStart_toStartOf="@id/reglog_guide_vl"
+            app:layout_constraintEnd_toEndOf="@id/reglog_guide_vr"
+            app:layout_constraintTop_toBottomOf="@id/reglog_guide_ht3"
+            style="@style/editText"
+            android:inputType="textEmailAddress"
+            android:hint="Enter your email"
+            android:textSize="15sp"
+            android:textAlignment="textStart"
+            android:paddingStart="10dp"
+            />
+
+        <EditText
+            android:id="@+id/loginPasswordEdt"
+            android:layout_width="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="@dimen/editTextHeight"
+            app:layout_constraintStart_toStartOf="@id/loginEmailEdt"
+            app:layout_constraintEnd_toEndOf="@id/reglog_guide_vr"
+            app:layout_constraintTop_toBottomOf="@id/loginEmailEdt"
+            style="@style/editText"
+            android:textSize="15sp"
+            android:inputType="textPassword"
+            android:hint="Enter your password"
+            android:textAlignment="textStart"
+            android:paddingStart="10dp"
+            />
+
+        <TextView
+            android:id="@+id/loginForgotPaswordTxt"
+            style="@style/h2"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/forgotPassTxt"
+            app:layout_constraintStart_toStartOf="@+id/loginPasswordEdt"
+            app:layout_constraintTop_toBottomOf="@+id/loginPasswordEdt"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            />
+        <ImageView
+            android:id="@+id/loginFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/facebook_login"
+            app:layout_constraintStart_toStartOf="@id/reglog_guide_vl"
+            app:layout_constraintTop_toBottomOf="@id/reglog_guide_hb2"
+            />
+
+        <TextView
+            android:id="@+id/loginFacebookTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Facebook"
+            android:textColor="#017EFB"
+            app:layout_constraintStart_toStartOf="@+id/loginFacebook"
+            app:layout_constraintEnd_toEndOf="@+id/loginFacebook"
+            app:layout_constraintTop_toTopOf="@+id/loginFacebook"
+            app:layout_constraintBottom_toBottomOf="@+id/loginFacebook"/>
+
+        <ImageView
+            android:id="@+id/loginGoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/google_login"
+            app:layout_constraintEnd_toEndOf="@id/reglog_guide_vr"
+            app:layout_constraintTop_toBottomOf="@id/reglog_guide_hb2"
+            />
+        <TextView
+            android:id="@+id/loginGoogleTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google"
+            android:textColor="#EA4335"
+            app:layout_constraintStart_toStartOf="@+id/loginGoogle"
+            app:layout_constraintEnd_toEndOf="@+id/loginGoogle"
+            app:layout_constraintTop_toTopOf="@+id/loginGoogle"
+            app:layout_constraintBottom_toBottomOf="@+id/loginGoogle"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogin"
+            style="@style/blueButtonStyle"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Login"
+            app:layout_constraintBottom_toTopOf="@id/reglog_guide_hb"
+            app:layout_constraintEnd_toStartOf="@+id/reglog_guide_vr"
+            app:layout_constraintStart_toEndOf="@+id/reglog_guide_vl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_ht"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_ht2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_ht3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_hb2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_hb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_vl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/reglog_guide_vr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
