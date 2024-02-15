@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "624151482397",
+    "project_id": "virtumart-d6965",
+    "storage_bucket": "virtumart-d6965.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624151482397:android:d883683dd2a6e503a936f4",
+        "android_client_info": {
+          "package_name": "com.unitytests.virtumarttest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvubBYLWCzsP8wzbBrCBEW8hOo6g8IfC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
