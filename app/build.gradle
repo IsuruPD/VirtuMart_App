@@ -189,13 +189,13 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
     namespace 'com.unitytests.virtumarttest'
 
     defaultConfig {
         applicationId 'com.unitytests.virtumarttest'
         minSdk 21
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 

@@ -10,10 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.unitytests.virtumarttest.data.User
 import com.unitytests.virtumarttest.databinding.FragmentRegisterBinding
+import com.unitytests.virtumarttest.util.RegisterValidation
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.registerVM
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class RegisterFragment: Fragment() {
@@ -59,6 +62,26 @@ class RegisterFragment: Fragment() {
                         binding.btnRegister.revertAnimation()
                     }
                     else -> Unit
+                }
+            }
+        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.validation.collect {validation->
+                if(validation.email is RegisterValidation.Failed){
+                    withContext(Dispatchers.Main) {
+                        binding.regEmailEdt.apply{
+                            requestFocus()
+                            error=validation.email.message
+                        }
+                    }
+                }
+                if(validation.password is RegisterValidation.Failed){
+                    withContext(Dispatchers.Main) {
+                        binding.regPasswordEdt.apply{
+                            requestFocus()
+                            error=validation.password.message
+                        }
+                    }
                 }
             }
         }

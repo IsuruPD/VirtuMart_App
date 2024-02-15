@@ -82,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/editTextHeight"
             android:hint="Enter your email"
-            android:inputType="textPassword"
+            android:inputType="textEmailAddress"
             android:paddingStart="10dp"
             android:textAlignment="textStart"
             android:textSize="15sp"
