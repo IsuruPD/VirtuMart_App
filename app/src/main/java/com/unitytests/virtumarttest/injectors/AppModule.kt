@@ -1,4 +1,4 @@
-package com.unitytests.virtumarttest.di
+package com.unitytests.virtumarttest.injectors
 
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
