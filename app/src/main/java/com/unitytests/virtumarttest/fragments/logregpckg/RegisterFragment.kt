@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.data.User
 import com.unitytests.virtumarttest.databinding.FragmentRegisterBinding
 import com.unitytests.virtumarttest.util.RegisterValidation
@@ -35,6 +37,10 @@ class RegisterFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.registerSubTitle.setOnClickListener{
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        }
 
         binding.apply {
             btnRegister.setOnClickListener {
