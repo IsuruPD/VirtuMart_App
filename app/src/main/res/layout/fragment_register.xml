@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="@+id/reg_guide_ht" />
 
         <TextView
-            android:id="@+id/accopTitle"
+            android:id="@+id/registerTitle"
             style="@style/h4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,15 +37,15 @@
             app:layout_constraintTop_toBottomOf="@+id/reg_guide_ht2" />
 
         <TextView
-            android:id="@+id/accopSubTitle"
+            android:id="@+id/registerSubTitle"
             style="@style/h2"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="@string/registerLoginNowTxt"
-            app:layout_constraintStart_toStartOf="@+id/accopTitle"
-            app:layout_constraintTop_toBottomOf="@+id/accopTitle"
+            app:layout_constraintStart_toStartOf="@+id/registerTitle"
+            app:layout_constraintTop_toBottomOf="@+id/registerTitle"
             />
 
         <EditText
@@ -171,7 +171,8 @@
             android:text="Register"
             app:layout_constraintBottom_toTopOf="@id/reg_guide_hb"
             app:layout_constraintEnd_toStartOf="@+id/reg_guide_vr"
-            app:layout_constraintStart_toEndOf="@+id/reg_guide_vl" />
+            app:layout_constraintStart_toEndOf="@+id/reg_guide_vl"
+            app:spinning_bar_color="@color/white"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/reg_guide_ht"
