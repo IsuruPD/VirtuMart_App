@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.activities.ShoppingActivity
 import com.unitytests.virtumarttest.databinding.FragmentLoginBinding
 import com.unitytests.virtumarttest.databinding.FragmentRegisterBinding
+import com.unitytests.virtumarttest.dialogBoxes.setupBottomSheetDialog
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.LoginVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +47,29 @@ class loginFragment: Fragment(R.layout.fragment_login) {
                 val password=loginPasswordEdt.text.toString()
 
                 viewModel.login(email, password)
+            }
+        }
+
+        binding.loginForgotPaswordTxt.setOnClickListener{
+            setupBottomSheetDialog { email->
+                viewModel.resetPassword(email)
+
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            viewModel.resetPassword.collect{
+                when(it){
+                    is Resource.Loading ->{
+
+                    }
+                    is Resource.Success->{
+                        Snackbar.make(requireView(), "Check your email for the reset link", Snackbar.LENGTH_LONG).show()
+                    }
+                    is Resource.Error->{
+                        Snackbar.make(requireView(), "Error! ${it.message}", Snackbar.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
             }
         }
 
