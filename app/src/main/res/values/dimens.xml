@@ -3,4 +3,5 @@
     <dimen name="addressforShopping">115dp</dimen>
     <dimen name="buttonCorners">5dp</dimen>
     <dimen name="editTextHeight">60dp</dimen>
+    <dimen name="transitionduration">250</dimen>
 </resources>
