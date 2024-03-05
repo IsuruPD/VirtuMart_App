@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_intro">
         <action
             android:id="@+id/action_introFragment_to_accOptionsFragment"
-            app:destination="@id/accOptionsFragment" />
+            app:destination="@id/accOptionsFragment"
+            app:enterAnim="@anim/from_bottom_to_top_in_animation"
+            app:exitAnim="@anim/from_bottom_to_top_out_animation"
+            app:popEnterAnim="@anim/from_top_to_bottom_in_animation"
+            app:popExitAnim="@anim/from_top_to_bottom_out_animation" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -22,6 +26,10 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment2"
             app:destination="@id/registerFragment"
+            app:enterAnim="@anim/from_bottom_to_top_in_animation"
+            app:exitAnim="@anim/from_bottom_to_top_out_animation"
+            app:popEnterAnim="@anim/from_left_to_right_in_animation"
+            app:popExitAnim="@anim/from_left_to_right_out_animation"
             app:popUpTo="@id/accOptionsFragment" />
     </fragment>
     <fragment
@@ -32,6 +40,10 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@anim/from_bottom_to_top_in_animation"
+            app:exitAnim="@anim/from_bottom_to_top_out_animation"
+            app:popEnterAnim="@anim/from_left_to_right_in_animation"
+            app:popExitAnim="@anim/from_left_to_right_out_animation"
             app:popUpTo="@id/accOptionsFragment" />
     </fragment>
     <fragment
@@ -41,9 +53,17 @@
         tools:layout="@layout/fragment_acc_options">
         <action
             android:id="@+id/action_accOptionsFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/from_right_to_left_in_animation"
+            app:exitAnim="@anim/from_right_to_left_out_animation"
+            app:popEnterAnim="@anim/from_left_to_right_in_animation"
+            app:popExitAnim="@anim/from_left_to_right_out_animation" />
         <action
             android:id="@+id/action_accOptionsFragment_to_registerFragment2"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/from_right_to_left_in_animation"
+            app:exitAnim="@anim/from_right_to_left_out_animation"
+            app:popEnterAnim="@anim/from_left_to_right_in_animation"
+            app:popExitAnim="@anim/from_left_to_right_out_animation" />
     </fragment>
 </navigation>
