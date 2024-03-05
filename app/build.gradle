@@ -235,15 +235,15 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    //intuit
+    //Intuit
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
 
-    //loading button
+    //Loading button
     implementation 'br.com.simplepass:loading-button-android:2.2.0'
 
-    //firebase
+    //Firebase
     implementation 'com.google.firebase:firebase-firestore:24.0.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.1'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
@@ -253,33 +253,33 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
 
-    //google play services
+    //Google Play Services
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
-    //smooth bar
+    //Smooth Bar
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.9'
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
 
-    //circular image
+    //Circular Image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    //Navigation and safe args
-    def nav_version = "2.4.1"
+    //Navigation and Safe Args
+    def nav_version = "2.5.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    //viewpager2 indicatior
+    //Viewpager2 Indicator
     implementation 'io.github.vejei.viewpagerindicator:viewpagerindicator:1.0.0-alpha.1'
 
-    //lifecycle
+    //Lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.0"
 
-    //Firebase coroutines
+    //Firebase Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
-    //stepView
+    //StepView
     implementation 'com.shuhart.stepview:stepview:1.5.1'
 
     //Android Ktx
