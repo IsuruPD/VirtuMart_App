@@ -3,6 +3,9 @@
     <style name="Base.Theme.VirtuMartTest" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
+
     </style>
 
     <style name="Theme.VirtuMartTest" parent="Base.Theme.VirtuMartTest" />
