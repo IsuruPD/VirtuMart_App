@@ -3,7 +3,7 @@ package com.unitytests.virtumarttest.adapters
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class ViewPagerFragmentAdapter(
+class HomeViewPagerFragmentAdapter(
     fragment: Fragment,
     private val fragments: List<Fragment>
 ) : FragmentStateAdapter(fragment) {

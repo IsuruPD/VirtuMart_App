@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.R
-import com.unitytests.virtumarttest.adapters.ViewPagerFragmentAdapter
+import com.unitytests.virtumarttest.adapters.HomeViewPagerFragmentAdapter
 import com.unitytests.virtumarttest.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -34,7 +34,8 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val db = FirebaseFirestore.getInstance()
         val categoriesRef = db.collection("Categories")
 
-        categoriesRef.get()
+        categoriesRef.orderBy("rank")//Created the field "rank" in documents to order the tabs
+            .get()
             .addOnSuccessListener { result ->
                 if (result != null) {
                     val categoryList = mutableListOf<String>()
@@ -51,7 +52,11 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 }
             }
             .addOnFailureListener { exception ->
+                Log.e("FirestoreError", "Error fetching categories: $exception")
+                // Mandatory
                 // Handle errors
+                // What to be done if the categories were not found
+                // Logout or kill the app
             }
     }
 
@@ -61,7 +66,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         val categoriesFragments = categoryList.map { CategoryFragment.newInstance(it) }
 
-        val adapter = ViewPagerFragmentAdapter(this, categoriesFragments)
+        val adapter = HomeViewPagerFragmentAdapter(this, categoriesFragments)
         viewPager.adapter = adapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
