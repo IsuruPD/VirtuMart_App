@@ -11,6 +11,7 @@ import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.HomeViewPagerFragmentAdapter
 import com.unitytests.virtumarttest.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.unitytests.virtumarttest.fragments.categories.MainCategoryFragment
 
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
@@ -64,7 +65,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val tabLayout = binding.tabLayoutHome
         val viewPager = binding.viewPagerHome
 
-        val categoriesFragments = categoryList.map { CategoryFragment.newInstance(it) }
+        val categoriesFragments = categoryList.map { MainCategoryFragment.newInstance(it) }
 
         val adapter = HomeViewPagerFragmentAdapter(this, categoriesFragments)
         viewPager.adapter = adapter

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/card_background"
+    app:elevation="0dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgProductGalleryView"
+            android:layout_width="130dp"
+            android:layout_height="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitCenter"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutTitleProductGalleryView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/imgProductGalleryView"
+            app:layout_constraintTop_toBottomOf="@id/imgProductGalleryView"
+            app:layout_constraintEnd_toEndOf="@id/imgProductGalleryView">
+
+            <TextView
+                android:id="@+id/txtTitleProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_light"
+                android:layout_marginStart="2dp"
+                android:text="Air Fryer"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/imgFavoriteProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/g_blue_gray200" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtPriceProductGalleryView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/sf_pro_display"
+            android:text="Rs.29,990/="
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/imgProductGalleryView"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView" />
+
+        <TextView
+            android:id="@+id/txtPriceProductDealsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/sf_pro_display"
+            android:text="10% off"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txtPriceProductGalleryView"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView"
+            android:layout_marginStart="10dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

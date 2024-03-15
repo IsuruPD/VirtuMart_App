@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_background"
+    android:elevation="0dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/imgProductDealsView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/txtTitleProductDealsView"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Sony Air Fryer"
+            app:layout_constraintStart_toEndOf="@id/imgProductDealsView"
+            app:layout_constraintTop_toTopOf="@id/imgProductDealsView"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins_light"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txtOfferProductDealsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10% offer!"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleProductDealsView"
+            app:layout_constraintStart_toEndOf="@id/txtPriceProductDealsView"
+            android:textColor="@color/g_gray700"
+            android:textSize="12sp"
+            android:fontFamily="@font/sf_pro_display"
+            android:layout_marginStart="8dp"
+            />
+
+        <TextView
+            android:id="@+id/txtPriceProductDealsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs.29,990/="
+            app:layout_constraintStart_toStartOf="@id/txtTitleProductDealsView"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleProductDealsView"
+
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:fontFamily="@font/sf_pro_display"/>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btnViewProductDealsView"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_product_slider_shape_s"
+            android:fontFamily="@font/poppins_light"
+            android:text="See product"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/txtTitleProductDealsView"
+            app:layout_constraintTop_toTopOf="@id/txtTitleProductDealsView"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="20dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
