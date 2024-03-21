@@ -52,24 +52,53 @@
                 android:src="@drawable/ic_heart"
                 app:tint="@color/g_blue_gray200" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtPriceProductGalleryView"
+        <LinearLayout
+            android:id="@+id/priceDisplayGallery"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/sf_pro_display"
-            android:text="Rs.29,990/="
-            android:textColor="@color/black"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/imgProductGalleryView"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView" />
-
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView">
+            <TextView
+                android:id="@+id/txtPriceCurrencyProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/sf_pro_display"
+                android:text="Rs."
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                 />
+            <TextView
+                android:id="@+id/txtPriceProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/sf_pro_display"
+                android:text="29,990"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/txtPriceSuffixProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/sf_pro_display"
+                android:text="/="
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                />
+        </LinearLayout>
         <TextView
-            android:id="@+id/txtPriceProductDealsView"
+            android:id="@+id/txtOfferPercentageProductGalleryView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -79,7 +108,7 @@
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/txtPriceProductGalleryView"
+            app:layout_constraintStart_toEndOf="@id/priceDisplayGallery"
             app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView"
             android:layout_marginStart="10dp"/>
 

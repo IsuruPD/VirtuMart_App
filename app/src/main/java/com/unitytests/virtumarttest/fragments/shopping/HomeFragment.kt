@@ -29,6 +29,9 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fetchCategoriesFromFirestore()
+
+        //Disable the swipe motion to different tabs
+        binding.viewPagerHome.isUserInputEnabled=false
     }
 
     private fun fetchCategoriesFromFirestore() {

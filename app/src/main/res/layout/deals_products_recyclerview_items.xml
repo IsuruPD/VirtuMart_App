@@ -33,32 +33,102 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="12sp"/>
-
-        <TextView
-            android:id="@+id/txtOfferProductDealsView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10% offer!"
-            app:layout_constraintTop_toBottomOf="@id/txtTitleProductDealsView"
-            app:layout_constraintStart_toEndOf="@id/txtPriceProductDealsView"
-            android:textColor="@color/g_gray700"
-            android:textSize="12sp"
-            android:fontFamily="@font/sf_pro_display"
-            android:layout_marginStart="8dp"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/g_light_red"
+            android:padding="5dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txtPriceProductDealsView"
+            <TextView
+                android:id="@+id/txtProductOfferPercentageDealsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/g_gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/sf_pro_display"
+                />
+            <TextView
+                android:id="@+id/txtOfferKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="% offer!"
+                android:textColor="@color/g_gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/sf_pro_display"
+                />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rs.29,990/="
             app:layout_constraintStart_toStartOf="@id/txtTitleProductDealsView"
             app:layout_constraintTop_toBottomOf="@id/txtTitleProductDealsView"
+            android:orientation="vertical">
 
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:fontFamily="@font/sf_pro_display"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtNewPriceProductCurrencyDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs."
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
 
+                <TextView
+                    android:id="@+id/txtNewPriceProductDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="29,990"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtNewPriceProductCurrencySuffixDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/="
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtOldPriceProductCurrencyDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="was Rs."
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtOldPriceProductDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="29,990"
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtOldPriceProductCurrencySuffixDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/="
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+            </LinearLayout>
+        </LinearLayout>
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnViewProductDealsView"
             android:layout_width="80dp"

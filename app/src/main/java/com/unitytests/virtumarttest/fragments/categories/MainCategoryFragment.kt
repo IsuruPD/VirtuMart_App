@@ -2,14 +2,34 @@ package com.unitytests.virtumarttest.fragments.categories
 
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.unitytests.virtumarttest.R
+import com.unitytests.virtumarttest.adapters.DealsProductsAdapter
+import com.unitytests.virtumarttest.adapters.GalleryProductsAdapter
+import com.unitytests.virtumarttest.adapters.TopProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentMainCategoryBinding
+import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.viewmodel.MainCategoryVM
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
-class MainCategoryFragment: Fragment() {
+@AndroidEntryPoint
+class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
     private lateinit var binding: FragmentMainCategoryBinding
+    private lateinit var topProductsAdapter: TopProductsAdapter
+    private lateinit var dealsProductsAdapter: DealsProductsAdapter
+    private lateinit var galleryProductsAdapter: GalleryProductsAdapter
+    private val viewModel by viewModels<MainCategoryVM>()
 
+    //Category Tabs
     companion object {
         private const val argCategoryName = "categoryName"
 
@@ -26,7 +46,7 @@ class MainCategoryFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMainCategoryBinding.inflate(inflater)
         return binding.root
     }
@@ -34,7 +54,106 @@ class MainCategoryFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupTopProductsView()
+        setupDealsProductsView()
+        setupGalleryProductsView()
+
+        // For the top products recycler
+        lifecycleScope.launchWhenStarted {
+            viewModel.topProduct.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+                    is Resource.Success -> {
+                        topProductsAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e("MainCategoryFragment", it.message.toString())
+                        Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
+             }
+        }
+
+        // For the deals products recycler
+        lifecycleScope.launchWhenStarted {
+            viewModel.dealsProducts.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+                    is Resource.Success -> {
+                        dealsProductsAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e("MainCategoryFragment", it.message.toString())
+                        Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
+        // For the gallery products recycler
+        lifecycleScope.launchWhenStarted {
+            viewModel.galleryProducts.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+                    is Resource.Success -> {
+                        galleryProductsAdapter.differ.submitList(it.data)
+                        hideLoading()
+                    }
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e("MainCategoryFragment", it.message.toString())
+                        Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
+    // Category Tabs
         val categoryName = arguments?.getString(argCategoryName) ?: ""
-        // Customize your fragment based on the category name
+        // Customizing fragment based on the category name
+    }
+
+    private fun setupTopProductsView(){
+        topProductsAdapter = TopProductsAdapter()
+        binding.rvTopProducts.apply{
+            layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter=topProductsAdapter
+        }
+    }
+
+    private fun setupDealsProductsView() {
+        dealsProductsAdapter = DealsProductsAdapter()
+        binding.rvDealsProducts.apply{
+            layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter=dealsProductsAdapter
+        }
+    }
+    private fun setupGalleryProductsView() {
+        galleryProductsAdapter= GalleryProductsAdapter()
+        binding.rvProductsCatalogue.apply{
+            layoutManager=GridLayoutManager(requireContext(),2,GridLayoutManager.VERTICAL, false)
+            adapter=galleryProductsAdapter
+        }
+    }
+
+    private fun hideLoading(){
+        binding.prgbrMainCategory.visibility=View.GONE
+    }
+
+    private fun showLoading(){
+        binding.prgbrMainCategory.visibility=View.VISIBLE
     }
 }
