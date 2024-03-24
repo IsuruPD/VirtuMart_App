@@ -21,13 +21,16 @@ class GalleryProductsAdapter: RecyclerView.Adapter<GalleryProductsAdapter.Galler
                     // Discount calculation
                     val priceAfterDiscount = (product.price*(1f-it))
                     // The new price display with only two decimal values
-                    txtPriceProductGalleryView.text="${String.format("%,2f",priceAfterDiscount)}"
+                    txtPriceProductGalleryView.text="${String.format("%,.2f",priceAfterDiscount)}"
                     // Offer percentage display
                     val discountPercentage= product.offerPercentage*100
-                    txtOfferPercentageProductGalleryView.text=discountPercentage.toString()
-                }
-                if(product.offerPercentage==null){
-                    txtOfferPercentageProductGalleryView.visibility= View.INVISIBLE
+                    txtOfferPercentageProductGalleryView.text="${String.format("%.2f",discountPercentage)}% off"
+
+                    txtOldPriceProductGalleryView.text="${String.format("%,.2f",product.price)}"
+                    if(product.offerPercentage==null || discountPercentage.equals(0f)){
+                        txtOfferPercentageProductGalleryView.visibility= View.INVISIBLE
+                        oldPriceDisplayGallery.visibility=View.INVISIBLE
+                    }
                 }
             }
         }

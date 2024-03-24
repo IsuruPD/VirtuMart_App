@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.DealsProductsAdapter
 import com.unitytests.virtumarttest.adapters.GalleryProductsAdapter
@@ -63,14 +65,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             viewModel.topProduct.collectLatest {
                 when (it) {
                     is Resource.Loading -> {
-                        showLoading()
+                        binding.prgbrTopUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
                         topProductsAdapter.differ.submitList(it.data)
-                        hideLoading()
+                        binding.prgbrTopUpdateMainCategory.visibility=View.GONE
                     }
                     is Resource.Error -> {
-                        hideLoading()
+                        binding.prgbrTopUpdateMainCategory.visibility=View.GONE
                         Log.e("MainCategoryFragment", it.message.toString())
                         Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
                     }
@@ -84,14 +86,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             viewModel.dealsProducts.collectLatest {
                 when (it) {
                     is Resource.Loading -> {
-                        showLoading()
+                        binding.prgbrDealsUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
                         dealsProductsAdapter.differ.submitList(it.data)
-                        hideLoading()
+                        binding.prgbrDealsUpdateMainCategory.visibility=View.GONE
                     }
                     is Resource.Error -> {
-                        hideLoading()
+                        binding.prgbrDealsUpdateMainCategory.visibility=View.GONE
                         Log.e("MainCategoryFragment", it.message.toString())
                         Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
                     }
@@ -105,14 +107,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             viewModel.galleryProducts.collectLatest {
                 when (it) {
                     is Resource.Loading -> {
-                        showLoading()
+                        binding.prgbrGalleryUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
                         galleryProductsAdapter.differ.submitList(it.data)
-                        hideLoading()
+                        binding.prgbrGalleryUpdateMainCategory.visibility=View.GONE
                     }
                     is Resource.Error -> {
-                        hideLoading()
+                        binding.prgbrGalleryUpdateMainCategory.visibility=View.GONE
                         Log.e("MainCategoryFragment", it.message.toString())
                         Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
                     }
@@ -120,6 +122,37 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
                 }
             }
         }
+
+    // Top products end reach
+    binding.rvTopProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (!recyclerView.canScrollHorizontally(1)) {
+                // End of RecyclerView reached by swiping to the right
+                viewModel.fetchTopProducts()
+            }
+        }
+    })
+
+    // Deals end reach
+    binding.rvDealsProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (!recyclerView.canScrollHorizontally(1)) {
+                // End of RecyclerView reached by swiping to the right
+                viewModel.fetchDealsProducts()
+            }
+        }
+    })
+
+    // Gallery bottom reach
+    binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{v,_, scrollY,_,_ ->
+        //Check if the end of the page is reached
+        if(v.getChildAt(0).bottom <= v.height+scrollY){
+            //if yes fetch the next batch of products from firebase
+            viewModel.fetchGalleryProducts()
+        }
+    })
 
     // Category Tabs
         val categoryName = arguments?.getString(argCategoryName) ?: ""

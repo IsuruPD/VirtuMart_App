@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/card_background"
-    app:elevation="0dp"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="5dp"
+    app:cardBackgroundColor="@color/dark_white_background"
+    app:cardUseCompatPadding="true"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,12 +16,28 @@
 
         <ImageView
             android:id="@+id/imgProductGalleryView"
-            android:layout_width="130dp"
+            android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_margin="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:scaleType="fitCenter"/>
+
+        <TextView
+            android:id="@+id/txtOfferPercentageProductGalleryView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:fontFamily="@font/sf_pro_display"
+            android:text="10% off"
+            android:padding="2dp"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:background="@color/g_purple"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/linearLayoutTitleProductGalleryView"
@@ -26,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
+            android:layout_marginStart="0dp"
             app:layout_constraintStart_toStartOf="@id/imgProductGalleryView"
             app:layout_constraintTop_toBottomOf="@id/imgProductGalleryView"
             app:layout_constraintEnd_toEndOf="@id/imgProductGalleryView">
@@ -35,11 +55,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_light"
-                android:layout_marginStart="2dp"
                 android:text="Air Fryer"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                android:maxLines="2"
                 android:layout_weight="1"/>
 
             <ImageView
@@ -47,26 +67,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:layout_marginEnd="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="0dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_heart"
                 app:tint="@color/g_blue_gray200" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/priceDisplayGallery"
+            android:id="@+id/newPriceDisplayGallery"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/imgProductGalleryView"
+            app:layout_constraintStart_toStartOf="@id/linearLayoutTitleProductGalleryView"
             app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView">
             <TextView
                 android:id="@+id/txtPriceCurrencyProductGalleryView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/sf_pro_display"
                 android:text="Rs."
                 android:textColor="@color/black"
@@ -78,7 +96,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_marginStart="2dp"
-                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/sf_pro_display"
                 android:text="29,990"
                 android:textColor="@color/black"
@@ -90,28 +107,78 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_marginStart="2dp"
-                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/sf_pro_display"
                 android:text="/="
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 />
         </LinearLayout>
-        <TextView
-            android:id="@+id/txtOfferPercentageProductGalleryView"
+
+        <LinearLayout
+            android:id="@+id/oldPriceDisplayGallery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/sf_pro_display"
-            android:text="10% off"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/priceDisplayGallery"
-            app:layout_constraintTop_toBottomOf="@id/linearLayoutTitleProductGalleryView"
-            android:layout_marginStart="10dp"/>
+            app:layout_constraintStart_toStartOf="@id/newPriceDisplayGallery"
+            app:layout_constraintTop_toBottomOf="@id/newPriceDisplayGallery">
+            <TextView
+                android:id="@+id/txtOldPriceProductCurrencyGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="was Rs."
+                android:textColor="@color/g_gray700"
+                android:textSize="8sp"
+                android:fontFamily="@font/sf_pro_display"/>
 
+            <TextView
+                android:id="@+id/txtOldPriceProductGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="29,990"
+                android:textColor="@color/g_gray700"
+                android:textSize="8sp"
+                android:fontFamily="@font/sf_pro_display"/>
+
+            <TextView
+                android:id="@+id/txtOldPriceProductCurrencySuffixGalleryView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/="
+                android:textColor="@color/g_gray700"
+                android:textSize="8sp"
+                android:fontFamily="@font/sf_pro_display"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/freeShippingDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/newPriceDisplayGallery"
+            app:layout_constraintTop_toBottomOf="@id/oldPriceDisplayGallery">
+
+            <ImageView
+            android:id="@+id/imgFreeShipping"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:paddingBottom="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/shipping2"
+            app:tint="@color/g_blue_gray200" />
+
+            <TextView
+            android:id="@+id/txtFreeShipping"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:text="Free Shipping"
+            android:gravity="center_vertical"
+            android:textColor="#00CC00"
+            android:textSize="8sp"
+            android:fontFamily="@font/sf_pro_display"/>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -21,7 +21,7 @@ class DealsProductsAdapter: RecyclerView.Adapter<DealsProductsAdapter.DealsProdu
                     // Discount calculation
                     val priceAfterDiscount = (product.price*(1f-it))
                     // The new price display with only two decimal values
-                    txtNewPriceProductDealsView.text="${String.format("%,2f",priceAfterDiscount)}"
+                    txtNewPriceProductDealsView.text="${String.format("%,.2f",priceAfterDiscount)}"
                     // Offer percentage display
                     val discountPercentage= product.offerPercentage*100
                     txtProductOfferPercentageDealsView.text=discountPercentage.toString()

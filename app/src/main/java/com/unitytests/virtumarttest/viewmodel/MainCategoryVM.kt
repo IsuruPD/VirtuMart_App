@@ -25,59 +25,107 @@ class MainCategoryVM @Inject constructor(
     private val _galleryProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val galleryProducts: StateFlow<Resource<List<Product>>> = _galleryProducts
 
+    private val pagingInfo  = PagingInfo()
     init{
         fetchTopProducts()
         fetchDealsProducts()
         fetchGalleryProducts()
     }
     fun fetchTopProducts(){
-        viewModelScope.launch{
-            _topProducts.emit(Resource.Loading())
-        }
-        //Make the selection here using whereEqualTo("field","value") after collection
-        firestore.collection("products").get().addOnSuccessListener { result->
-            val topProductsList=result.toObjects((Product::class.java))
+        if (!pagingInfo.isPagingEnd) {
             viewModelScope.launch {
-                _topProducts.emit(Resource.Success(topProductsList))
+                _topProducts.emit(Resource.Loading())
             }
-        }.addOnFailureListener{
-            viewModelScope.launch {
-                _topProducts.emit(Resource.Error(it.message.toString()))
+            val pageSize = 10 // Number of items per page
+            val startIndex = (pagingInfo.page - 1) * pageSize
+            val endIndex = startIndex + pageSize
+            //Make the selection here using whereEqualTo("field","value") after collection
+            firestore.collection("products")
+                .limit(endIndex.toLong())
+                .get()
+                .addOnSuccessListener { result ->
+                    val topProductsList = result.toObjects((Product::class.java))
+                    viewModelScope.launch {
+                        if (topProductsList.size < pageSize) {
+                            // All items have been fetched
+                            pagingInfo.isPagingEnd = true
+                        }
+                        _topProducts.emit(Resource.Success(topProductsList))
+                    }
+                    if (!pagingInfo.isPagingEnd) {
+                        pagingInfo.page++
+                    }
+                }.addOnFailureListener {
+                viewModelScope.launch {
+                    _topProducts.emit(Resource.Error(it.message.toString()))
+                }
             }
         }
     }
 
-    fun fetchDealsProducts(){
-        viewModelScope.launch{
-            _dealsProducts.emit(Resource.Loading())
-        }
-        //Make the selection here using whereEqualTo("field","value") after collection
-        firestore.collection("products").get().addOnSuccessListener { result->
-            val dealsProductsList=result.toObjects((Product::class.java))
+    fun fetchDealsProducts() {
+        if (!pagingInfo.isPagingEnd) {
             viewModelScope.launch {
-                _dealsProducts.emit(Resource.Success(dealsProductsList))
+                _dealsProducts.emit(Resource.Loading())
             }
-        }.addOnFailureListener{
-            viewModelScope.launch {
-                _dealsProducts.emit(Resource.Error(it.message.toString()))
-            }
+            val pageSize = 10 // Number of items per page
+            val startIndex = (pagingInfo.page - 1) * pageSize
+            val endIndex = startIndex + pageSize
+            firestore.collection("products")
+                .limit(endIndex.toLong()) // Fetch items up to the end index
+                .get()
+                .addOnSuccessListener { result ->
+                    val dealsProductsList = result.toObjects(Product::class.java)
+                    viewModelScope.launch {
+                        if (dealsProductsList.size < pageSize) {
+                            // All items have been fetched
+                            pagingInfo.isPagingEnd = true
+                        }
+                        _dealsProducts.emit(Resource.Success(dealsProductsList))
+                    }
+                    if (!pagingInfo.isPagingEnd) {
+                        pagingInfo.page++
+                    }
+                }
+                .addOnFailureListener { e ->
+                    viewModelScope.launch {
+                        _dealsProducts.emit(Resource.Error(e.message.toString()))
+                    }
+                }
         }
     }
+
 
     fun fetchGalleryProducts(){
-        viewModelScope.launch{
-            _galleryProducts.emit(Resource.Loading())
-        }
-        //Make the selection here using whereEqualTo("field","value") after collection
-        firestore.collection("products").get().addOnSuccessListener { result->
-            val galleryProductsList=result.toObjects((Product::class.java))
-            viewModelScope.launch {
-                _galleryProducts.emit(Resource.Success(galleryProductsList))
+        if(!pagingInfo.isPagingEnd){
+            viewModelScope.launch{
+                _galleryProducts.emit(Resource.Loading())
             }
-        }.addOnFailureListener{
-            viewModelScope.launch {
-                _galleryProducts.emit(Resource.Error(it.message.toString()))
+            //Make the selection here using whereEqualTo("field","value") after collection
+            firestore.collection("products").limit(pagingInfo.page * 10).get().addOnSuccessListener { result->
+                val galleryProductsList=result.toObjects((Product::class.java))
+                //
+                pagingInfo.isPagingEnd = galleryProductsList == pagingInfo.prevGalleryProducts
+                pagingInfo.prevGalleryProducts = galleryProductsList
+                //
+                viewModelScope.launch {
+                    _galleryProducts.emit(Resource.Success(galleryProductsList))
+                }
+                pagingInfo.page++
+            }.addOnFailureListener{
+                viewModelScope.launch {
+                    _galleryProducts.emit(Resource.Error(it.message.toString()))
+                }
             }
         }
     }
 }
+
+// Page number initializing before
+internal data class PagingInfo(
+    var page: Long = 1,
+    //To avoid making more requests from firebase if the items are over to save bandwidth
+    var prevGalleryProducts: List<Product> = emptyList(),
+    var isPagingEnd: Boolean = false
+
+)

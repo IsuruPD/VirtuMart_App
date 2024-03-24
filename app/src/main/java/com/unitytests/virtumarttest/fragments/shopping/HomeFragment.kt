@@ -11,7 +11,15 @@ import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.HomeViewPagerFragmentAdapter
 import com.unitytests.virtumarttest.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.unitytests.virtumarttest.fragments.categories.AirConditionersFragment
+import com.unitytests.virtumarttest.fragments.categories.CleaningFragment
+import com.unitytests.virtumarttest.fragments.categories.EntertainmentFragment
+import com.unitytests.virtumarttest.fragments.categories.HealthandWellnessFragment
+import com.unitytests.virtumarttest.fragments.categories.HomeDecorFragment
+import com.unitytests.virtumarttest.fragments.categories.KitchenFragment
+import com.unitytests.virtumarttest.fragments.categories.LaundryFragment
 import com.unitytests.virtumarttest.fragments.categories.MainCategoryFragment
+import com.unitytests.virtumarttest.fragments.categories.PersonalCareFragment
 
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
@@ -21,19 +29,46 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fetchCategoriesFromFirestore()
+        //fetchCategoriesFromFirestore()
 
         //Disable the swipe motion to different tabs
         binding.viewPagerHome.isUserInputEnabled=false
-    }
 
+        val categoriesFragments = arrayListOf<Fragment>(
+            MainCategoryFragment(),
+            KitchenFragment(),
+            LaundryFragment(),
+            CleaningFragment(),
+            EntertainmentFragment(),
+            AirConditionersFragment(),
+            HomeDecorFragment(),
+            PersonalCareFragment(),
+            HealthandWellnessFragment()
+        )
+        val viewPager2Adapter = HomeViewPagerFragmentAdapter(categoriesFragments,childFragmentManager, lifecycle)
+        binding.viewPagerHome.adapter=viewPager2Adapter
+        TabLayoutMediator(binding.tabLayoutHome, binding.viewPagerHome){tab, position->
+            when(position){
+                0-> tab.text="All"
+                1-> tab.text="Kitchenware"
+                2-> tab.text="Laundry"
+                3-> tab.text="Cleaning"
+                4-> tab.text="Entertainment"
+                5-> tab.text="Air Conditioners"
+                6-> tab.text="Home Decor"
+                7-> tab.text="Personal Care"
+                8-> tab.text="Health and Wellness"
+            }
+        }.attach()
+    }
+/*
     private fun fetchCategoriesFromFirestore() {
         val db = FirebaseFirestore.getInstance()
         val categoriesRef = db.collection("Categories")
@@ -77,4 +112,5 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             tab.text = categoryList[position]
         }.attach()
     }
+*/
 }

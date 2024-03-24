@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:id="@+id/nestedScrollBaseCategory">
+
+        <ProgressBar
+            android:id="@+id/prgbrBaseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminateTint="@color/g_gray700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtTitleTopProductsBaseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top Products"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_thin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rvTopProductsBaseCategory"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTopProductsBaseCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleTopProductsBaseCategory"/>
+
+        <ProgressBar
+            android:id="@+id/prgbrTopUpdateBaseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/g_gray700"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/rvTopProductsBaseCategory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rvTopProductsBaseCategory" />
+
+        <TextView
+            android:id="@+id/txtTitleAllProductsBaseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Catalogue"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_thin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvTopProductsBaseCategory"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductsCatalogueBaseCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleAllProductsBaseCategory"
+            android:overScrollMode="never"/>
+
+        <ProgressBar
+            android:id="@+id/prgbrGalleryUpdateBaseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:indeterminateTint="@color/g_gray700"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="100dp"/>
+
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
