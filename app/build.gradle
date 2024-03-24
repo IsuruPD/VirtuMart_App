@@ -219,6 +219,12 @@ android {
     buildFeatures{
         viewBinding true
     }
+    // Added to solve Inheritance from an interface with '@JvmDefault' members is only allowed with -Xjvm-default option
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach{
+        kotlinOptions{
+            freeCompilerArgs +=["-Xjvm-default=all",]
+        }
+    }
 }
 
 dependencies {
