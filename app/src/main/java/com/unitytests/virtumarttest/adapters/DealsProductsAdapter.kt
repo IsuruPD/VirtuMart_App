@@ -24,7 +24,7 @@ class DealsProductsAdapter: RecyclerView.Adapter<DealsProductsAdapter.DealsProdu
                     txtNewPriceProductDealsView.text="${String.format("%,.2f",priceAfterDiscount)}"
                     // Offer percentage display
                     val discountPercentage= product.offerPercentage*100
-                    txtProductOfferPercentageDealsView.text=discountPercentage.toString()
+                    txtProductOfferPercentageDealsView.text="${String.format("%.1f",discountPercentage)}"
                 }
                 txtOldPriceProductDealsView.text=product.price.toString()
 

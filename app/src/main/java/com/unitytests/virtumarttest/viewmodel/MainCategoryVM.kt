@@ -25,37 +25,94 @@ class MainCategoryVM @Inject constructor(
     private val _galleryProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val galleryProducts: StateFlow<Resource<List<Product>>> = _galleryProducts
 
-    private val pagingInfo  = PagingInfo()
+    private val topPagingInfoMain  = PagingInfo()
+    private val dealsPagingInfoMain  = PagingInfo()
+    private val galleryPagingInfoMain  = PagingInfo()
     init{
-        fetchTopProducts()
-        fetchDealsProducts()
-        fetchGalleryProducts()
+        fetchTopProductsMain()
+        fetchDealsProductsMain()
+        fetchGalleryProductsMain()
     }
-    fun fetchTopProducts(){
-        if (!pagingInfo.isPagingEnd) {
-            viewModelScope.launch {
+//    fun fetchTopProducts(){
+//        if (!pagingInfo.isPagingEnd) {
+//            viewModelScope.launch {
+//                _topProducts.emit(Resource.Loading())
+//            }
+//            val pageSize = 10 // Number of items per page
+//            val startIndex = (pagingInfo.page - 1) * pageSize
+//            val endIndex = startIndex + pageSize
+//            //Make the selection here using whereEqualTo("field","value") after collection
+//            firestore.collection("products")
+//                .limit(endIndex.toLong())
+//                .get()
+//                .addOnSuccessListener { result ->
+//                    val topProductsList = result.toObjects((Product::class.java))
+//                    viewModelScope.launch {
+//                        if (topProductsList.size < pageSize) {
+//                            // All items have been fetched
+//                            pagingInfo.isPagingEnd = true
+//                        }
+//                        _topProducts.emit(Resource.Success(topProductsList))
+//                    }
+//                    if (!pagingInfo.isPagingEnd) {
+//                        pagingInfo.page++
+//                    }
+//                }.addOnFailureListener {
+//                viewModelScope.launch {
+//                    _topProducts.emit(Resource.Error(it.message.toString()))
+//                }
+//            }
+//        }
+//    }
+
+//    fun fetchDealsProducts() {
+//        if (!pagingInfo.isPagingEnd) {
+//            viewModelScope.launch {
+//                _dealsProducts.emit(Resource.Loading())
+//            }
+//            val pageSize = 10 // Number of items per page
+//            val startIndex = (pagingInfo.page - 1) * pageSize
+//            val endIndex = startIndex + pageSize
+//            firestore.collection("products")
+//                .limit(endIndex.toLong()) // Fetch items up to the end index
+//                .get()
+//                .addOnSuccessListener { result ->
+//                    val dealsProductsList = result.toObjects(Product::class.java)
+//                    viewModelScope.launch {
+//                        if (dealsProductsList.size < pageSize) {
+//                            // All items have been fetched
+//                            pagingInfo.isPagingEnd = true
+//                        }
+//                        _dealsProducts.emit(Resource.Success(dealsProductsList))
+//                    }
+//                    if (!pagingInfo.isPagingEnd) {
+//                        pagingInfo.page++
+//                    }
+//                }
+//                .addOnFailureListener { e ->
+//                    viewModelScope.launch {
+//                        _dealsProducts.emit(Resource.Error(e.message.toString()))
+//                    }
+//                }
+//        }
+//    }
+    fun fetchTopProductsMain(){
+        if(!topPagingInfoMain.isPagingEnd){
+            viewModelScope.launch{
                 _topProducts.emit(Resource.Loading())
             }
-            val pageSize = 10 // Number of items per page
-            val startIndex = (pagingInfo.page - 1) * pageSize
-            val endIndex = startIndex + pageSize
             //Make the selection here using whereEqualTo("field","value") after collection
-            firestore.collection("products")
-                .limit(endIndex.toLong())
-                .get()
-                .addOnSuccessListener { result ->
-                    val topProductsList = result.toObjects((Product::class.java))
-                    viewModelScope.launch {
-                        if (topProductsList.size < pageSize) {
-                            // All items have been fetched
-                            pagingInfo.isPagingEnd = true
-                        }
-                        _topProducts.emit(Resource.Success(topProductsList))
-                    }
-                    if (!pagingInfo.isPagingEnd) {
-                        pagingInfo.page++
-                    }
-                }.addOnFailureListener {
+            firestore.collection("products").limit(topPagingInfoMain.page * 10).get().addOnSuccessListener { result->
+                val topProductsList=result.toObjects((Product::class.java))
+                //
+                topPagingInfoMain.isPagingEnd = topProductsList == topPagingInfoMain.prevTopProducts
+                topPagingInfoMain.prevTopProducts = topProductsList
+                //
+                viewModelScope.launch {
+                    _topProducts.emit(Resource.Success(topProductsList))
+                }
+                topPagingInfoMain.page++
+            }.addOnFailureListener{
                 viewModelScope.launch {
                     _topProducts.emit(Resource.Error(it.message.toString()))
                 }
@@ -63,55 +120,46 @@ class MainCategoryVM @Inject constructor(
         }
     }
 
-    fun fetchDealsProducts() {
-        if (!pagingInfo.isPagingEnd) {
-            viewModelScope.launch {
+    fun fetchDealsProductsMain(){
+        if(!dealsPagingInfoMain.isPagingEnd){
+            viewModelScope.launch{
                 _dealsProducts.emit(Resource.Loading())
             }
-            val pageSize = 10 // Number of items per page
-            val startIndex = (pagingInfo.page - 1) * pageSize
-            val endIndex = startIndex + pageSize
-            firestore.collection("products")
-                .limit(endIndex.toLong()) // Fetch items up to the end index
-                .get()
-                .addOnSuccessListener { result ->
-                    val dealsProductsList = result.toObjects(Product::class.java)
-                    viewModelScope.launch {
-                        if (dealsProductsList.size < pageSize) {
-                            // All items have been fetched
-                            pagingInfo.isPagingEnd = true
-                        }
-                        _dealsProducts.emit(Resource.Success(dealsProductsList))
-                    }
-                    if (!pagingInfo.isPagingEnd) {
-                        pagingInfo.page++
-                    }
+            //Make the selection here using whereEqualTo("field","value") after collection
+            firestore.collection("products").limit(dealsPagingInfoMain.page * 10).get().addOnSuccessListener { result->
+                val dealsProductsList=result.toObjects((Product::class.java))
+                //
+                dealsPagingInfoMain.isPagingEnd = dealsProductsList == dealsPagingInfoMain.prevDealsProducts
+                dealsPagingInfoMain.prevDealsProducts = dealsProductsList
+                //
+                viewModelScope.launch {
+                    _dealsProducts.emit(Resource.Success(dealsProductsList))
                 }
-                .addOnFailureListener { e ->
-                    viewModelScope.launch {
-                        _dealsProducts.emit(Resource.Error(e.message.toString()))
-                    }
+                dealsPagingInfoMain.page++
+            }.addOnFailureListener{
+                viewModelScope.launch {
+                    _dealsProducts.emit(Resource.Error(it.message.toString()))
                 }
+            }
         }
     }
 
-
-    fun fetchGalleryProducts(){
-        if(!pagingInfo.isPagingEnd){
+    fun fetchGalleryProductsMain(){
+        if(!galleryPagingInfoMain.isPagingEnd){
             viewModelScope.launch{
                 _galleryProducts.emit(Resource.Loading())
             }
             //Make the selection here using whereEqualTo("field","value") after collection
-            firestore.collection("products").limit(pagingInfo.page * 10).get().addOnSuccessListener { result->
+            firestore.collection("products").limit(galleryPagingInfoMain.page * 10).get().addOnSuccessListener { result->
                 val galleryProductsList=result.toObjects((Product::class.java))
                 //
-                pagingInfo.isPagingEnd = galleryProductsList == pagingInfo.prevGalleryProducts
-                pagingInfo.prevGalleryProducts = galleryProductsList
+                galleryPagingInfoMain.isPagingEnd = galleryProductsList == galleryPagingInfoMain.prevGalleryProducts
+                galleryPagingInfoMain.prevGalleryProducts = galleryProductsList
                 //
                 viewModelScope.launch {
                     _galleryProducts.emit(Resource.Success(galleryProductsList))
                 }
-                pagingInfo.page++
+                galleryPagingInfoMain.page++
             }.addOnFailureListener{
                 viewModelScope.launch {
                     _galleryProducts.emit(Resource.Error(it.message.toString()))
@@ -125,6 +173,8 @@ class MainCategoryVM @Inject constructor(
 internal data class PagingInfo(
     var page: Long = 1,
     //To avoid making more requests from firebase if the items are over to save bandwidth
+    var prevTopProducts: List<Product> = emptyList(),
+    var prevDealsProducts: List<Product> = emptyList(),
     var prevGalleryProducts: List<Product> = emptyList(),
     var isPagingEnd: Boolean = false
 

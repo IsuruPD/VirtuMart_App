@@ -54,6 +54,23 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
         })
     }
 
+
+    fun showTopBasePrgBrLoading(){
+        binding.prgbrTopUpdateBaseCategory.visibility=View.VISIBLE
+    }
+
+    fun showGalleryBasePrgBrLoading(){
+        binding.prgbrGalleryUpdateBaseCategory.visibility=View.VISIBLE
+    }
+
+    fun hideTopBasePrgBrLoading(){
+        binding.prgbrTopUpdateBaseCategory.visibility =View.GONE
+    }
+
+    fun hideGalleryBasePrgBrLoading(){
+        binding.prgbrGalleryUpdateBaseCategory.visibility=View.GONE
+    }
+
     open fun onTopBasePagingRequest(){
 
     }
@@ -61,6 +78,7 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
     open fun onGalleryBasePagingRequest(){
 
     }
+
     private fun setupRvTopProductsBase() {
         binding.rvTopProductsBaseCategory.apply{
             layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

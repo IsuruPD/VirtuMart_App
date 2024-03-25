@@ -129,7 +129,7 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             super.onScrolled(recyclerView, dx, dy)
             if (!recyclerView.canScrollHorizontally(1)) {
                 // End of RecyclerView reached by swiping to the right
-                viewModel.fetchTopProducts()
+                viewModel.fetchTopProductsMain()
             }
         }
     })
@@ -140,7 +140,7 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             super.onScrolled(recyclerView, dx, dy)
             if (!recyclerView.canScrollHorizontally(1)) {
                 // End of RecyclerView reached by swiping to the right
-                viewModel.fetchDealsProducts()
+                viewModel.fetchDealsProductsMain()
             }
         }
     })
@@ -150,7 +150,7 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
         //Check if the end of the page is reached
         if(v.getChildAt(0).bottom <= v.height+scrollY){
             //if yes fetch the next batch of products from firebase
-            viewModel.fetchGalleryProducts()
+            viewModel.fetchGalleryProductsMain()
         }
     })
 

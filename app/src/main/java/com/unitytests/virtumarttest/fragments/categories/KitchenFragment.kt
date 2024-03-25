@@ -2,6 +2,7 @@ package com.unitytests.virtumarttest.fragments.categories
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
@@ -30,13 +31,15 @@ class KitchenFragment: BaseCategoryFragment() {
             viewModel.topProductsBase.collectLatest {
                 when(it){
                     is Resource.Loading ->{
-
+                        showTopBasePrgBrLoading()
                     }
                     is Resource.Success ->{
                         topBaseAdapter.differ.submitList(it.data)
+                        hideTopBasePrgBrLoading()
                     }
                     is Resource.Error ->{
                         Snackbar.make(requireView(), it.message.toString(), Snackbar.LENGTH_LONG).show()
+                        hideTopBasePrgBrLoading()
                     }
                     else -> Unit
                 }
@@ -47,17 +50,30 @@ class KitchenFragment: BaseCategoryFragment() {
             viewModel.galleryProductsBase.collectLatest {
                 when(it){
                     is Resource.Loading ->{
-
+                        showGalleryBasePrgBrLoading()
                     }
                     is Resource.Success ->{
                         catalogBaseAdapter.differ.submitList(it.data)
+                        hideGalleryBasePrgBrLoading()
                     }
                     is Resource.Error ->{
                         Snackbar.make(requireView(), it.message.toString(), Snackbar.LENGTH_LONG).show()
+                        hideGalleryBasePrgBrLoading()
                     }
                     else -> Unit
                 }
             }
         }
+    }
+    override fun onTopBasePagingRequest() {
+        // Category Top End Reach
+        viewModel.fetchTopProductsBase()
+    }
+
+    override fun onGalleryBasePagingRequest() {
+        // Gallery Bottom Reach
+        //if yes fetch the next batch of products from firebase
+        viewModel.fetchGalleryProductsBase()
+
     }
 }
