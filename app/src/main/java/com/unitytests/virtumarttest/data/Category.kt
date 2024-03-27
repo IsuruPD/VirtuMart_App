@@ -8,5 +8,6 @@ sealed class Category(val category: String) {
     object HomeDecor: Category("HomeDecor")
     object Laundry: Category("Laundry")
     object PersonalCare: Category("Personal Care")
+    object AirConditioner: Category("Air Conditioner")
 
 }
