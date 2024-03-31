@@ -53,9 +53,15 @@ class DealsProductsAdapter: RecyclerView.Adapter<DealsProductsAdapter.DealsProdu
     override fun onBindViewHolder(holder: DealsProductViewHolder, position: Int) {
         val product= differ.currentList[position]
         holder.bind(product)
+
+        holder.itemView.setOnClickListener{
+            onClick?.invoke(product)
+        }
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
+    var onClick: ((Product) -> Unit)? = null
 }

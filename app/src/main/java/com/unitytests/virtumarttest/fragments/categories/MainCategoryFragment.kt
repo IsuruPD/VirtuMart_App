@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +18,11 @@ import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.DealsProductsAdapter
 import com.unitytests.virtumarttest.adapters.GalleryProductsAdapter
 import com.unitytests.virtumarttest.adapters.TopProductsAdapter
+import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.databinding.FragmentMainCategoryBinding
+import com.unitytests.virtumarttest.fragments.shopping.ProductDetailsFragment
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.MainCategoryVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -59,6 +63,21 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
         setupTopProductsView()
         setupDealsProductsView()
         setupGalleryProductsView()
+
+        // Navigate to product view page
+        topProductsAdapter.onClick = {
+            val bundle= Bundle().apply{putParcelable("product",it)}
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+        dealsProductsAdapter.onClick = {
+            val bundle= Bundle().apply{putParcelable("product",it)}
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+        galleryProductsAdapter.onClick = {
+            val bundle= Bundle().apply{putParcelable("product",it)}
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
 
         // For the top products recycler
         lifecycleScope.launchWhenStarted {
@@ -188,5 +207,10 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
 
     private fun showLoading(){
         binding.prgbrMainCategory.visibility=View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showNavBarVisibility()
     }
 }

@@ -2,6 +2,7 @@ package com.unitytests.virtumarttest.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,7 @@ class ColorsAdapter: RecyclerView.Adapter<ColorsAdapter.ColorsViewHolder>() {
                     ImageShadow.visibility= View.VISIBLE
                     imgSelectedColor.visibility=View.VISIBLE
                 }
-            }else{ //Colorr Not Selected
+            }else{ //Color Not Selected
                 binding.apply {
                     ImageShadow.visibility= View.INVISIBLE
                     imgSelectedColor.visibility=View.INVISIBLE
@@ -57,13 +58,15 @@ class ColorsAdapter: RecyclerView.Adapter<ColorsAdapter.ColorsViewHolder>() {
     override fun onBindViewHolder(holder: ColorsViewHolder, position: Int) {
         val color = differ.currentList[position]
         holder.bindColor(color, position)
-
-        holder.itemView.setOnClickListener{
-            if(selectedPosition<=0){
-                notifyItemChanged(selectedPosition)
-            }
+        Log.d("ColorsAdapter", "Color at position $position: $color")
+        holder.itemView.setOnClickListener {
+            val previousSelectedPosition = selectedPosition
             selectedPosition = holder.adapterPosition
+
+            // Notify adapter about the items change
+            notifyItemChanged(previousSelectedPosition)
             notifyItemChanged(selectedPosition)
+
             onItemClick?.invoke(color)
         }
     }
@@ -72,5 +75,5 @@ class ColorsAdapter: RecyclerView.Adapter<ColorsAdapter.ColorsViewHolder>() {
         return differ.currentList.size
     }
 
-    val onItemClick: ((String) -> Unit)? =null
+    var onItemClick: ((String) -> Unit)? =null
 }
