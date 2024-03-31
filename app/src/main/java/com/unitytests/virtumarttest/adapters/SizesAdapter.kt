@@ -1,0 +1,78 @@
+package com.unitytests.virtumarttest.adapters
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.unitytests.virtumarttest.databinding.SizeRecyclerviewItemsBinding
+
+class SizesAdapter: RecyclerView.Adapter<SizesAdapter.SizesViewHolder>() {
+
+    private var selectedPosition =-1
+
+    inner class SizesViewHolder(private val binding: SizeRecyclerviewItemsBinding) : ViewHolder(binding.root){
+        fun bindColor(size: String, position: Int){
+            binding.txtSelectedSize.text=size
+            if (position== selectedPosition){ //Size Selected
+                binding.apply {
+                    SizeShadow.visibility= View.VISIBLE
+                }
+            }else{ //Size Not Selected
+                binding.apply {
+                    SizeShadow.visibility= View.INVISIBLE
+                }
+            }
+        }
+    }
+
+    private val diffCallback = object : DiffUtil.ItemCallback<String>(){
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem==newItem
+        }
+
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem== newItem
+        }
+    }
+
+    val differ = AsyncListDiffer(this, diffCallback)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SizesViewHolder {
+        return SizesViewHolder(
+            SizeRecyclerviewItemsBinding.inflate(
+                LayoutInflater.from(parent.context),parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: SizesViewHolder, position: Int) {
+        val size = differ.currentList[position]
+        holder.bindColor(size, position)
+        Log.d("SizesAdapter", "Size at position $position: $size")
+        holder.itemView.setOnClickListener{
+//            if(selectedPosition<=0){
+//                notifyItemChanged(selectedPosition)
+//            }
+//            selectedPosition = holder.adapterPosition
+//            notifyItemChanged(selectedPosition)
+            val previousSelectedPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
+
+            // Notify adapter about the items change
+            notifyItemChanged(previousSelectedPosition)
+            notifyItemChanged(selectedPosition)
+
+
+            onItemClick?.invoke(size)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return differ.currentList.size
+    }
+
+    var onItemClick: ((String) -> Unit)? =null
+}

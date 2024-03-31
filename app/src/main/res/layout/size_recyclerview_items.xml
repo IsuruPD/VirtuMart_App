@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/SizeShadow"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="#BBD9FA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ImageSize"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@color/g_gray700"
+        app:layout_constraintStart_toStartOf="@+id/SizeShadow"
+        app:layout_constraintEnd_toEndOf="@+id/SizeShadow"
+        app:layout_constraintTop_toTopOf="@+id/SizeShadow"
+        app:layout_constraintBottom_toBottomOf="@+id/SizeShadow"/>
+
+    <TextView
+        android:id="@+id/txtSelectedSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="@+id/ImageSize"
+        app:layout_constraintEnd_toEndOf="@+id/ImageSize"
+        app:layout_constraintTop_toTopOf="@+id/ImageSize"
+        app:layout_constraintBottom_toBottomOf="@+id/ImageSize"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

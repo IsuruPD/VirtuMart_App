@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_background"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/dark_white_background"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+        <ImageView
+            android:id="@+id/imgProductDealsView"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/txtTitleProductDealsView"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Sony Air Fryer"
+            app:layout_constraintStart_toEndOf="@id/imgProductDealsView"
+            app:layout_constraintTop_toTopOf="@id/imgProductDealsView"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins_light"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:maxLines="2"
+            android:textSize="12sp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/g_light_red"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtProductOfferPercentageDealsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10"
+                android:textColor="@color/g_gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/sf_pro_display"
+                />
+            <TextView
+                android:id="@+id/txtOfferKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="% offer!"
+                android:textColor="@color/g_gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/sf_pro_display"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/txtTitleProductDealsView"
+            app:layout_constraintTop_toBottomOf="@id/txtTitleProductDealsView"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtNewPriceProductCurrencyDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs."
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtNewPriceProductDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="29,990"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtNewPriceProductCurrencySuffixDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/="
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtOldPriceProductCurrencyDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="was Rs."
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtOldPriceProductDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="29,990"
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+
+                <TextView
+                    android:id="@+id/txtOldPriceProductCurrencySuffixDealsView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/="
+                    android:textColor="@color/g_gray700"
+                    android:textSize="8sp"
+                    android:fontFamily="@font/sf_pro_display"/>
+            </LinearLayout>
+        </LinearLayout>
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btnViewProductDealsView"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_product_slider_shape_s"
+            android:fontFamily="@font/poppins_light"
+            android:text="See product"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/txtTitleProductDealsView"
+            app:layout_constraintTop_toTopOf="@id/txtTitleProductDealsView"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="20dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

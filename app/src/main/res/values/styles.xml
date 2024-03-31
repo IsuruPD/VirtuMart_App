@@ -27,6 +27,14 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="darkWhiteButtonStyle">
+        <item name="android:background">@drawable/dark_white_background</item>
+        <item name="android:fontFamily">@font/poppins_thin</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="whiteButtonStyle">
         <item name="android:background">@drawable/white_background</item>
         <item name="android:fontFamily">@font/poppins_thin</item>
@@ -58,8 +66,14 @@
 
     </style>
 
+    <style name="tabLayout_text" parent="TextAppearance.AppCompat">
+        <item name="color">@color/black</item>
+        <item name="fontFamily">@font/sf_pro_display</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
 <!--    @dimen/h2TextSize-->
 <!--    <dimen name="h3TextSize">22sp</dimen>-->
-
 
 </resources>
