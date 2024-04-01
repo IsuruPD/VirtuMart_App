@@ -55,10 +55,10 @@
                 android:layout_height="match_parent"/>
 
             <ImageView
-                android:id="@+id/filterIcon"
+                android:id="@+id/chatIcon"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/filter_icon"
+                android:src="@drawable/ic_chat"
                 android:background="@drawable/icon_background"
                 android:backgroundTint="@color/g_search_and_icons"
                 android:padding="8dp"/>
