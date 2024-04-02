@@ -81,6 +81,16 @@
             app:layout_constraintTop_toBottomOf="@id/toolBarCartView"
             app:layout_constraintBottom_toTopOf="@id/gdlnBottomHCartView"
             />
+
+        <ProgressBar
+            android:id="@+id/prgbrCartView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/gdlnLeftVCartView"
+            app:layout_constraintEnd_toStartOf="@id/gdlnRightVCartView"
+            app:layout_constraintTop_toBottomOf="@id/toolBarCartView"
+            app:layout_constraintBottom_toTopOf="@id/gdlnBottomHCartView"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/CartOverviewDisplayCartView"
             android:layout_width="0dp"

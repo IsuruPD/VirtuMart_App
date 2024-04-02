@@ -64,15 +64,31 @@
                 android:layout_margin="5dp"
                 android:src="@color/g_gray500"
                 />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgProductSelectedSizeCartView"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_margin="5dp"
-                android:src="@color/g_gray500"
-                />
-
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgProductSelectedSizeCartView"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_margin="5dp"
+                    android:src="@color/g_gray500"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <TextView
+                    android:id="@+id/txtProductSelectedSizeCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S"
+                    app:layout_constraintTop_toTopOf="@+id/imgProductSelectedSizeCartView"
+                    app:layout_constraintBottom_toBottomOf="@+id/imgProductSelectedSizeCartView"
+                    app:layout_constraintStart_toStartOf="@+id/imgProductSelectedSizeCartView"
+                    app:layout_constraintEnd_toEndOf="@+id/imgProductSelectedSizeCartView"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
             <LinearLayout
@@ -101,7 +117,7 @@
                     >
 
                     <ImageView
-                        android:id="@+id/imgProductQuantityDecreaseCartView"
+                        android:id="@+id/btnProductQuantityDecreaseCartView"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:padding="2dp"
@@ -117,7 +133,7 @@
                         />
 
                     <ImageView
-                        android:id="@+id/imgProductQuantityIncreaseCartView"
+                        android:id="@+id/btnProductQuantityIncreaseCartView"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:padding="0dp"
