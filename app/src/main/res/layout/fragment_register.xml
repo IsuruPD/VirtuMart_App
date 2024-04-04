@@ -107,21 +107,21 @@
             android:paddingStart="10dp"
             />
 
-        <EditText
-            android:id="@+id/regBirthdayEdt"
-            android:layout_width="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_height="@dimen/editTextHeight"
-            app:layout_constraintStart_toStartOf="@id/regPasswordEdt"
-            app:layout_constraintEnd_toEndOf="@id/regPasswordEdt"
-            app:layout_constraintTop_toBottomOf="@id/regPasswordEdt"
-            style="@style/editText"
-            android:textSize="15sp"
-            android:inputType="textPassword"
-            android:hint="Select your Birthday"
-            android:textAlignment="textStart"
-            android:paddingStart="10dp"
-            />
+<!--        <EditText-->
+<!--            android:id="@+id/regBirthdayEdt"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_height="@dimen/editTextHeight"-->
+<!--            app:layout_constraintStart_toStartOf="@id/regPasswordEdt"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/regPasswordEdt"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/regPasswordEdt"-->
+<!--            style="@style/editText"-->
+<!--            android:textSize="15sp"-->
+<!--            android:inputType="textPassword"-->
+<!--            android:hint="Select your Birthday"-->
+<!--            android:textAlignment="textStart"-->
+<!--            android:paddingStart="10dp"-->
+<!--            />-->
 
 <!--        <ImageView-->
 <!--            android:id="@+id/loginFacebook"-->

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbShippingAddress"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnBackShippingView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="3dp"
+                android:elevation="1dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_back_arrow"
+                app:tint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/txtTbTitleShippingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Shipping Details"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnBackShippingView"
+                app:layout_constraintStart_toEndOf="@id/btnBackShippingView"
+                app:layout_constraintTop_toTopOf="@+id/btnBackShippingView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <EditText
+        android:id="@+id/shippingAliasEdt"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/white_background"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="start|center_vertical"
+        android:hint="Alias"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@+id/tbShippingAddress" />
+
+    <EditText
+        android:id="@+id/shippingReceiverNameEdt"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/white_background"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="start|center_vertical"
+        android:hint="Receiver Name"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@+id/shippingAliasEdt" />
+
+    <EditText
+        android:id="@+id/shippingAddressEdt"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/white_background"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="start|center_vertical"
+        android:hint="Address"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@id/shippingReceiverNameEdt" />
+
+    <LinearLayout
+        android:id="@+id/layoutLinearShippingView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@+id/shippingAddressEdt">
+
+        <EditText
+            android:id="@+id/shippingCityEdt"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/white_background"
+            android:fontFamily="@font/poppins_light"
+            android:gravity="start|center_vertical"
+            android:hint="City"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="true"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/shippingDistrictEdt"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/white_background"
+            android:fontFamily="@font/poppins_light"
+            android:gravity="start|center_vertical"
+            android:hint="District"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="true"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/shippingContactEdt"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/white_background"
+        android:fontFamily="@font/poppins_light"
+        android:gravity="start|center_vertical"
+        android:hint="Contact Number"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:singleLine="true"
+        android:inputType="phone"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@+id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@+id/layoutLinearShippingView" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/gdlnVRight"
+        app:layout_constraintStart_toStartOf="@id/gdlnVLeft"
+        app:layout_constraintTop_toBottomOf="@+id/shippingContactEdt">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDeleteShippingView"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:text="Delete"
+            android:background="@drawable/white_background"
+            android:fontFamily="@font/poppins_thin"
+            android:textAllCaps="false"
+            android:textColor="@color/g_gray700"
+            android:textSize="14sp"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSaveShippingView"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:text="Save"
+            android:background="@drawable/blue_background"
+            android:fontFamily="@font/poppins_thin"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/prgbrShippingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/g_gray700"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gdlnVLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gdlnVRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopping_navigation_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/shippingDetailsFragment">
 
     <fragment
         android:id="@+id/cartFragment"
@@ -46,4 +46,9 @@
             android:name="product"
             app:argType="com.unitytests.virtumarttest.data.Product" />
     </fragment>
+    <fragment
+        android:id="@+id/shippingDetailsFragment"
+        android:name="com.unitytests.virtumarttest.fragments.shopping.ShippingDetailsFragment"
+        android:label="ShippingDetailsFragment"
+        tools:layout="@layout/fragment_shipping_details"/>
 </navigation>
