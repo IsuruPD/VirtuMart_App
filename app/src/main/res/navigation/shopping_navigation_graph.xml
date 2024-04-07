@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopping_navigation_graph"
-    app:startDestination="@id/shippingDetailsFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/cartFragment"
@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_cartFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_orderConfirmationFragment"
+            app:destination="@id/orderConfirmationFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -27,7 +30,11 @@
         android:id="@+id/profileFragment"
         android:name="com.unitytests.virtumarttest.fragments.shopping.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_shippingDetailsFragment"
+            app:destination="@id/shippingDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.unitytests.virtumarttest.fragments.shopping.SearchFragment"
@@ -51,4 +58,19 @@
         android:name="com.unitytests.virtumarttest.fragments.shopping.ShippingDetailsFragment"
         android:label="ShippingDetailsFragment"
         tools:layout="@layout/fragment_shipping_details"/>
+    <fragment
+        android:id="@+id/orderConfirmationFragment"
+        android:name="com.unitytests.virtumarttest.fragments.shopping.OrderConfirmationFragment"
+        android:label="OrderConfirmationFragment"
+        tools:layout="@layout/fragment_order_confirmation">
+        <action
+            android:id="@+id/action_orderConfirmationFragment_to_shippingDetailsFragment"
+            app:destination="@id/shippingDetailsFragment" />
+        <argument
+            android:name="totalOrderCost"
+            app:argType="float" />
+        <argument
+            android:name="orderProducts"
+            app:argType="com.unitytests.virtumarttest.data.CartProducts[]" />
+    </fragment>
 </navigation>

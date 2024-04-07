@@ -1,5 +1,7 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +10,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.CartProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentCartBinding
+import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.CartVM
 import kotlinx.coroutines.flow.collectLatest
 
@@ -36,6 +41,56 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
         super.onViewCreated(view, savedInstanceState)
 
         setupCartRV()
+
+        // Setup total price
+        var totalCost = 0f //To be sent to order confirmation page
+        lifecycleScope.launchWhenStarted {
+            viewModel.productsCost.collectLatest {cost->
+                cost?.let{
+                    totalCost = it
+                    binding.txtAmountTotalCartView.text= "Rs. ${String.format("%,.2f",cost)}"
+                }
+            }
+        }
+
+        //Go to product view on click
+        cartProductsAdapter.onProductClick = {
+            val bundle = Bundle().apply { putParcelable("product", it.product) }
+            findNavController().navigate(R.id.action_cartFragment_to_productDetailsFragment, bundle)
+        }
+
+        // Change Quantity
+        cartProductsAdapter.onProductAddClick = {
+            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.INCREASE)
+        }
+        cartProductsAdapter.onProductRemoveClick = {
+            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.DECREASE)
+        }
+
+        // Navigate to order confirmation page
+        binding.btnCheckoutCartView.setOnClickListener{
+            val action = CartFragmentDirections.actionCartFragmentToOrderConfirmationFragment(totalCost, cartProductsAdapter.differ.currentList.toTypedArray())
+            findNavController().navigate(action)
+        }
+
+        // Remove product from cart
+        lifecycleScope.launchWhenStarted {
+            viewModel.deleteCartItem.collectLatest {
+                val viewDeleteCartItemDialog = AlertDialog.Builder(requireContext()).apply {
+                    setTitle("Remove product")
+                    setMessage("Do you want to remove the item from the cart?")
+                    setNegativeButton("No") {dialogBox,_ ->
+                        dialogBox.dismiss()
+                    }
+                    setPositiveButton("Yes"){dialogBox,_ ->
+                        viewModel.deleteCartItem(it)
+                        dialogBox.dismiss()
+                    }
+                }
+                viewDeleteCartItemDialog.create()
+                viewDeleteCartItemDialog.show()
+            }
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.cartProductsSF.collectLatest {
@@ -86,5 +141,8 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
         }
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        showNavBarVisibility()
+    }
 }

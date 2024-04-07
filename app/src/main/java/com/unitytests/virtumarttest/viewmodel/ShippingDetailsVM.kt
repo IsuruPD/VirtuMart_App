@@ -31,7 +31,7 @@ class ShippingDetailsVM @Inject constructor(
         val validateShippingDetails = validateShippingDetails(shippingDetails)
         if(validateShippingDetails) {
             viewModelScope.launch { _addNewShippingDetail.emit(Resource.Loading()) }
-            firestore.collection("user").document(auth.uid!!).collection("shipping").document()
+            firestore.collection("user").document(auth.uid!!).collection("shippingDetails").document()
                 .set(shippingDetails)
                 .addOnSuccessListener {
                     viewModelScope.launch{_addNewShippingDetail.emit(Resource.Success(shippingDetails))}
