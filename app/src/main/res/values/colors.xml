@@ -2,7 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="g_gray700">#666666</color>
     <color name="g_black">#171717</color>
     <color name="g_blue">#000DAE</color>
@@ -18,5 +17,6 @@
     <color name="g_red">#FF0000</color>
     <color name="g_purple">#FF673AB7</color>
     <color name="g_gray500">#969899</color>
+    <color name="g_light_gray">#DADADA</color>
     <color name="g_orange_yellow">#F8BA00</color>
 </resources>

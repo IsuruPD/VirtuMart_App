@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarOrder"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/btnBackOrderView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="3dp"
+                    android:elevation="1dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_back_arrow"
+                    app:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/txtTbTitleOrderView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Order"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnBackOrderView"
+                    app:layout_constraintStart_toEndOf="@id/btnBackOrderView"
+                    app:layout_constraintTop_toTopOf="@+id/btnBackOrderView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/txtPaymentMethodsOrderView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_thin"
+            android:text="Payment Methods"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/toolbarOrder" />
+
+        <TextView
+            android:id="@+id/txtPaymentDescriptionOrderView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_display"
+            android:text="Select any payment method from below"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/txtPaymentMethodsOrderView" />
+
+        <View
+            android:id="@+id/separatorH1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_background"
+            android:backgroundTint="@color/g_blue_gray200"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/txtPaymentDescriptionOrderView"/>
+
+        <TextView
+            android:id="@+id/txtAddressSelectionTitleOrderView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_thin"
+            android:text="Shipping Address"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:drawableLeftCompat="@drawable/ic_location_pin"
+            app:drawableTint="@color/black"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/separatorH1" />
+
+        <ImageView
+            android:id="@+id/imgAddShippingAddressesOrderView"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="@id/txtAddressSelectionTitleOrderView"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintTop_toTopOf="@id/txtAddressSelectionTitleOrderView"
+            app:tint="@color/g_dark_blue" />
+
+        <FrameLayout
+            android:id="@+id/layoutShippingAddressesOrderView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/txtAddressSelectionTitleOrderView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvShippingAddressesOrderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/shipping_alias_recyclerview_items" />
+
+            <ProgressBar
+                android:id="@+id/prgbrShippingAddressesOrderView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/g_blue"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <View
+            android:id="@+id/separatorH2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_background"
+            android:backgroundTint="@color/g_blue_gray200"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/layoutShippingAddressesOrderView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOrderProductsOrderView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/separatorH2"
+            tools:listitem="@layout/order_products_recyclerview_items"/>
+
+        <View
+            android:id="@+id/separatorH3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/white_background"
+            android:backgroundTint="@color/g_blue_gray200"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@id/rvOrderProductsOrderView" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutTotalPriceOrderView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
+            app:layout_constraintTop_toBottomOf="@+id/separatorH3">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/sf_pro_display"
+                android:text="Total Payable"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/txtTotalCostOrderView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/sf_pro_display"
+                android:text="Rs.9,999,999.99"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btnPlaceOrder"
+            style="@style/blueButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="20dp"
+            android:text="Place Order"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/layoutTotalPriceOrderView"
+            app:layout_constraintStart_toStartOf="@id/layoutTotalPriceOrderView"
+            app:layout_constraintTop_toBottomOf="@id/layoutTotalPriceOrderView"
+            app:spinning_bar_color="@color/white"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnVLeftOrderView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnVRightOrderView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

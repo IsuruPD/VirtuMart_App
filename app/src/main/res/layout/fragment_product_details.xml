@@ -31,19 +31,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <ImageView
-                    android:id="@+id/btnBackProductDisplay"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginTop="3dp"
-                    android:elevation="1dp"
-                    android:padding="5dp"
-                    android:src="@drawable/back_arrow"
-                    app:layout_constraintStart_toStartOf="@+id/imgProductDisplay"
-                    app:layout_constraintTop_toTopOf="@+id/imgProductDisplay"
-                    app:tint="@color/black" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/btnBackProductDisplay"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="3dp"
+                        android:elevation="1dp"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_back_arrow"
+                        app:tint="@color/black" />
 
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                    </View>
+                    <ImageView
+                        android:id="@+id/btnChatProductDisplay"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginTop="3dp"
+                        android:elevation="1dp"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_chat"
+                        app:tint="@color/black" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <LinearLayout

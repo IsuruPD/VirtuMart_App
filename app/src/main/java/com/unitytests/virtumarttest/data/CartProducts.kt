@@ -1,10 +1,14 @@
 package com.unitytests.virtumarttest.data
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class CartProducts(
     val product: Product,
     val quantity: Int,
     val selectedColor: Int? = null,
-    val selectedString: String? = null
-) {
+    val selectedSize: String? = null
+): Parcelable {
     constructor(): this(Product(), 1, null, null)
 }

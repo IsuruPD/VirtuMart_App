@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.GalleryProductsAdapter
 import com.unitytests.virtumarttest.adapters.TopProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentBaseCategoryBinding
+import com.unitytests.virtumarttest.util.showNavBarVisibility
 
 open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
 
@@ -34,6 +36,17 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
 
         setupRvTopProductsBase()
         setupRvCategoryBase()
+
+        // Display product views
+        topBaseAdapter.onClick = {
+            val bundle= Bundle().apply{putParcelable("product",it)}
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
+
+        catalogBaseAdapter.onClick = {
+            val bundle= Bundle().apply{putParcelable("product",it)}
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, bundle)
+        }
 
         // Top products base end reach
         binding.rvTopProductsBaseCategory.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -91,5 +104,10 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
             layoutManager= GridLayoutManager(requireContext(),2, GridLayoutManager.VERTICAL, false)
             adapter=catalogBaseAdapter
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showNavBarVisibility()
     }
 }
