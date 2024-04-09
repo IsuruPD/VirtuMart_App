@@ -120,6 +120,10 @@ class OrderConfirmationFragment: Fragment() {
             }
             displayConfirmationDialog()
         }
+
+        binding.btnBackOrderView.setOnClickListener{
+            findNavController().navigateUp()
+        }
     }
 
     private fun displayConfirmationDialog() {

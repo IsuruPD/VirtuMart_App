@@ -175,9 +175,10 @@
             android:id="@+id/layoutTotalPriceOrderView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnPlaceOrder"
             app:layout_constraintEnd_toEndOf="@id/gdlnVRightOrderView"
-            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView"
-            app:layout_constraintTop_toBottomOf="@+id/separatorH3">
+            app:layout_constraintStart_toStartOf="@id/gdlnVLeftOrderView">
 
             <TextView
                 android:layout_width="0dp"
@@ -215,15 +216,14 @@
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnPlaceOrder"
             style="@style/blueButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_marginTop="45dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="80dp"
             android:text="Place Order"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/layoutTotalPriceOrderView"
             app:layout_constraintStart_toStartOf="@id/layoutTotalPriceOrderView"
-            app:layout_constraintTop_toBottomOf="@id/layoutTotalPriceOrderView"
             app:spinning_bar_color="@color/white"/>
 
         <androidx.constraintlayout.widget.Guideline
