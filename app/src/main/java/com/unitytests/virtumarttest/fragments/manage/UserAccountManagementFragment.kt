@@ -17,16 +17,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.unitytests.virtumarttest.data.User
-import com.unitytests.virtumarttest.databinding.FragmentUserAccountBinding
+import com.unitytests.virtumarttest.databinding.FragmentUserAccountManagementBinding
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.ProfileVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-class UserAccountFragment: Fragment() {
+class UserAccountManagementFragment: Fragment() {
 
-    private lateinit var binding: FragmentUserAccountBinding
+    private lateinit var binding: FragmentUserAccountManagementBinding
     private val viewModel by viewModels<ProfileVM>()
     private var imageUri: Uri?= null
     private lateinit var imageActivityResultLauncher: ActivityResultLauncher<Intent>
@@ -46,7 +46,7 @@ class UserAccountFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserAccountBinding.inflate(inflater)
+        binding = FragmentUserAccountManagementBinding.inflate(inflater)
         return binding.root
     }
 
@@ -108,7 +108,7 @@ class UserAccountFragment: Fragment() {
 
     private fun showUserInformation(data: User) {
         binding.apply {
-            Glide.with(this@UserAccountFragment).load(data.imagePath).error(ColorDrawable(Color.DKGRAY)).into(imgUserProfileView)
+            Glide.with(this@UserAccountManagementFragment).load(data.imagePath).error(ColorDrawable(Color.DKGRAY)).into(imgUserProfileView)
             txtEmailProfileView.text = data.email
             profileFirstNameEdt.setText(data.firstname)
             profileLastNameEdt.setText(data.lastname)

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopping_navigation_graph"
-    app:startDestination="@id/userAccountFragment">
+    app:startDestination="@id/userOrderManagementFragment">
 
     <fragment
         android:id="@+id/cartFragment"
@@ -75,6 +75,25 @@
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
-        android:name="com.unitytests.virtumarttest.fragments.manage.UserAccountFragment"
-        android:label="UserAccountFragment" />
+        android:name="com.unitytests.virtumarttest.fragments.manage.UserAccountManagementFragment"
+        android:label="UserAccountFragment"
+        tools:layout="@layout/fragment_user_account_management"/>
+    <fragment
+        android:id="@+id/userOrderManagementFragment"
+        android:name="com.unitytests.virtumarttest.fragments.manage.UserOrderManagementFragment"
+        android:label="UserOrderManagementFragment"
+        tools:layout="@layout/fragment_user_orders_management">
+        <action
+            android:id="@+id/action_userOrderManagementFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.unitytests.virtumarttest.fragments.manage.OrderDetailsFragment"
+        android:label="OrderDetailsFragment"
+        tools:layout="@layout/fragment_order_detail">
+        <argument
+            android:name="order"
+            app:argType="com.unitytests.virtumarttest.data.orders.Order" />
+    </fragment>
 </navigation>
