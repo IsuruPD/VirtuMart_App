@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopping_navigation_graph"
-    app:startDestination="@id/userOrderManagementFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/cartFragment"
@@ -30,10 +30,19 @@
         android:id="@+id/profileFragment"
         android:name="com.unitytests.virtumarttest.fragments.shopping.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile">
+        tools:layout="@layout/fragment_user_profile_options">
         <action
             android:id="@+id/action_profileFragment_to_shippingDetailsFragment"
             app:destination="@id/shippingDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userOrderManagementFragment"
+            app:destination="@id/userOrderManagementFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_orderConfirmationFragment"
+            app:destination="@id/orderConfirmationFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
