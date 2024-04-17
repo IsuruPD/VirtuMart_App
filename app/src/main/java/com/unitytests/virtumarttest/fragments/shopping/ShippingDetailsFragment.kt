@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.unitytests.virtumarttest.data.ShippingDetails
 import com.unitytests.virtumarttest.databinding.FragmentShippingDetailsBinding
 import com.unitytests.virtumarttest.util.Resource
@@ -20,12 +21,14 @@ import kotlinx.coroutines.flow.collectLatest
 class ShippingDetailsFragment: Fragment() {
     private lateinit var binding : FragmentShippingDetailsBinding
     val viewModel by viewModels<ShippingDetailsVM>()
+    val args by navArgs<ShippingDetailsFragmentArgs>()
+    private var isNew: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenStarted{
-            viewModel.addNewShippingDetail.collectLatest{
+            viewModel.addOrUpdateShippingDetail.collectLatest{
                 when(it){
                     is Resource.Loading ->{
                         binding.prgbrShippingView.visibility = View.VISIBLE
@@ -60,6 +63,23 @@ class ShippingDetailsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val shippingDetails = args.shippingDetails
+        if(shippingDetails == null){
+            binding.btnDeleteShippingView.visibility = View.GONE
+        }else{
+            binding.apply{
+                shippingAliasEdt.isEnabled = false
+                btnSaveShippingView.text = "Update"
+                shippingAliasEdt.setText(shippingDetails.addressAlias)
+                shippingReceiverNameEdt.setText(shippingDetails.receiverName)
+                shippingAddressEdt.setText(shippingDetails.address)
+                shippingCityEdt.setText(shippingDetails.city)
+                shippingDistrictEdt.setText(shippingDetails.district)
+                shippingContactEdt.setText(shippingDetails.contact)
+                isNew = false
+            }
+        }
+
         binding.apply{
             btnSaveShippingView.setOnClickListener{
                 val addressAlias = shippingAliasEdt.text.toString()
@@ -70,8 +90,12 @@ class ShippingDetailsFragment: Fragment() {
                 val contact = shippingContactEdt.text.toString()
                 val shippingAddress = ShippingDetails(addressAlias, receiverName, address, city, district, contact)
 
-                viewModel.addShippingDetails(shippingAddress)
+                viewModel.addOrUpdateShippingDetails(shippingAddress, isNew)
             }
+        }
+
+        binding.btnBackShippingView.setOnClickListener{
+            findNavController().navigateUp()
         }
     }
 }

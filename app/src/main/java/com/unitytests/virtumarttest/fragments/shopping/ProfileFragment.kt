@@ -55,7 +55,7 @@ class ProfileFragment: Fragment() {
             findNavController().navigate(action)
         }
         binding.layoutShippingUserOptions.setOnClickListener{
-            findNavController().navigate(R.id.action_profileFragment_to_shippingDetailsFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_shippingAddressManagementFragment)
         }
         binding.Logout.setOnClickListener{
             viewModel.logout()

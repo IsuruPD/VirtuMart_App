@@ -32,9 +32,6 @@
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_user_profile_options">
         <action
-            android:id="@+id/action_profileFragment_to_shippingDetailsFragment"
-            app:destination="@id/shippingDetailsFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_userAccountFragment"
             app:destination="@id/userAccountFragment" />
         <action
@@ -43,6 +40,9 @@
         <action
             android:id="@+id/action_profileFragment_to_orderConfirmationFragment"
             app:destination="@id/orderConfirmationFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_shippingAddressManagementFragment"
+            app:destination="@id/shippingAddressManagementFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -66,7 +66,13 @@
         android:id="@+id/shippingDetailsFragment"
         android:name="com.unitytests.virtumarttest.fragments.shopping.ShippingDetailsFragment"
         android:label="ShippingDetailsFragment"
-        tools:layout="@layout/fragment_shipping_details"/>
+        tools:layout="@layout/fragment_shipping_details">
+        <argument
+            android:name="shippingDetails"
+            app:argType="com.unitytests.virtumarttest.data.ShippingDetails"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/orderConfirmationFragment"
         android:name="com.unitytests.virtumarttest.fragments.shopping.OrderConfirmationFragment"
@@ -104,5 +110,14 @@
         <argument
             android:name="order"
             app:argType="com.unitytests.virtumarttest.data.orders.Order" />
+    </fragment>
+    <fragment
+        android:id="@+id/shippingAddressManagementFragment"
+        android:name="com.unitytests.virtumarttest.fragments.manage.ShippingAddressManagementFragment"
+        android:label="ShippingAddressManagementFragment"
+        tools:layout="@layout/fragment_shipping_details_management">
+        <action
+            android:id="@+id/action_shippingAddressManagementFragment_to_shippingDetailsFragment"
+            app:destination="@id/shippingDetailsFragment" />
     </fragment>
 </navigation>
