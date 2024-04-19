@@ -22,7 +22,6 @@ class ShippingDetailsFragment: Fragment() {
     private lateinit var binding : FragmentShippingDetailsBinding
     val viewModel by viewModels<ShippingDetailsVM>()
     val args by navArgs<ShippingDetailsFragmentArgs>()
-    private var isNew: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,37 +61,56 @@ class ShippingDetailsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        // Getting the values from argument
         val shippingDetails = args.shippingDetails
+
+
         if(shippingDetails == null){
             binding.btnDeleteShippingView.visibility = View.GONE
+            binding.btnUpdateShippingView.visibility = View.GONE
         }else{
             binding.apply{
                 shippingAliasEdt.isEnabled = false
-                btnSaveShippingView.text = "Update"
+                binding.btnSaveShippingView.visibility = View.GONE
+
                 shippingAliasEdt.setText(shippingDetails.addressAlias)
                 shippingReceiverNameEdt.setText(shippingDetails.receiverName)
                 shippingAddressEdt.setText(shippingDetails.address)
                 shippingCityEdt.setText(shippingDetails.city)
                 shippingDistrictEdt.setText(shippingDetails.district)
                 shippingContactEdt.setText(shippingDetails.contact)
-                isNew = false
             }
         }
 
-        binding.apply{
-            btnSaveShippingView.setOnClickListener{
+        binding.apply {
+            btnSaveShippingView.setOnClickListener {
                 val addressAlias = shippingAliasEdt.text.toString()
                 val receiverName = shippingReceiverNameEdt.text.toString()
                 val address = shippingAddressEdt.text.toString()
                 val city = shippingCityEdt.text.toString()
                 val district = shippingDistrictEdt.text.toString()
                 val contact = shippingContactEdt.text.toString()
-                val shippingAddress = ShippingDetails(addressAlias, receiverName, address, city, district, contact)
 
-                viewModel.addOrUpdateShippingDetails(shippingAddress, isNew)
+                val shippingAddress = ShippingDetails(null, addressAlias, receiverName, address, city, district, contact)
+
+                viewModel.addShippingDetails(shippingAddress)
+            }
+
+            btnUpdateShippingView.setOnClickListener {
+                val shippingId = args.shippingDetails?.id ?: ""
+                val addressAlias = shippingAliasEdt.text.toString()
+                val receiverName = shippingReceiverNameEdt.text.toString()
+                val address = shippingAddressEdt.text.toString()
+                val city = shippingCityEdt.text.toString()
+                val district = shippingDistrictEdt.text.toString()
+                val contact = shippingContactEdt.text.toString()
+
+                val shippingAddress = ShippingDetails(shippingId, addressAlias, receiverName, address, city, district, contact)
+
+                viewModel.updateShippingDetails(shippingAddress)
             }
         }
+
 
         binding.btnBackShippingView.setOnClickListener{
             findNavController().navigateUp()
