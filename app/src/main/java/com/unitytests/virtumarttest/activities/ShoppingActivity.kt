@@ -1,12 +1,16 @@
 package com.unitytests.virtumarttest.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.unity3d.player.UnityPlayerActivity
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.databinding.ActivityShoppingBinding
 import com.unitytests.virtumarttest.util.Resource
@@ -24,12 +28,14 @@ class ShoppingActivity : AppCompatActivity() {
     val viewModel by viewModels<CartVM>(
 
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         val navController = findNavController(R.id.shoppingHostFragment)
         binding.bottonNavBar.setupWithNavController(navController)
+
 
         lifecycleScope.launchWhenStarted {
             viewModel.cartProductsSF.collectLatest {

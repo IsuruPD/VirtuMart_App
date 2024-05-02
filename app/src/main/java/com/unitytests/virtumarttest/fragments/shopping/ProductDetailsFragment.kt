@@ -1,8 +1,10 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.app.ProgressDialog.show
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.unity3d.player.UnityPlayerActivity
 import com.unitytests.virtumarttest.adapters.ColorsAdapter
 import com.unitytests.virtumarttest.adapters.SizesAdapter
 import com.unitytests.virtumarttest.adapters.ViewPagerforImagesAdapter
@@ -110,6 +113,12 @@ class ProductDetailsFragment: Fragment() {
             product.colors?.let{colorsAdapter.differ.submitList(it)}
             product.size?.let{sizesAdapter.differ.submitList(it)}
         }
+
+
+
+        binding.btnViewARProductDisplayView.setOnClickListener {
+            openUnityActivity()
+        }
     }
 
     private fun setupRVProductImages() {
@@ -129,6 +138,19 @@ class ProductDetailsFragment: Fragment() {
         binding.rvSizeProductView.apply{
             adapter=sizesAdapter
             layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+
+    private fun openUnityActivity() {
+        try {
+            Toast.makeText(requireContext(), "This is from the fragment", Toast.LENGTH_LONG).show()
+            Log.i("UnityActivityInfo", "This is from the fragment")
+
+            val intent = Intent(requireContext(), UnityPlayerActivity::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("UnityActivityError", "Error starting UnityPlayerActivity: ${e.message}", e)
         }
     }
 }

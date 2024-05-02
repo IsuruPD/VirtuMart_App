@@ -32,14 +32,14 @@ class PlaceOrderVM @Inject constructor(
                 .collection("orders").document()
                 .set(order)
 
-        firestore.collection("orders").document().set(order)
+            firestore.collection("orders").document(auth.uid!!).collection("user_orders").add(order)
 
-        firestore.collection("user").document(auth.uid!!).collection("cart").get()
-            .addOnSuccessListener {
-                it.documents.forEach{
-                    it.reference.delete()
+            firestore.collection("user").document(auth.uid!!).collection("cart").get()
+                .addOnSuccessListener {
+                    it.documents.forEach{
+                        it.reference.delete()
+                    }
                 }
-            }
         }.addOnSuccessListener {
             viewModelScope.launch{
                 _order.emit(Resource.Success(order))

@@ -26,9 +26,13 @@ class OrdersVM @Inject constructor(
     }
 
     fun getOrders(){
+
         viewModelScope.launch {
             _allOrders.emit(Resource.Loading())
         }
+
+        //Fetch from the orders sub collection in users
+        /*
         firestore.collection("user").document(auth.uid!!).collection("orders")
             .get()
             .addOnSuccessListener {
@@ -40,6 +44,37 @@ class OrdersVM @Inject constructor(
             .addOnFailureListener{
                 viewModelScope.launch{
                     _allOrders.emit(Resource.Error(it.message.toString()))
+                }
+            }*/
+
+        //Fetch from the orders collection
+
+        firestore.collection("orders").document(auth.uid!!)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // Retrieve the order data from the document
+                    val orderData = documentSnapshot.toObject(Order::class.java)
+                    if (orderData != null) {
+                        viewModelScope.launch {
+                            _allOrders.emit(Resource.Success(listOf(orderData))) // Wrap the order in a list
+                        }
+                    } else {
+                        // No orders found for the user
+                        viewModelScope.launch {
+                            _allOrders.emit(Resource.Success(emptyList()))
+                        }
+                    }
+                } else {
+                    // No document found for the user
+                    viewModelScope.launch {
+                        _allOrders.emit(Resource.Success(emptyList()))
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                viewModelScope.launch {
+                    _allOrders.emit(Resource.Error(e.message ?: "Failed to retrieve orders"))
                 }
             }
     }
