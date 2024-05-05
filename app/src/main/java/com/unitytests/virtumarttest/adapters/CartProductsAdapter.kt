@@ -33,7 +33,7 @@ class CartProductsAdapter : RecyclerView.Adapter<CartProductsAdapter.CartProduct
 
     private val diffCallback = object : DiffUtil.ItemCallback<CartProducts> (){
         override fun areItemsTheSame(oldItem: CartProducts, newItem: CartProducts): Boolean {
-            return oldItem.product.id==newItem.product.id
+            return oldItem.product.productId==newItem.product.productId
         }
         override fun areContentsTheSame(oldItem: CartProducts, newItem: CartProducts): Boolean {
             return oldItem == newItem

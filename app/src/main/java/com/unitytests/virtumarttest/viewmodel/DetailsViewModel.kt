@@ -27,7 +27,7 @@ class DetailsViewModel @Inject constructor(
     fun addUpdateProductInCart(cartProducts: CartProducts){
         viewModelScope.launch { _addToCart.emit(Resource.Loading()) }
         firestore.collection("user").document(auth.uid!!).collection("cart")
-            .whereEqualTo("product.id", cartProducts.product.id)
+            .whereEqualTo("product.productId", cartProducts.product.productId)
             .get()
             .addOnSuccessListener{
                 it.documents.let{
