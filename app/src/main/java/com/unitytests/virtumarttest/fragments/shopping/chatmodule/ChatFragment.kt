@@ -45,7 +45,7 @@ class ChatFragment : Fragment() {
         // Simulated received messages (replace with actual message retrieval logic)
         val messages = listOf(
             ChatMessages("Hello", MessageType.SENT),
-            ChatMessages("Hi there!", MessageType.SENT),
+            ChatMessages("Hi there!", MessageType.RECEIVED),
             ChatMessages("How are you?", MessageType.SENT)
         )
 
