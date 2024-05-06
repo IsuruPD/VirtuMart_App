@@ -45,10 +45,10 @@
             app:destination="@id/shippingAddressManagementFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.unitytests.virtumarttest.fragments.shopping.SearchFragment"
+        android:id="@+id/chatFragment"
+        android:name="com.unitytests.virtumarttest.fragments.shopping.chatmodule.ChatFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search">
+        tools:layout="@layout/fragment_chat">
         <action
             android:id="@+id/action_searchFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />

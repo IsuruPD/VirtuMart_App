@@ -6,10 +6,11 @@
         android:icon="@drawable/ic_home"
         />
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/chatFragment"
         android:title="Search"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_chat_thick"
         />
+<!--    android:icon="@drawable/ic_search"-->
     <item
         android:id="@+id/cartFragment"
         android:title="Cart"
