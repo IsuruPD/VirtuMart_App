@@ -20,55 +20,93 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
-class registerVM @Inject constructor(
+class RegisterVM @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val db: FirebaseFirestore
-    ): ViewModel(){
+) : ViewModel() {
 
-        private val _register= MutableStateFlow<Resource<User>>(Resource.Unspecified())
-        val register: Flow<Resource<User>> =_register
+    private val _register = MutableStateFlow<Resource<User>>(Resource.Unspecified())
+    val register: Flow<Resource<User>> = _register
 
-        private val _validation= Channel<RegisterFieldsState>()
-        val validation=_validation.receiveAsFlow()
+    private val _validation = Channel<RegisterFieldsState>()
+    val validation = _validation.receiveAsFlow()
 
-        fun createAccountsWithEmailPass(user: User, password: String){
-            if(checkValidation(user, password)) {
-                runBlocking {
-                    _register.emit(Resource.Loading())
-                }
-                firebaseAuth.createUserWithEmailAndPassword(user.email, password)
-                    .addOnSuccessListener {
-                        it.user?.let {
-                            saveUserInfo(it.uid, user)
-                        }
+    fun createAccountsWithEmailPass(user: User, password: String) {
+        if (checkValidation(user, password)) {
+            runBlocking {
+                _register.emit(Resource.Loading())
+            }
+            firebaseAuth.createUserWithEmailAndPassword(user.email, password)
+                .addOnSuccessListener { authResult ->
+                    val firebaseUser = authResult.user
+                    firebaseUser?.let {
+                        val username = "${user.firstname} ${user.lastname}"
+                        val updatedUser = user.copy(username = username)
+                        saveUserInfo(it.uid, updatedUser)
                     }
-                    .addOnFailureListener {
-                        _register.value = Resource.Error(it.message.toString())
-                    }
-            }else{
-                val registerFieldsState= RegisterFieldsState(validateEmail(user.email), validatePassword(password))
-                runBlocking {
-                    _validation.send(registerFieldsState)
                 }
+                .addOnFailureListener { e ->
+                    _register.value = Resource.Error(e.message.toString())
+                }
+        } else {
+            val registerFieldsState =
+                RegisterFieldsState(validateEmail(user.email), validatePassword(password))
+            runBlocking {
+                _validation.send(registerFieldsState)
             }
         }
+    }
 
     private fun saveUserInfo(userUid: String, user: User) {
+        val userData = hashMapOf(
+            "firstname" to user.firstname,
+            "lastname" to user.lastname,
+            "email" to user.email,
+            "imagePath" to user.imagePath,
+            "id" to userUid,
+            "nic" to user.nic,
+            "phoneNumber" to user.phoneNumber,
+            "username" to user.username,
+            "gender" to user.gender,
+            "dob" to user.dob
+        )
+        val updatedUser = user.copy(id = userUid)
+
         db.collection(USER_COLLECTION)
             .document(userUid)
-            .set(user)
+            .set(userData)
             .addOnSuccessListener {
-                _register.value = Resource.Success(user)
-            }.addOnFailureListener{
-                _register.value = Resource.Error(it.message.toString())
+                // If user data is saved successfully to 'user' collection, also save the details to 'chatheads' collection
+                val chatheadsData = hashMapOf(
+                    "id" to userUid,
+                    "username" to user.username,
+                    "profileImg" to user.imagePath,
+                    "email" to user.email
+                )
+
+                db.collection("chatheads")
+                    .document(userUid)
+                    .set(chatheadsData)
+                    .addOnSuccessListener {
+                        // Both 'user' and 'chatheads' data saved successfully
+                        _register.value = Resource.Success(updatedUser)
+                    }
+                    .addOnFailureListener { e ->
+                        // Error saving data to 'chatheads' collection
+                        _register.value = Resource.Error(e.message.toString())
+                    }
+            }
+            .addOnFailureListener { e ->
+                _register.value = Resource.Error(e.message.toString())
             }
     }
 
     private fun checkValidation(user: User, password: String): Boolean {
         val emailValidation = validateEmail(user.email)
         val passwordValidation = validatePassword(password)
-        val validationStatus = emailValidation is RegisterValidation.Success &&
-                passwordValidation is RegisterValidation.Success
+        val validationStatus =
+            emailValidation is RegisterValidation.Success &&
+                    passwordValidation is RegisterValidation.Success
 
         return validationStatus
     }

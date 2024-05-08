@@ -31,6 +31,10 @@ class ProfileVM @Inject constructor(
     app: Application
 ) :AndroidViewModel(app) {
 
+    fun getUserId(): String {
+        return auth.currentUser?.uid ?: ""
+    }
+
     private val _user = MutableStateFlow<Resource<User>>(Resource.Unspecified())
     val user = _user.asStateFlow()
 

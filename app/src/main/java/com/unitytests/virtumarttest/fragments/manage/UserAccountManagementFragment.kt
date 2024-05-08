@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseUser
 import com.unitytests.virtumarttest.data.User
 import com.unitytests.virtumarttest.databinding.FragmentUserAccountManagementBinding
 import com.unitytests.virtumarttest.util.Resource
@@ -100,7 +101,8 @@ class UserAccountManagementFragment: Fragment() {
                 val email = txtEmailProfileView.text.toString()
                 val firstName = profileFirstNameEdt.text.toString().trim()
                 val lastName = profileLastNameEdt.text.toString().trim()
-                val user = User(firstName,lastName,email)
+
+                val user = User(viewModel.getUserId(), firstName,lastName,email)
                 viewModel.updateUserDetails(user, imageUri)
             }
         }
