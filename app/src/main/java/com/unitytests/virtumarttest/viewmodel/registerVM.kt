@@ -81,20 +81,34 @@ class RegisterVM @Inject constructor(
                     "id" to userUid,
                     "username" to user.username,
                     "profileImg" to user.imagePath,
-                    "email" to user.email
+                    "email" to user.email,
+                    "blocked" to listOf<String>()
                 )
 
                 db.collection("chatheads")
                     .document(userUid)
                     .set(chatheadsData)
                     .addOnSuccessListener {
-                        // Both 'user' and 'chatheads' data saved successfully
-                        _register.value = Resource.Success(updatedUser)
+
+                    val userChatsData = hashMapOf(
+                        "chats" to listOf<String>() // Initialize 'chats' as an empty list
+                    )
+                    db.collection("userchats")
+                        .document(userUid)
+                        .set(userChatsData)
+                        .addOnSuccessListener {
+                            // All 'user', 'chatheads' and 'userchats' data saved successfully
+                            _register.value = Resource.Success(updatedUser)
+                        }
+                        .addOnFailureListener { e ->
+                            // Error saving data to 'chatheads' collection
+                            _register.value = Resource.Error(e.message.toString())
+                        }
                     }
-                    .addOnFailureListener { e ->
-                        // Error saving data to 'chatheads' collection
-                        _register.value = Resource.Error(e.message.toString())
-                    }
+                .addOnFailureListener { e ->
+                    // Error saving data to 'chatheads' collection
+                    _register.value = Resource.Error(e.message.toString())
+                }
             }
             .addOnFailureListener { e ->
                 _register.value = Resource.Error(e.message.toString())
