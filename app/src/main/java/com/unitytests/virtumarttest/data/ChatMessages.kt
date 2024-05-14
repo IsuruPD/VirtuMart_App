@@ -3,14 +3,23 @@ package com.unitytests.virtumarttest.data
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 data class ChatMessages(
-    val text: String,
-    val type: MessageType,
-    val timestamp: String = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date())
-)
+    val userId: String,
+    val chats: List<ChatMetadata>
+){
+    constructor() : this("", emptyList())
+}
 
-enum class MessageType {
-    SENT,
-    RECEIVED
+@Serializable
+data class ChatMetadata(
+    val chatId: String,
+    @SerialName("isSeen") var isSeen: Boolean,
+    var lastMessage: String = "",
+    val receiverId: String,
+    var updatedAt: Long
+){
+    constructor() : this("", false,"", "XbkxdDReZVQOesb0a5ikpDu0lKY2", 0)
 }

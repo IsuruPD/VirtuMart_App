@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.data.ChatMessages
-import com.unitytests.virtumarttest.data.MessageType
 
 class ChatHeadsAdapter : ListAdapter<ChatMessages, RecyclerView.ViewHolder>(ChatMessageDiffCallback()) {
 
@@ -45,27 +44,28 @@ class ChatHeadsAdapter : ListAdapter<ChatMessages, RecyclerView.ViewHolder>(Chat
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = getItem(position)
 
-        when (holder.itemViewType) {
-            SENT_MESSAGE_VIEW_TYPE -> {
-                val sentHolder = holder as SentMessageViewHolder
-                sentHolder.sentMessageView.text = message.text
-                sentHolder.sentTimeStamp.text = message.timestamp
-            }
-            RECEIVED_MESSAGE_VIEW_TYPE -> {
-                val receivedHolder = holder as ReceivedMessageViewHolder
-                receivedHolder.receivedMessageView.text = message.text
-                receivedHolder.receivedTimeStamp.text = message.timestamp
-            }
-        }
+//        when (holder.itemViewType) {
+//            SENT_MESSAGE_VIEW_TYPE -> {
+//                val sentHolder = holder as SentMessageViewHolder
+//                sentHolder.sentMessageView.text = message.text
+//                sentHolder.sentTimeStamp.text = message.timestamp
+//            }
+//            RECEIVED_MESSAGE_VIEW_TYPE -> {
+//                val receivedHolder = holder as ReceivedMessageViewHolder
+//                receivedHolder.receivedMessageView.text = message.text
+//                receivedHolder.receivedTimeStamp.text = message.timestamp
+//            }
+//        }
     }
 
     override fun getItemViewType(position: Int): Int {
-        val message = getItem(position)
-        return if (message.type == MessageType.SENT) {
-            SENT_MESSAGE_VIEW_TYPE
-        } else {
-            RECEIVED_MESSAGE_VIEW_TYPE
-        }
+//        val message = getItem(position)
+//        return if (message.type == MessageType.SENT) {
+//            SENT_MESSAGE_VIEW_TYPE
+//        } else {
+//            RECEIVED_MESSAGE_VIEW_TYPE
+//        }
+        return 0
     }
 
     class ChatMessageDiffCallback : DiffUtil.ItemCallback<ChatMessages>() {
@@ -74,7 +74,7 @@ class ChatHeadsAdapter : ListAdapter<ChatMessages, RecyclerView.ViewHolder>(Chat
         }
 
         override fun areContentsTheSame(oldItem: ChatMessages, newItem: ChatMessages): Boolean {
-            return oldItem.text == newItem.text && oldItem.type == newItem.type
+            return oldItem.chats == newItem.chats
         }
     }
 
