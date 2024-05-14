@@ -11,6 +11,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.StorageReference
 import com.unitytests.virtumarttest.data.ChatMessages
 import com.unitytests.virtumarttest.data.ChatMetadata
+import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,9 +28,13 @@ class ChatVM @Inject constructor(
     private val auth: FirebaseAuth,
     private val storageRef: StorageReference): ViewModel() {
 
-    private val _chatMessages =
-        MutableStateFlow<Resource<List<ChatMessages>>>(Resource.Unspecified())
+    private val _chatMessages = MutableStateFlow<Resource<List<ChatMessages>>>(Resource.Unspecified())
     val chatMessages = _chatMessages.asStateFlow()
+
+    private val pagingInfoChats  = ChatsPagingInfo()
+    init{
+        fetchChatMessages()
+    }
 
     fun getUserId(): String {
         return auth.currentUser?.uid ?: ""
@@ -151,7 +156,7 @@ class ChatVM @Inject constructor(
 
                 Log.d("Message Send Fail", "Error: " + e.message.toString())
             }
-        }
+    }
 
     private suspend fun uploadImage(file: java.io.File, senderId: String): String? {
         return try {
@@ -175,4 +180,37 @@ class ChatVM @Inject constructor(
 
         return senderId+"chat";
     }
+
+
+    fun fetchChatMessages(){
+        if(!pagingInfoChats.isPagingEnd){
+            viewModelScope.launch{
+                _chatMessages.emit(Resource.Loading())
+            }
+            //Make the selection here using whereEqualTo("field","value") after collection
+            firestore.collection("chats").limit(pagingInfoChats.page * 10).get().addOnSuccessListener { result->
+                val chatMessageList=result.toObjects((ChatMessages::class.java))
+                //
+                pagingInfoChats.isPagingEnd = chatMessageList == pagingInfoChats.prevChatMessages
+                pagingInfoChats.prevChatMessages = chatMessageList
+                //
+                viewModelScope.launch {
+                    _chatMessages.emit(Resource.Success(chatMessageList))
+                }
+                pagingInfoChats.page++
+            }.addOnFailureListener{
+                viewModelScope.launch {
+                    _chatMessages.emit(Resource.Error(it.message.toString()))
+                }
+            }
+        }
+    }
 }
+
+internal data class ChatsPagingInfo(
+    var page: Long = 1,
+    //To avoid making more requests from firebase if the items are over to save bandwidth
+    var prevChatMessages: List<ChatMessages> = emptyList(),
+    var isPagingEnd: Boolean = false
+
+)

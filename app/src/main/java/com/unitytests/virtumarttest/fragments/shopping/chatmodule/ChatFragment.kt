@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.unitytests.virtumarttest.adapters.ChatHeadsAdapter
+import com.unitytests.virtumarttest.adapters.TopProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentChatBinding
 import com.unitytests.virtumarttest.viewmodel.ChatVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,9 +35,37 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupChatsView()
+
+        // Set up RecyclerView with LinearLayoutManager
+        binding.messagesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = chatAdapter
+        }
+
+
         // Set click listener for send button
         binding.sendBtn.setOnClickListener {
             sendMessage()
+        }
+
+        // Submit the list of messages to the adapter
+
+        // Chats bottom reach
+//        binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{ v, _, scrollY, _, _ ->
+//            //Check if the end of the page is reached
+//            if(v.getChildAt(0).bottom <= v.height+scrollY){
+//                //if yes fetch the next batch of products from firebase
+                viewModel.fetchChatMessages()
+//            }
+//        })
+    }
+
+    private fun setupChatsView(){
+        chatAdapter = ChatHeadsAdapter()
+        binding.messagesRecyclerView.apply{
+            layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter=chatAdapter
         }
     }
 
@@ -49,6 +79,7 @@ class ChatFragment : Fragment() {
 
             lifecycleScope.launch {
                 viewModel.sendMessage(senderId, messageText, imgFile)
+                binding.messageBodyChatViewEdt.text.clear()
             }
         }
     }
