@@ -1,5 +1,6 @@
 package com.unitytests.virtumarttest.data
 
+import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,4 +23,13 @@ data class ChatMetadata(
     var updatedAt: Long
 ){
     constructor() : this("", false,"", "XbkxdDReZVQOesb0a5ikpDu0lKY2", 0)
+}
+
+data class Messages(
+    val text : String,
+    val createdAt : Timestamp?,
+    val senderId : String,
+    val imgUrl : String
+){
+    constructor() : this("",null,"","")
 }

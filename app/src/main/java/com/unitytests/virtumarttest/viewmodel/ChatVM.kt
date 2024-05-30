@@ -4,18 +4,20 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.StorageReference
 import com.unitytests.virtumarttest.data.ChatMessages
 import com.unitytests.virtumarttest.data.ChatMetadata
-import com.unitytests.virtumarttest.data.Product
+import com.unitytests.virtumarttest.data.Messages
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Date
@@ -26,13 +28,16 @@ import javax.inject.Inject
 class ChatVM @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val storageRef: StorageReference): ViewModel() {
+    private val storageRef: StorageReference
+) : ViewModel() {
 
-    private val _chatMessages = MutableStateFlow<Resource<List<ChatMessages>>>(Resource.Unspecified())
-    val chatMessages = _chatMessages.asStateFlow()
+    private val _chatMessages = MutableStateFlow<Resource<List<Messages>>>(Resource.Unspecified())
+    val chatMessages: StateFlow<Resource<List<Messages>>> = _chatMessages
 
-    private val pagingInfoChats  = ChatsPagingInfo()
-    init{
+    private val pagingInfoChats = ChatsPagingInfo()
+
+    init {
+        val userId = getUserId()
         fetchChatMessages()
     }
 
@@ -40,31 +45,75 @@ class ChatVM @Inject constructor(
         return auth.currentUser?.uid ?: ""
     }
 
+    fun fetchChatMessages() {
+        val documentId = getUserId() + "chat"
+
+        firestore.collection("chats")
+            .document(documentId)
+            .addSnapshotListener { documentSnapshot, exception ->
+                if (exception != null) {
+                    viewModelScope.launch {
+                        _chatMessages.emit(Resource.Error(exception.message.toString()))
+                    }
+                    return@addSnapshotListener
+                }
+
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val messagesList = documentSnapshot.get("messages") as? List<Map<String, Any>>
+
+                    val chatMessageList = messagesList?.map { messageMap ->
+                        Messages(
+                            text = messageMap["text"] as? String ?: "",
+                            createdAt = messageMap["createdAt"] as? Timestamp,
+                            senderId = messageMap["senderId"] as? String ?: "",
+                            imgUrl = messageMap["imgUrl"] as? String ?: ""
+                        )
+                    } ?: emptyList()
+
+                    Log.d("Firestore", "Messages: $chatMessageList")
+
+                    // Paging logic
+                    pagingInfoChats.isPagingEnd = chatMessageList == pagingInfoChats.prevChatMessages
+                    pagingInfoChats.prevChatMessages = chatMessageList
+
+                    viewModelScope.launch {
+                        _chatMessages.emit(Resource.Success(chatMessageList))
+                    }
+                    pagingInfoChats.page++
+                } else {
+                    viewModelScope.launch {
+                        _chatMessages.emit(Resource.Error("Document does not exist"))
+                    }
+                }
+            }
+    }
+
+
     suspend fun sendMessage(senderId: String, text: String, imgFile: java.io.File?) {
 
         if (text.isEmpty()) return
 
         val customerCareId = "DaMi3g8f9bSEUK6hWn5UWcbi8nv2";
-        val chatId = generateChatId(senderId)
+        val chatId = generatedChatId(senderId)
 
         var imgUrl: String? = null
 
         try {
-                // Upload image to Firebase Storage if available
-                imgFile?.let { file ->
-                    imgUrl = uploadImage(file, senderId)
-                }
+            // Upload image to Firebase Storage if available
+            imgFile?.let { file ->
+                imgUrl = uploadImage(file, senderId)
+            }
 
-                // Construct message data
-                val messageData = mapOf(
-                    "senderId" to senderId,
-                    "text" to text,
-                    "createdAt" to Date(),
-                    "imgUrl" to imgUrl
-                )
+            // Construct message data
+            val messageData = mapOf(
+                "senderId" to senderId,
+                "text" to text,
+                "createdAt" to Date(),
+                "imgUrl" to imgUrl
+            )
             val chatRef = firestore.collection("chats").document(chatId)
 
-            firestore.runTransaction{transaction->
+            firestore.runTransaction { transaction ->
                 // Update chat document in Firestore with new message
                 chatRef.set(mapOf<String, Any>(), SetOptions.merge())
                     .addOnCompleteListener { task ->
@@ -73,16 +122,25 @@ class ChatVM @Inject constructor(
                             // Now update the messages array
                             chatRef.update("messages", FieldValue.arrayUnion(messageData))
                                 .addOnSuccessListener {
-                                    Log.d("chats Success", "Data has been saved in chats successfully!")
+                                    Log.d(
+                                        "chats Success",
+                                        "Data has been saved in chats successfully!"
+                                    )
                                 }
                                 .addOnFailureListener { error ->
                                     viewModelScope.launch {
                                         _chatMessages.emit(Resource.Error(error?.message.toString()))
                                     }
-                                    Log.d("Chats Fail", "Failed to update messages in chats: ${error.message}")
+                                    Log.d(
+                                        "Chats Fail",
+                                        "Failed to update messages in chats: ${error.message}"
+                                    )
                                 }
                         } else {
-                            Log.d("Chats Fail", "Failed to create/update chat document: ${task.exception?.message}")
+                            Log.d(
+                                "Chats Fail",
+                                "Failed to create/update chat document: ${task.exception?.message}"
+                            )
                             viewModelScope.launch {
                                 _chatMessages.emit(Resource.Error("Failed to create/update chat document"))
                             }
@@ -104,7 +162,8 @@ class ChatVM @Inject constructor(
                             val currentReceiverId = if (id == senderId) customerCareId else senderId
 
                             // Create or update the 'chats' array
-                            val updatedChats = userChatsData?.chats?.toMutableList() ?: mutableListOf()
+                            val updatedChats =
+                                userChatsData?.chats?.toMutableList() ?: mutableListOf()
                             val existingChat = updatedChats.find { it.chatId == chatId }
 
                             if (existingChat == null) {
@@ -127,13 +186,19 @@ class ChatVM @Inject constructor(
                             // Update 'chats' array in userchats document
                             userChatsRef.set(mapOf("chats" to updatedChats), SetOptions.merge())
                                 .addOnSuccessListener {
-                                    Log.d("userChats Success", "Data has been saved in userChats successfully!")
+                                    Log.d(
+                                        "userChats Success",
+                                        "Data has been saved in userChats successfully!"
+                                    )
                                 }
                                 .addOnFailureListener { error ->
                                     viewModelScope.launch {
                                         _chatMessages.emit(Resource.Error(error?.message.toString()))
                                     }
-                                    Log.d("userChats Fail", "Data has not been saved in userChats successfully!")
+                                    Log.d(
+                                        "userChats Fail",
+                                        "Data has not been saved in userChats successfully!"
+                                    )
                                 }
                         }
                     }
@@ -149,13 +214,16 @@ class ChatVM @Inject constructor(
                     viewModelScope.launch {
                         _chatMessages.emit(Resource.Error(error?.message.toString()))
                     }
-                    Log.d("All Fail","Data has not been saved in userChats and chats successfully! : ${error.message.toString()}")
+                    Log.d(
+                        "All Fail",
+                        "Data has not been saved in userChats and chats successfully! : ${error.message.toString()}"
+                    )
 
                 }
-            } catch (e: Exception){
+        } catch (e: Exception) {
 
-                Log.d("Message Send Fail", "Error: " + e.message.toString())
-            }
+            Log.d("Message Send Fail", "Error: " + e.message.toString())
+        }
     }
 
     private suspend fun uploadImage(file: java.io.File, senderId: String): String? {
@@ -176,41 +244,14 @@ class ChatVM @Inject constructor(
         }
     }
 
-    private fun generateChatId(senderId : String): String{
+    private fun generatedChatId(senderId: String): String {
 
-        return senderId+"chat";
-    }
-
-
-    fun fetchChatMessages(){
-        if(!pagingInfoChats.isPagingEnd){
-            viewModelScope.launch{
-                _chatMessages.emit(Resource.Loading())
-            }
-            //Make the selection here using whereEqualTo("field","value") after collection
-            firestore.collection("chats").limit(pagingInfoChats.page * 10).get().addOnSuccessListener { result->
-                val chatMessageList=result.toObjects((ChatMessages::class.java))
-                //
-                pagingInfoChats.isPagingEnd = chatMessageList == pagingInfoChats.prevChatMessages
-                pagingInfoChats.prevChatMessages = chatMessageList
-                //
-                viewModelScope.launch {
-                    _chatMessages.emit(Resource.Success(chatMessageList))
-                }
-                pagingInfoChats.page++
-            }.addOnFailureListener{
-                viewModelScope.launch {
-                    _chatMessages.emit(Resource.Error(it.message.toString()))
-                }
-            }
-        }
+        return senderId + "chat";
     }
 }
 
 internal data class ChatsPagingInfo(
     var page: Long = 1,
-    //To avoid making more requests from firebase if the items are over to save bandwidth
-    var prevChatMessages: List<ChatMessages> = emptyList(),
+    var prevChatMessages: List<Messages> = emptyList(),
     var isPagingEnd: Boolean = false
-
 )
