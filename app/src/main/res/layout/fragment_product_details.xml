@@ -252,7 +252,7 @@
 
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btnViewARProductDisplayView"
-        style="@style/darkWhiteButtonStyle"
+        style="@style/blueButtonStyle"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"

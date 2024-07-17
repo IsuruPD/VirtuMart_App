@@ -13,6 +13,7 @@ import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.CartVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import com.unity3d.player.UnityPlayerActivity
 
 @AndroidEntryPoint
 class ShoppingActivity : AppCompatActivity() {
