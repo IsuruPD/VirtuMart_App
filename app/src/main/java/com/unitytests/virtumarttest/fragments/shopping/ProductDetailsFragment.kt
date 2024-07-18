@@ -126,7 +126,8 @@ class ProductDetailsFragment: Fragment() {
         }
 
         binding.btnViewARProductDisplayView.setOnClickListener {
-            val modelUrl: String? = "https://drive.usercontent.google.com/u/0/uc?id=1yWgFHshD7FjVBesmpk4Sp4AZ9ZT0e9Cc&export=download";
+            val modelUrl: String? = product.modelUrl
+            Log.d("TestingModelFetch Model URL", product.modelUrl.toString())
             openUnityActivity(modelUrl)
         }
     }
@@ -165,5 +166,4 @@ class ProductDetailsFragment: Fragment() {
             Log.e("UnityActivityError", "Error starting UnityPlayerActivity: ${e.message}", e)
         }
     }
-
 }
