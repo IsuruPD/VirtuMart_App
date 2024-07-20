@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.DealsProductsAdapter
 import com.unitytests.virtumarttest.adapters.GalleryProductsAdapter
+import com.unitytests.virtumarttest.adapters.SearchProductsAdapter
 import com.unitytests.virtumarttest.adapters.TopProductsAdapter
 import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.databinding.FragmentMainCategoryBinding
 import com.unitytests.virtumarttest.fragments.shopping.ProductDetailsFragment
+import com.unitytests.virtumarttest.fragments.shopping.SearchableFragment
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.MainCategoryVM
@@ -28,11 +30,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
-class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
+class MainCategoryFragment: Fragment(R.layout.fragment_main_category), SearchableFragment {
     private lateinit var binding: FragmentMainCategoryBinding
     private lateinit var topProductsAdapter: TopProductsAdapter
     private lateinit var dealsProductsAdapter: DealsProductsAdapter
     private lateinit var galleryProductsAdapter: GalleryProductsAdapter
+    private lateinit var searchProductsAdapter: SearchProductsAdapter
     private val viewModel by viewModels<MainCategoryVM>()
 
     //Category Tabs
@@ -63,6 +66,8 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
         setupTopProductsView()
         setupDealsProductsView()
         setupGalleryProductsView()
+
+        setupSearchProductsView()
 
         // Navigate to product view page
         topProductsAdapter.onClick = {
@@ -199,6 +204,18 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category) {
             layoutManager=GridLayoutManager(requireContext(),2,GridLayoutManager.VERTICAL, false)
             adapter=galleryProductsAdapter
         }
+    }
+
+    private fun setupSearchProductsView() {
+        searchProductsAdapter = SearchProductsAdapter()
+        binding.rvProductsCatalogue.apply {
+            layoutManager = GridLayoutManager(requireContext(),2, GridLayoutManager.VERTICAL, false)
+            adapter = searchProductsAdapter
+        }
+    }
+
+    override fun onSearchQueryChanged(query: String) {
+        viewModel.filterProducts(query)
     }
 
     private fun hideLoading(){

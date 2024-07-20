@@ -1,10 +1,13 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.R
@@ -67,6 +70,22 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 8-> tab.text="Health and Wellness"
             }
         }.attach()
+
+        binding.searchBarHome.findViewById<EditText>(R.id.searchEditText).addTextChangedListener(object :
+            TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val query = s.toString()
+                for (fragment in categoriesFragments) {
+                    if (fragment is SearchableFragment) {
+                        fragment.onSearchQueryChanged(query)
+                    }
+                }
+            }
+        })
     }
 /*
     private fun fetchCategoriesFromFirestore() {
@@ -113,4 +132,9 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         }.attach()
     }
 */
+
+}
+
+interface SearchableFragment {
+    fun onSearchQueryChanged(query: String)
 }

@@ -24,6 +24,8 @@ class MainCategoryVM @Inject constructor(
     private val _galleryProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val galleryProducts: StateFlow<Resource<List<Product>>> = _galleryProducts
 
+    private var allProducts: List<Product> = listOf()
+
     private val topPagingInfoMain  = PagingInfo()
     private val dealsPagingInfoMain  = PagingInfo()
     private val galleryPagingInfoMain  = PagingInfo()
@@ -95,6 +97,7 @@ class MainCategoryVM @Inject constructor(
 //                }
 //        }
 //    }
+
     fun fetchTopProductsMain(){
         if(!topPagingInfoMain.isPagingEnd){
             viewModelScope.launch{
@@ -165,6 +168,15 @@ class MainCategoryVM @Inject constructor(
                 }
             }
         }
+    }
+
+    fun filterProducts(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            allProducts
+        } else {
+            allProducts.filter { it.productName.contains(query, ignoreCase = true) }
+        }
+        _galleryProducts.value = Resource.Success(filteredList)
     }
 }
 
