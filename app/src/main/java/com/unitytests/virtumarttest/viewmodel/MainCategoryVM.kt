@@ -1,5 +1,7 @@
 package com.unitytests.virtumarttest.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +27,14 @@ class MainCategoryVM @Inject constructor(
     private val _galleryProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val galleryProducts: StateFlow<Resource<List<Product>>> = _galleryProducts
 
-    private var allProducts: List<Product> = listOf()
+    private val _searchResults = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+    val searchResults: StateFlow<Resource<List<Product>>> = _searchResults
+
 
     private val topPagingInfoMain  = PagingInfo()
     private val dealsPagingInfoMain  = PagingInfo()
     private val galleryPagingInfoMain  = PagingInfo()
+//    private val searchPagingInfoMain  = PagingInfo()
     init{
         fetchTopProductsMain()
         fetchDealsProductsMain()
@@ -97,7 +103,6 @@ class MainCategoryVM @Inject constructor(
 //                }
 //        }
 //    }
-
     fun fetchTopProductsMain(){
         if(!topPagingInfoMain.isPagingEnd){
             viewModelScope.launch{
@@ -170,13 +175,24 @@ class MainCategoryVM @Inject constructor(
         }
     }
 
-    fun filterProducts(query: String) {
-        val filteredList = if (query.isEmpty()) {
-            allProducts
-        } else {
-            allProducts.filter { it.productName.contains(query, ignoreCase = true) }
+    fun searchProducts(query: String) {
+        viewModelScope.launch {
+            _searchResults.emit(Resource.Loading())
+            try {
+                val products = firestore.collection("products")
+                    .get()
+                    .await()
+                    .toObjects(Product::class.java)
+
+                val results = products.filter {
+                    it.productName.contains(query, ignoreCase = true)
+                }
+
+                _searchResults.emit(Resource.Success(results))
+            } catch (e: Exception) {
+                _searchResults.emit(Resource.Error(e.message ?: "Unknown error"))
+            }
         }
-        _galleryProducts.value = Resource.Success(filteredList)
     }
 }
 
@@ -187,6 +203,7 @@ internal data class PagingInfo(
     var prevTopProducts: List<Product> = emptyList(),
     var prevDealsProducts: List<Product> = emptyList(),
     var prevGalleryProducts: List<Product> = emptyList(),
+    var prevSearchProducts: List<Product> = emptyList(),
     var isPagingEnd: Boolean = false
 
 )

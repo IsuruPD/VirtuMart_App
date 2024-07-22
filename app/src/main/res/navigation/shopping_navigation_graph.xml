@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_homeFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -119,5 +122,17 @@
         <action
             android:id="@+id/action_shippingAddressManagementFragment_to_shippingDetailsFragment"
             app:destination="@id/shippingDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.unitytests.virtumarttest.fragments.shopping.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <argument
+            android:name="product"
+            app:argType="com.unitytests.virtumarttest.data.Product" />
+        <action
+            android:id="@+id/action_searchFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

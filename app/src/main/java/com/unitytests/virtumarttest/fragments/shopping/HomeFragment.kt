@@ -1,14 +1,17 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.HomeViewPagerFragmentAdapter
@@ -23,10 +26,14 @@ import com.unitytests.virtumarttest.fragments.categories.KitchenFragment
 import com.unitytests.virtumarttest.fragments.categories.LaundryFragment
 import com.unitytests.virtumarttest.fragments.categories.MainCategoryFragment
 import com.unitytests.virtumarttest.fragments.categories.PersonalCareFragment
+import com.unitytests.virtumarttest.viewmodel.MainCategoryVM
+import com.unitytests.virtumarttest.viewmodel.SharedSearchVM
 
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
+    //private val sharedViewModel: SharedSearchVM by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +47,19 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //fetchCategoriesFromFirestore()
+
+        val searchInputEditText = view.findViewById<EditText>(R.id.searchEditText)
+
+        searchInputEditText.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
+
+//        searchInputEditText.doOnTextChanged { text, _, _, _ ->
+//            val query = text.toString()
+//            sharedViewModel.searchProducts(query)
+//
+//            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+//        }
 
         //Disable the swipe motion to different tabs
         binding.viewPagerHome.isUserInputEnabled=false
@@ -70,22 +90,6 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 8-> tab.text="Health and Wellness"
             }
         }.attach()
-
-        binding.searchBarHome.findViewById<EditText>(R.id.searchEditText).addTextChangedListener(object :
-            TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val query = s.toString()
-                for (fragment in categoriesFragments) {
-                    if (fragment is SearchableFragment) {
-                        fragment.onSearchQueryChanged(query)
-                    }
-                }
-            }
-        })
     }
 /*
     private fun fetchCategoriesFromFirestore() {
@@ -132,9 +136,4 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         }.attach()
     }
 */
-
-}
-
-interface SearchableFragment {
-    fun onSearchQueryChanged(query: String)
 }
