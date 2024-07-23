@@ -1,0 +1,53 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group >
+        <item
+            android:id="@+id/navProduct_category"
+            android:title="Category"
+            >
+            <menu android:checkableBehavior="all">
+                <item android:title="All" android:checkable="true" />
+                <item android:title="Kitchen" android:checkable="true" />
+                <item android:title="Entertainment" android:checkable="true" />
+                <item android:title="Cleaning" android:checkable="true" />
+                <item android:title="Laundry" android:checkable="true" />
+                <item android:title="Home Decor" android:checkable="true" />
+                <item android:title="Personal Care" android:checkable="true" />
+                <item android:title="Health and Wellness" android:checkable="true" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/navShipping"
+            android:title="Free Shipping"
+            android:checkable="true" />
+        <item
+            android:id="@+id/navFeatured"
+            android:title="Featured"
+            android:checkable="true" />
+        <item
+            android:id="@+id/navDeals"
+            android:title="Deals"
+            android:checkable="true" />
+    </group>
+    <group>
+        <item
+            android:id="@+id/navToggle_sort_price"
+            android:title="Sort by Price">
+        </item>
+    </group>
+
+    <group>
+        <item android:title="Filter Products">
+            <menu>
+                <item
+                    android:id="@+id/nav_action_buttons"
+                    android:title=""
+                    android:enabled="false"
+                    android:checkable="false" />
+            </menu>
+        </item>
+    </group>
+</menu>

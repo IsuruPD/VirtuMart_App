@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -131,5 +132,34 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="100dp"/>
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/dummyNavBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:elevation="10dp"
+            android:background="@drawable/bottom_navigation_background"
+            app:itemIconTint="@drawable/bottom_nav_item_background"
+            app:itemPaddingBottom="10dp"
+            app:itemPaddingTop="10dp"
+            android:visibility="gone"
+            app:itemRippleColor="@color/g_white"
+            app:labelVisibilityMode="unlabeled"
+            android:layout_gravity="bottom"
+            app:menu="@menu/bottom_navigation_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:elevation="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:headerLayout="@layout/navdrawer_header"
+        app:menu="@menu/menu_filters">
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>
