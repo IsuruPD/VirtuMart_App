@@ -21,6 +21,9 @@ class SharedSearchVM @Inject constructor(
     val searchResults: StateFlow<Resource<List<Product>>> = _searchResults
     private val searchPagingInfoSearch = PagingInfoSearch()
 
+    private val _categories = MutableStateFlow<Resource<List<String>>>(Resource.Unspecified())
+    val categories: StateFlow<Resource<List<String>>> = _categories
+
     fun searchProducts(query: String) {
         // Reset pagination if the query has changed
         if (query != searchPagingInfoSearch.currentQuery) {
@@ -60,6 +63,26 @@ class SharedSearchVM @Inject constructor(
             }
         }
     }
+
+    fun fetchCategories() {
+        viewModelScope.launch {
+            _categories.emit(Resource.Loading())
+
+            try {
+                val categories = firestore.collection("Categories")
+                    .orderBy("rank")
+                    .get()
+                    .await()
+                    .documents
+                    .map { it.getString("name") ?: "" }
+
+                _categories.emit(Resource.Success(categories))
+            } catch (e: Exception) {
+                _categories.emit(Resource.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
 }
 
 internal data class PagingInfoSearch(

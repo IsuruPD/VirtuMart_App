@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -48,8 +50,12 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         //fetchCategoriesFromFirestore()
 
-        val searchInputEditText = view.findViewById<EditText>(R.id.searchEditText)
+        val searchInputEditText = view.findViewById<TextView>(R.id.searchEditText)
+        val homeFragmentHeader = view.findViewById<LinearLayout>(R.id.homeFragmentHeader)
 
+        homeFragmentHeader.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
         searchInputEditText.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }

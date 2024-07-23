@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:background="@drawable/search_box_background">
 
-            <EditText
+            <TextView
                 android:id="@+id/searchEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

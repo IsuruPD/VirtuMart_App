@@ -2,6 +2,7 @@ package com.unitytests.virtumarttest.fragments.shopping
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.SharedSearchVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
@@ -64,11 +66,17 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         // Set up the navigation view
         navView.setNavigationItemSelectedListener(this)
 
+        // Fetch categories
+        sharedViewModel.fetchCategories()
+
+        //Get the drawer elements
+        val menu = navView.menu.findItem(R.id.navProduct_category).subMenu
+
+
         // Inflate and add the custom title view
         val categoryTitleView = LayoutInflater.from(context).inflate(R.layout.navdrawer_title_styling, null) as TextView
         categoryTitleView.text = "Categories"
         navView.menu.findItem(R.id.navProduct_category).actionView = categoryTitleView
-
 
         // Inflate and add the radio group for sorting options
         val radioGroupView = LayoutInflater.from(context).inflate(R.layout.navdrawer_radio_buttons, null) as RadioGroup
@@ -168,13 +176,46 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
                 }
             }
         }
+
+        // Observe the categories
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.categories.collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        val categories = resource.data ?: emptyList()
+                        if (menu != null) {
+                            populateMenu(menu, categories)
+                        }
+                    }
+                    is Resource.Error -> {
+                        // Handle error
+                    }
+                    is Resource.Loading -> {
+                        // Handle loading
+                    }
+                    is Resource.Unspecified -> {
+                        // Handle unspecified
+                    }
+                }
+            }
+        }
     }
+
 
     private fun setupSearchProductsView() {
         searchProductsAdapter = SearchProductsAdapter()
         binding.rvSearchProducts.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = searchProductsAdapter
+        }
+    }
+
+    private fun populateMenu(menu: Menu, categories: List<String>) {
+        menu.clear()
+        categories.forEach { category ->
+            menu.add(Menu.NONE, Menu.NONE, Menu.NONE, category).apply {
+                isCheckable = true
+            }
         }
     }
 
