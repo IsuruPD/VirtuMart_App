@@ -1,6 +1,7 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -44,6 +45,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
     private lateinit var searchProductsAdapter: SearchProductsAdapter
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    private lateinit var radioGroupView: RadioGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +74,6 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         //Get the drawer elements
         val menu = navView.menu.findItem(R.id.navProduct_category).subMenu
 
-
         // Inflate and add the custom title view
         val categoryTitleView = LayoutInflater.from(context).inflate(R.layout.navdrawer_title_styling, null) as TextView
         categoryTitleView.text = "Categories"
@@ -92,6 +93,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
 
         applyFiltersButton.setOnClickListener {
             applyFilters()
+            outputSelectedItems()
             drawerLayout.closeDrawer(GravityCompat.END)
         }
 
@@ -109,6 +111,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
             override fun onDrawerOpened(drawerView: View) {
                 binding.dummyNavBar.visibility = View.VISIBLE
                 hideNavBarVisibility()
+                updateFilterUI()
             }
 
             override fun onDrawerClosed(drawerView: View) {
@@ -127,7 +130,6 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
             hideNavBarVisibility()
             drawerLayout.openDrawer(GravityCompat.END)
         }
-
 
         setupSearchProductsView()
 
@@ -188,19 +190,15 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
                         }
                     }
                     is Resource.Error -> {
-                        // Handle error
-                    }
-                    is Resource.Loading -> {
-                        // Handle loading
-                    }
-                    is Resource.Unspecified -> {
-                        // Handle unspecified
+                        Toast.makeText(requireContext(), "Error occurred retrieving data: " + resource.message.toString(), Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
-    }
 
+        // Setup filter items
+        setupFilterItems()
+    }
 
     private fun setupSearchProductsView() {
         searchProductsAdapter = SearchProductsAdapter()
@@ -215,48 +213,141 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         categories.forEach { category ->
             menu.add(Menu.NONE, Menu.NONE, Menu.NONE, category).apply {
                 isCheckable = true
+                setOnMenuItemClickListener {
+                    toggleCategorySelection(it, category)
+                    true
+                }
             }
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle filter and sort item selection
-//        when (item.itemId) {
-//            R.id.navbtn_apply_filters -> {
-//                // Apply the selected filters
-//                applyFilters()
-//                drawerLayout.closeDrawer(GravityCompat.END)
-//                return true
-//            }
-//            R.id.navbtn_clear_filters -> {
-//                // Clear all filters
-//                clearFilters()
-//                drawerLayout.closeDrawer(GravityCompat.END)
-//                return true
-//            }
-//            else -> {
-//                // Handle other filter/sort selections
-//                return false
-//            }
-//        }
-        return true
+    // Setup filters
+    private fun setupFilterItems() {
+        // Initialize radioGroupView
+        radioGroupView = LayoutInflater.from(context).inflate(R.layout.navdrawer_radio_buttons, null) as RadioGroup
+        navView.menu.findItem(R.id.navToggle_sort_price).actionView = radioGroupView
+
+        navView.menu.findItem(R.id.navShipping).setOnMenuItemClickListener {
+            toggleFilterSelection(it, "Free Shipping")
+            true
+        }
+
+        navView.menu.findItem(R.id.navFeatured).setOnMenuItemClickListener {
+            toggleFilterSelection(it, "Featured")
+            true
+        }
+
+        navView.menu.findItem(R.id.navDeals).setOnMenuItemClickListener {
+            toggleFilterSelection(it, "Deals")
+            true
+        }
+
+        radioGroupView.setOnCheckedChangeListener { _, checkedId ->
+            sharedViewModel.selectedSortOption = when (checkedId) {
+                R.id.radio_low_to_high -> "Low to High"
+                R.id.radio_high_to_low -> "High to Low"
+                else -> null
+            }
+        }
+    }
+
+    private fun toggleCategorySelection(item: MenuItem, category: String) {
+        if (sharedViewModel.selectedCategory == category) {
+            sharedViewModel.selectedCategory = null
+            item.isChecked = false
+        } else {
+            sharedViewModel.selectedCategory = category
+            item.isChecked = true
+        }
+        updateFilterUI()
+    }
+
+    private fun toggleFilterSelection(item: MenuItem, filter: String) {
+        if (sharedViewModel.selectedFilter == filter) {
+            sharedViewModel.selectedFilter = null
+            item.isChecked = false
+        } else {
+            sharedViewModel.selectedFilter = filter
+            item.isChecked = true
+        }
+        updateFilterUI()
     }
 
     private fun applyFilters() {
-        // Implement the logic to apply the selected filters
+        sharedViewModel.applyFilters()
+        updateFilterUI()
     }
 
     private fun clearFilters() {
-        // Implement the logic to clear all filters
+        sharedViewModel.clearFilters()
+        updateFilterUI()
+    }
+
+    private fun updateFilterUI() {
+        // Update category selections
+        val categorySubMenu = navView.menu.findItem(R.id.navProduct_category)?.subMenu
+        categorySubMenu?.let {
+            for (i in 0 until it.size()) {
+                val item = it.getItem(i)
+                item.isChecked = item.title == sharedViewModel.selectedCategory
+            }
+        }
+
+        // Update filter selections
+        navView.menu.findItem(R.id.navShipping)?.isChecked = sharedViewModel.selectedFilter == "Free Shipping"
+        navView.menu.findItem(R.id.navFeatured)?.isChecked = sharedViewModel.selectedFilter == "Featured"
+        navView.menu.findItem(R.id.navDeals)?.isChecked = sharedViewModel.selectedFilter == "Deals"
+
+        // Update radio buttons
+        when (sharedViewModel.selectedSortOption) {
+            "Low to High" -> radioGroupView.check(R.id.radio_low_to_high)
+            "High to Low" -> radioGroupView.check(R.id.radio_high_to_low)
+            else -> radioGroupView.clearCheck()
+        }
+    }
+
+    private fun outputSelectedItems() {
+        val selectedCategory = sharedViewModel.selectedCategory
+        val selectedFilter = sharedViewModel.selectedFilter
+        val selectedSortOption = sharedViewModel.selectedSortOption
+
+        Toast.makeText(
+            requireContext(),
+            "Selected Category: $selectedCategory\nSelected Filter: $selectedFilter\nSelected Sort Option: $selectedSortOption",
+            Toast.LENGTH_LONG
+        ).show()
+        Log.d("virtumart", "Selected Category: $selectedCategory\nSelected Filter: $selectedFilter\nSelected Sort Option: $selectedSortOption",
+        )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
         super.onResume()
         showNavBarVisibility()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // Handle filter and sort item selection
+        when (item.itemId) {
+            R.id.apply_filters -> {
+                // Apply the selected filters
+                applyFilters()
+                drawerLayout.closeDrawer(GravityCompat.END)
+                return true
+            }
+            R.id.clear_filters -> {
+                // Clear all filters
+                clearFilters()
+                drawerLayout.closeDrawer(GravityCompat.END)
+                return true
+            }
+            else -> {
+                return false
+            }
+        }
+        return true
     }
 }

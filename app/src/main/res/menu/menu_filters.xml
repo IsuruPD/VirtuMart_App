@@ -23,6 +23,7 @@
             android:title="Deals"
             android:checkable="true" />
     </group>
+
     <group>
         <item
             android:id="@+id/navToggle_sort_price"

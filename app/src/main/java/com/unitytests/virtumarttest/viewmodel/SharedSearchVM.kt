@@ -24,6 +24,11 @@ class SharedSearchVM @Inject constructor(
     private val _categories = MutableStateFlow<Resource<List<String>>>(Resource.Unspecified())
     val categories: StateFlow<Resource<List<String>>> = _categories
 
+    // Category and Filter selections
+    var selectedCategory: String? = null
+    var selectedFilter: String? = null
+    var selectedSortOption: String? = null
+
     fun searchProducts(query: String) {
         // Reset pagination if the query has changed
         if (query != searchPagingInfoSearch.currentQuery) {
@@ -83,6 +88,16 @@ class SharedSearchVM @Inject constructor(
         }
     }
 
+    // Applying filters
+    fun applyFilters() {
+        searchProducts(searchPagingInfoSearch.currentQuery)
+    }
+
+    fun clearFilters() {
+        selectedCategory = null
+        selectedFilter = null
+        selectedSortOption = null
+    }
 }
 
 internal data class PagingInfoSearch(
