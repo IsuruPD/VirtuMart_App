@@ -3,6 +3,7 @@ package com.unitytests.virtumarttest.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,11 @@ class SharedSearchVM @Inject constructor(
     var selectedFilter: String? = null
     var selectedSortOption: String? = null
 
+    init {
+        // Fetch categories initially
+        fetchCategories()
+    }
+
     fun searchProducts(query: String) {
         // Reset pagination if the query has changed
         if (query != searchPagingInfoSearch.currentQuery) {
@@ -43,12 +49,32 @@ class SharedSearchVM @Inject constructor(
                 _searchResults.emit(Resource.Loading())
 
                 try {
-                    // Perform the paginated query
-                    val products = firestore.collection("products")
+                    var queryRef = firestore.collection("products")
                         .limit(searchPagingInfoSearch.page * 10)
-                        .get()
-                        .await()
-                        .toObjects(Product::class.java)
+
+                    // Apply category filter
+                    if (!selectedCategory.isNullOrEmpty()) {
+                        queryRef = queryRef.whereEqualTo("category", selectedCategory)
+                    }
+
+                    // Apply additional filters
+                    if (!selectedFilter.isNullOrEmpty()) {
+                        when (selectedFilter) {
+                            "Free Shipping" -> queryRef = queryRef.whereEqualTo("freeShipping", true)
+                            "Deals" -> queryRef = queryRef.whereEqualTo("deals", true)
+                            "Featured" -> queryRef = queryRef.whereEqualTo("featured", true)
+                        }
+                    }
+
+                    // Apply sorting
+                    if (!selectedSortOption.isNullOrEmpty()) {
+                        when (selectedSortOption) {
+                            "Low to High" -> queryRef = queryRef.orderBy("price", Query.Direction.ASCENDING)
+                            "High to Low" -> queryRef = queryRef.orderBy("price", Query.Direction.DESCENDING)
+                        }
+                    }
+
+                    val products = queryRef.get().await().toObjects(Product::class.java)
 
                     // Filter the results based on the query
                     val results = products.filter {
@@ -68,6 +94,7 @@ class SharedSearchVM @Inject constructor(
             }
         }
     }
+
 
     fun fetchCategories() {
         viewModelScope.launch {
@@ -90,6 +117,19 @@ class SharedSearchVM @Inject constructor(
 
     // Applying filters
     fun applyFilters() {
+        searchPagingInfoSearch.page = 1
+        searchPagingInfoSearch.prevSearchProducts = emptyList()
+        searchPagingInfoSearch.isPagingEnd = false
+        searchProducts(searchPagingInfoSearch.currentQuery)
+    }
+
+    fun applyClearFilters() {
+        selectedCategory = null
+        selectedFilter = null
+        selectedSortOption = null
+        searchPagingInfoSearch.page = 1
+        searchPagingInfoSearch.prevSearchProducts = emptyList()
+        searchPagingInfoSearch.isPagingEnd = false
         searchProducts(searchPagingInfoSearch.currentQuery)
     }
 

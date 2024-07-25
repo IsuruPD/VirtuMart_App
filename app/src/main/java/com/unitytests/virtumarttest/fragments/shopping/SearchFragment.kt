@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.SearchProductsAdapter
+import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.databinding.FragmentSearchBinding
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.hideNavBarVisibility
@@ -62,8 +63,8 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         navView = view.findViewById(R.id.nav_view)
 
         // Display products when opened
-        val startSearchQuery = searchInputEditText.text.toString()
-        sharedViewModel.searchProducts(startSearchQuery)
+        //val startSearchQuery = searchInputEditText.text.toString()
+        sharedViewModel.searchProducts("")
 
         // Set up the navigation view
         navView.setNavigationItemSelectedListener(this)
@@ -99,6 +100,8 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
 
         clearFiltersButton.setOnClickListener {
             clearFilters()
+            outputSelectedItems()
+            sharedViewModel.applyClearFilters()
             drawerLayout.closeDrawer(GravityCompat.END)
         }
 
@@ -172,6 +175,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
                     }
                     is Resource.Error -> {
                         binding.prgbrSearchProducts.visibility = View.GONE
+                        Log.d("virtumart",it.message.toString())
                         Toast.makeText(requireContext(), "Error occurred retrieving data: " + it.message.toString(), Toast.LENGTH_LONG).show()
                     }
                     else -> Unit
@@ -280,7 +284,13 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
 
     private fun clearFilters() {
         sharedViewModel.clearFilters()
+        searchInputEditText.text.clear()
         updateFilterUI()
+    }
+
+    private fun updateAdapter(products: List<Product>) {
+        searchProductsAdapter.submitList(products)
+        binding.prgbrSearchProducts.visibility = View.GONE
     }
 
     private fun updateFilterUI() {
@@ -329,6 +339,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         super.onResume()
         showNavBarVisibility()
     }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle filter and sort item selection
         when (item.itemId) {
