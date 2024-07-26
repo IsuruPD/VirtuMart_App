@@ -61,6 +61,10 @@ class ProductDetailsFragment: Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.btnAddToWishlist.setOnClickListener{
+
+        }
+
         sizesAdapter.onItemClick = {
             selectedSize = it
         }

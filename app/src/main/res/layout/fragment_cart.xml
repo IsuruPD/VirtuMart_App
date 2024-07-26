@@ -38,7 +38,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="15dp"
-                    android:src="@drawable/ic_chat_thick"/>
+                    android:src="@drawable/ic_chat_thick"
+                    android:visibility="invisible"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.Toolbar>
@@ -75,6 +76,7 @@
             android:id="@+id/rvProductItemsCartView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="72dp"
             tools:listitem="@layout/cart_product_recyclerview_items"
             app:layout_constraintStart_toEndOf="@id/gdlnLeftVCartView"
             app:layout_constraintEnd_toStartOf="@id/gdlnRightVCartView"

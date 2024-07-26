@@ -120,6 +120,43 @@
                 android:background="@drawable/search_box_background">
 
                 <LinearLayout
+                    android:id="@+id/layoutWishListUserOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_search"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/settings_items_background"
+                        app:backgroundTint="@color/white" />
+
+                    <TextView
+                        style="@style/SubTextViewThin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Wish List"
+                        android:textColor="@color/g_gray700"
+                        android:textStyle="bold"
+                        android:layout_marginStart="15dp"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/g_blue_gray200"
+                        android:layout_gravity="center_vertical"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/layoutMyOrdersUserOptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,6 +185,7 @@
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
                         android:src="@drawable/ic_right_arrow"
                         app:tint="@color/g_blue_gray200"
                         android:layout_gravity="center_vertical"/>
@@ -183,6 +221,7 @@
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
                         android:src="@drawable/ic_right_arrow"
                         app:tint="@color/g_blue_gray200"
                         android:layout_gravity="center_vertical"/>
@@ -193,7 +232,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"                    android:layout_marginBottom="10dp"
+                    >
 
                     <ImageView
                         android:layout_width="30dp"
@@ -217,6 +257,7 @@
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
+                        android:layout_marginEnd="5dp"
                         android:src="@drawable/ic_right_arrow"
                         app:tint="@color/g_blue_gray200"
                         android:layout_gravity="center_vertical"/>

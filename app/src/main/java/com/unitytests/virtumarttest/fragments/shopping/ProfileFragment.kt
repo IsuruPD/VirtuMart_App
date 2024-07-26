@@ -47,6 +47,9 @@ class ProfileFragment: Fragment() {
         binding.imgProfileUserOptions.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_userAccountFragment)
         }
+        binding.layoutWishListUserOptions.setOnClickListener{
+            findNavController().navigate(R.id.action_profileFragment_to_userOrderManagementFragment)
+        }
         binding.layoutMyOrdersUserOptions.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_userOrderManagementFragment)
         }

@@ -18,7 +18,8 @@
         <activity
             android:name=".activities.ShoppingActivity"
             android:launchMode="standard"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
@@ -28,6 +29,7 @@
 
         <activity
             android:name=".activities.LoginRegisterActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -38,8 +38,8 @@
                         android:id="@+id/btnBackProductDisplay"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="8dp"
                         android:elevation="1dp"
                         android:padding="5dp"
                         android:src="@drawable/ic_back_arrow"
@@ -51,18 +51,22 @@
                         android:layout_weight="1">
 
                     </View>
-                    <ImageView
-                        android:id="@+id/btnChatProductDisplay"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginTop="3dp"
-                        android:elevation="1dp"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_chat"
-                        app:tint="@color/black" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/btnAddToWishlist"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="1dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/imgCardProductDisplay"/>
 
             <LinearLayout
                 android:id="@+id/layoutHTitleContentProductDisplay"
@@ -222,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/sf_pro_display"
-                        android:text="Size"
+                        android:text="Model"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
