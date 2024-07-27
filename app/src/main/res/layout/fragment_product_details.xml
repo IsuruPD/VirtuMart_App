@@ -68,6 +68,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/imgCardProductDisplay"/>
 
+            <ProgressBar
+                android:id="@+id/prgbrAddtoWishListDetailsView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="@id/btnAddToWishlist"
+                app:layout_constraintEnd_toEndOf="@id/btnAddToWishlist"
+                app:layout_constraintStart_toStartOf="@id/btnAddToWishlist"
+                app:layout_constraintBottom_toBottomOf="@id/btnAddToWishlist"/>
+
+
             <LinearLayout
                 android:id="@+id/layoutHTitleContentProductDisplay"
                 android:layout_width="0dp"

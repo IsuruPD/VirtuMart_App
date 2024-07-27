@@ -16,16 +16,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.unity3d.player.UnityPlayerActivity
+import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.ColorsAdapter
 import com.unitytests.virtumarttest.adapters.SizesAdapter
 import com.unitytests.virtumarttest.adapters.ViewPagerforImagesAdapter
 import com.unitytests.virtumarttest.data.CartProducts
+import com.unitytests.virtumarttest.data.WishListProducts
 import com.unitytests.virtumarttest.databinding.FragmentProductDetailsBinding
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductDetailsFragment: Fragment() {
@@ -61,10 +64,6 @@ class ProductDetailsFragment: Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.btnAddToWishlist.setOnClickListener{
-
-        }
-
         sizesAdapter.onItemClick = {
             selectedSize = it
         }
@@ -72,6 +71,19 @@ class ProductDetailsFragment: Fragment() {
             selectedColor = it
         }
 
+        // Check Product Availability in Wish List
+        viewModel.checkIfProductInWishList(product.productId)
+        lifecycleScope.launchWhenStarted {
+            viewModel.isProductInWishList.collectLatest { isInWishList ->
+                if (isInWishList) {
+                    binding.btnAddToWishlist.setImageResource(R.drawable.ic_heart_filled)
+                } else {
+                    binding.btnAddToWishlist.setImageResource(R.drawable.ic_heart)
+                }
+            }
+        }
+
+        // Add to Cart
         binding.btnAddtoCartProductDisplayView.setOnClickListener {
             selectedColor?.let { color ->
                 val selectedColorInt = Color.parseColor(color)
@@ -109,6 +121,80 @@ class ProductDetailsFragment: Fragment() {
                 }
             }
         }
+
+        // Add to Wish List
+        binding.btnAddToWishlist.setOnClickListener {
+            selectedColor?.let { color ->
+                val selectedColorInt = Color.parseColor(color)
+                viewModel.toggleWishList(
+                    WishListProducts(
+                        product,
+                        1,
+                        selectedColorInt,
+                        selectedSize
+                    )
+                )
+            } ?: run {
+                Toast.makeText(requireContext(), "Please select a specification", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.addToWishList.collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.VISIBLE
+                            binding.btnAddToWishlist.visibility = View.INVISIBLE
+                        }
+
+                        is Resource.Success -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.GONE
+                            Toast.makeText(
+                                requireContext(),
+                                "Added to Wishlist",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.btnAddToWishlist.visibility = View.VISIBLE
+                        }
+
+                        is Resource.Error -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.GONE
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                            binding.btnAddToWishlist.visibility = View.VISIBLE
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+
+            launch{
+                viewModel.removeFromWishList.collectLatest {
+                    when (it) {
+                        is Resource.Loading -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.VISIBLE
+                            binding.btnAddToWishlist.visibility = View.INVISIBLE
+                        }
+
+                        is Resource.Success -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.GONE
+                            Toast.makeText(requireContext(), "Removed from Wishlist", Toast.LENGTH_SHORT).show()
+                            binding.btnAddToWishlist.visibility = View.VISIBLE
+                        }
+
+                        is Resource.Error -> {
+                            binding.prgbrAddtoWishListDetailsView.visibility = View.GONE
+                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                            binding.btnAddToWishlist.visibility = View.VISIBLE
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
+
 
         binding.apply {
             txtTitleProductView.text = product.productName

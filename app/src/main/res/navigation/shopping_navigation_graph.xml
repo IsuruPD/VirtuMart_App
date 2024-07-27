@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_profileFragment_to_shippingAddressManagementFragment"
             app:destination="@id/shippingAddressManagementFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -133,6 +136,15 @@
             app:argType="com.unitytests.virtumarttest.data.Product" />
         <action
             android:id="@+id/action_searchFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/wishListFragment"
+        android:name="com.unitytests.virtumarttest.fragments.shopping.WishListFragment"
+        android:label="WishListFragment"
+        tools:layout="@layout/fragment_wishlist">
+        <action
+            android:id="@+id/action_wishListFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>
