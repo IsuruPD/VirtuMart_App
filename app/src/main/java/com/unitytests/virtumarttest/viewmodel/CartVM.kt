@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
 import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
 import com.unitytests.virtumarttest.helper.getProductPrice
+import com.unitytests.virtumarttest.helper.getProductSubTotal
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,6 +42,24 @@ class CartVM @Inject constructor (
         }
     }
 
+    val productsDiscount = cartProductsSF.map{
+        when(it){
+            is Resource.Success ->{
+                calculateDiscounts(it.data!!)
+            }
+            else -> null
+        }
+    }
+
+    val productsSubTotal = cartProductsSF.map{
+        when(it){
+            is Resource.Success ->{
+                calculateSubTotal(it.data!!)
+            }
+            else -> null
+        }
+    }
+
     // Remove products from cart
     private val _deleteCartItem = MutableSharedFlow<CartProducts>()
     val deleteCartItem = _deleteCartItem.asSharedFlow()
@@ -52,12 +71,25 @@ class CartVM @Inject constructor (
                 .document(documentId).delete()
         }
     }
+    private fun calculateSubTotal(data: List<CartProducts>): Float {
+        return data.sumByDouble { cartProducts ->
+            (cartProducts.product.offerPercentage.getProductSubTotal(cartProducts.product.price)*cartProducts.quantity).toDouble()
+        }.toFloat()
+    }
+
+    private fun calculateDiscounts(data: List<CartProducts>): Float {
+        return data.sumByDouble { cartProducts ->
+            ((cartProducts.product.offerPercentage.getProductSubTotal(cartProducts.product.price)*cartProducts.quantity).toDouble()
+                -(cartProducts.product.offerPercentage.getProductPrice(cartProducts.product.price)*cartProducts.quantity).toDouble())
+        }.toFloat()
+    }
 
     private fun calculateCost(data: List<CartProducts>): Float {
         return data.sumByDouble { cartProducts ->
             (cartProducts.product.offerPercentage.getProductPrice(cartProducts.product.price)*cartProducts.quantity).toDouble()
         }.toFloat()
     }
+
 
     init{
         getCartProducts()

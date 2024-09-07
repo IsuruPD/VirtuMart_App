@@ -53,6 +53,22 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.productsSubTotal.collectLatest {cost->
+                cost?.let{
+                    binding.txtAmountSubtotalCartView.text= "Rs. ${String.format("%,.2f",cost)}"
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.productsDiscount.collectLatest {cost->
+                cost?.let{
+                    binding.txtAmountDiscountCartView.text= "Rs. ${String.format("%,.2f",cost)}"
+                }
+            }
+        }
+
         //Go to product view on click
         cartProductsAdapter.onProductClick = {
             val bundle = Bundle().apply { putParcelable("product", it.product) }
