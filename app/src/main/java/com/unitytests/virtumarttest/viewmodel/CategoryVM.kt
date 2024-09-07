@@ -65,6 +65,7 @@ class CategoryVM constructor(
             //Make the selection here using whereEqualTo("field","value") after collection
             firestore.collection("products")
                 .whereEqualTo("category",category.category)
+                .whereEqualTo("featured", true)
                 .limit(topPagingInfoBase.page * 10)
                 .get()
                 .addOnSuccessListener { result->

@@ -32,7 +32,12 @@ class HealthandWellnessFragment: BaseCategoryFragment() {
                         showTopBasePrgBrLoading()
                     }
                     is Resource.Success ->{
-                        topBaseAdapter.differ.submitList(it.data)
+                        if(it.data.isNullOrEmpty()){
+                            bindingBase.txtNoFeaturedItemsAvailableMessage.visibility = View.VISIBLE
+                            bindingBase.rvTopProductsBaseCategory.visibility = View.INVISIBLE
+                        }else{
+                            topBaseAdapter.differ.submitList(it.data)
+                        }
                         hideTopBasePrgBrLoading()
                     }
                     is Resource.Error ->{
@@ -51,7 +56,16 @@ class HealthandWellnessFragment: BaseCategoryFragment() {
                         showGalleryBasePrgBrLoading()
                     }
                     is Resource.Success ->{
-                        catalogBaseAdapter.differ.submitList(it.data)
+                        if(it.data.isNullOrEmpty()){
+                            bindingBase.txtTitleTopProductsBaseCategory.visibility = View.INVISIBLE
+                            bindingBase.txtTitleAllProductsBaseCategory.visibility = View.INVISIBLE
+                            bindingBase.rvTopProductsBaseCategory.visibility = View.INVISIBLE
+                            bindingBase.rvProductsCatalogueBaseCategory.visibility = View.INVISIBLE
+                            bindingBase.txtNoFeaturedItemsAvailableMessage.visibility = View.INVISIBLE
+                            bindingBase.txtNoGalleryItemsAvailableMessage.visibility = View.VISIBLE
+                        }else{
+                            catalogBaseAdapter.differ.submitList(it.data)
+                        }
                         hideGalleryBasePrgBrLoading()
                     }
                     is Resource.Error ->{

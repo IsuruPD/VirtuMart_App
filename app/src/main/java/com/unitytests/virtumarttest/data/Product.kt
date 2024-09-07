@@ -14,7 +14,8 @@ data class Product(
     val colors: List<String>?= null,
     val size: List<String>?= null,
     val modelUrl: String?= null,
-    val imageURLs: List<String>
+    val imageURLs: List<String>,
+    val freeShipping: Boolean?=false
 
 ): Parcelable {
     constructor(): this("0", "", "", 0f, imageURLs= emptyList())

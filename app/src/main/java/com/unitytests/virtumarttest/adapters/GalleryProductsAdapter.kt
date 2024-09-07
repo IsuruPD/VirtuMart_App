@@ -31,6 +31,9 @@ class GalleryProductsAdapter: RecyclerView.Adapter<GalleryProductsAdapter.Galler
                         txtOfferPercentageProductGalleryView.visibility= View.INVISIBLE
                         oldPriceDisplayGallery.visibility=View.INVISIBLE
                     }
+                    if(product.freeShipping==false){
+                        freeShippingDisplay.visibility = View.INVISIBLE
+                    }
                 }
             }
         }

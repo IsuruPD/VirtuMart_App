@@ -25,6 +25,7 @@ import com.unitytests.virtumarttest.data.WishListProducts
 import com.unitytests.virtumarttest.databinding.FragmentProductDetailsBinding
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.hideNavBarVisibility
+import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.DetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -258,5 +259,10 @@ class ProductDetailsFragment: Fragment() {
         } catch (e: Exception) {
             Log.e("UnityActivityError", "Error starting UnityPlayerActivity: ${e.message}", e)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
     }
 }

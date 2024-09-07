@@ -87,8 +87,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category){
                         binding.prgbrTopUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
-                        topProductsAdapter.differ.submitList(it.data)
                         binding.prgbrTopUpdateMainCategory.visibility=View.GONE
+                        // Hide view when no products are present
+                        if(it.data.isNullOrEmpty()){
+                            binding.txtTitleTopProductsMainCategory.visibility = View.INVISIBLE
+                            binding.rvTopProducts.visibility = View.INVISIBLE
+                        }else{
+                            topProductsAdapter.differ.submitList(it.data)
+                        }
                     }
                     is Resource.Error -> {
                         binding.prgbrTopUpdateMainCategory.visibility=View.GONE
@@ -108,8 +114,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category){
                         binding.prgbrDealsUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
-                        dealsProductsAdapter.differ.submitList(it.data)
                         binding.prgbrDealsUpdateMainCategory.visibility=View.GONE
+                        // Hide view when no products are present
+                        if(it.data.isNullOrEmpty()){
+                            binding.txtTitleDealsProducts.visibility = View.INVISIBLE
+                            binding.rvDealsProducts.visibility = View.INVISIBLE
+                        }else{
+                            dealsProductsAdapter.differ.submitList(it.data)
+                        }
                     }
                     is Resource.Error -> {
                         binding.prgbrDealsUpdateMainCategory.visibility=View.GONE
@@ -129,8 +141,14 @@ class MainCategoryFragment: Fragment(R.layout.fragment_main_category){
                         binding.prgbrGalleryUpdateMainCategory.visibility=View.VISIBLE
                     }
                     is Resource.Success -> {
-                        galleryProductsAdapter.differ.submitList(it.data)
                         binding.prgbrGalleryUpdateMainCategory.visibility=View.GONE
+                        // Hide view when no products are present
+                        if(it.data.isNullOrEmpty()){
+                            binding.txtTitleAllProducts.visibility = View.INVISIBLE
+                            binding.rvProductsCatalogue.visibility = View.INVISIBLE
+                        }else{
+                            galleryProductsAdapter.differ.submitList(it.data)
+                        }
                     }
                     is Resource.Error -> {
                         binding.prgbrGalleryUpdateMainCategory.visibility=View.GONE

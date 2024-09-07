@@ -109,7 +109,7 @@ class MainCategoryVM @Inject constructor(
                 _topProducts.emit(Resource.Loading())
             }
             //Make the selection here using whereEqualTo("field","value") after collection
-            firestore.collection("products").limit(topPagingInfoMain.page * 10).get().addOnSuccessListener { result->
+            firestore.collection("products").whereEqualTo("featured",true).limit(topPagingInfoMain.page * 10).get().addOnSuccessListener { result->
                 val topProductsList=result.toObjects((Product::class.java))
                 //
                 topPagingInfoMain.isPagingEnd = topProductsList == topPagingInfoMain.prevTopProducts
@@ -133,7 +133,7 @@ class MainCategoryVM @Inject constructor(
                 _dealsProducts.emit(Resource.Loading())
             }
             //Make the selection here using whereEqualTo("field","value") after collection
-            firestore.collection("products").limit(dealsPagingInfoMain.page * 10).get().addOnSuccessListener { result->
+            firestore.collection("products").whereEqualTo("deals", true).limit(dealsPagingInfoMain.page * 10).get().addOnSuccessListener { result->
                 val dealsProductsList=result.toObjects((Product::class.java))
                 //
                 dealsPagingInfoMain.isPagingEnd = dealsProductsList == dealsPagingInfoMain.prevDealsProducts

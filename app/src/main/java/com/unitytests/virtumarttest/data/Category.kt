@@ -5,9 +5,9 @@ sealed class Category(val category: String) {
     object Cleaning: Category("Cleaning")
     object Entertainment: Category("Entertainment")
     object Health: Category("Health and Wellness")
-    object HomeDecor: Category("HomeDecor")
+    object HomeDecor: Category("Home Decor")
     object Laundry: Category("Laundry")
     object PersonalCare: Category("Personal Care")
-    object AirConditioner: Category("Air Conditioner")
+    object AirConditioners: Category("Air Conditioners")
 
 }
