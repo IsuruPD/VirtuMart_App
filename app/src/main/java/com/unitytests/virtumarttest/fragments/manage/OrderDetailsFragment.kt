@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.unitytests.virtumarttest.data.orders.OrderStatuses
 import com.unitytests.virtumarttest.data.orders.getOrderStatuses
 import com.unitytests.virtumarttest.databinding.FragmentOrderDetailBinding
 import com.unitytests.virtumarttest.util.VerticalRecyclerStylingClass
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 
 class OrderDetailsFragment: Fragment() {
 
@@ -33,7 +35,13 @@ class OrderDetailsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val order = args.order
 
+        hideNavBarVisibility()
         setupOrdersRV()
+
+        binding.btnBackOrderView.setOnClickListener{
+            findNavController().navigateUp()
+        }
+
         binding.apply{
             txtOrderIDOrderOver.text = "#"+order.orderId.toString()
             txtReceiverName.text=order.shippingAddress.receiverName.toString()
@@ -74,5 +82,10 @@ class OrderDetailsFragment: Fragment() {
             layoutManager=LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             addItemDecoration(VerticalRecyclerStylingClass())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
     }
 }

@@ -1,5 +1,6 @@
 package com.unitytests.virtumarttest.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -75,6 +76,7 @@ class CartVM @Inject constructor (
             }else{
                 cartProductDocuments = value.documents
                 val cartProducts = value.toObjects(CartProducts::class.java)
+                Log.d("CartVM", "Cart Products: $cartProducts")
                 viewModelScope.launch{
                     _cartProducts.emit(Resource.Success(cartProducts))
                 }

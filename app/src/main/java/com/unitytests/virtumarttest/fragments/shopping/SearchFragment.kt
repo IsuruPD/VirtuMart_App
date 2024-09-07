@@ -62,6 +62,8 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         drawerLayout = view.findViewById(R.id.drawer_layout)
         navView = view.findViewById(R.id.nav_view)
 
+        hideNavBarVisibility()
+
         // Display products when opened
         //val startSearchQuery = searchInputEditText.text.toString()
         sharedViewModel.searchProducts("")
@@ -113,13 +115,13 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
 
             override fun onDrawerOpened(drawerView: View) {
                 binding.dummyNavBar.visibility = View.VISIBLE
-                hideNavBarVisibility()
+                //hideNavBarVisibility()
                 updateFilterUI()
             }
 
             override fun onDrawerClosed(drawerView: View) {
                 binding.dummyNavBar.visibility = View.GONE
-                showNavBarVisibility()
+                //showNavBarVisibility()
             }
 
             override fun onDrawerStateChanged(newState: Int) {
@@ -130,7 +132,7 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         // Handle the filter button click
         view.findViewById<ImageView>(R.id.itemFilterSF).setOnClickListener {
             binding.dummyNavBar.visibility = View.VISIBLE
-            hideNavBarVisibility()
+            //hideNavBarVisibility()
             drawerLayout.openDrawer(GravityCompat.END)
         }
 
@@ -330,16 +332,6 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
         )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-        showNavBarVisibility()
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle filter and sort item selection
         when (item.itemId) {
@@ -360,5 +352,16 @@ class SearchFragment : Fragment(), NavigationView.OnNavigationItemSelectedListen
             }
         }
         return true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //showNavBarVisibility()
+        hideNavBarVisibility()
     }
 }

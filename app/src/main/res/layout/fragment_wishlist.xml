@@ -30,8 +30,9 @@
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="3dp"
                     android:elevation="1dp"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:src="@drawable/ic_back_arrow"
+                    app:tint="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
@@ -53,15 +54,42 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <LinearLayout
+            android:id="@+id/wishListOptionsLayout"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/gdlnLeftVWishListView"
+            app:layout_constraintEnd_toStartOf="@id/gdlnRightVWishListView"
+            app:layout_constraintTop_toBottomOf="@id/toolBarWishListView">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Items"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/wishListItemCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginStart="5dp"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProductItemsWishListView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginTop="0dp"
             tools:listitem="@layout/wishlist_recyclerview_items"
             app:layout_constraintStart_toEndOf="@id/gdlnLeftVWishListView"
             app:layout_constraintEnd_toStartOf="@id/gdlnRightVWishListView"
-            app:layout_constraintTop_toBottomOf="@id/toolBarWishListView"
+            app:layout_constraintTop_toBottomOf="@id/wishListOptionsLayout"
             app:layout_constraintBottom_toBottomOf="parent"
             />
 

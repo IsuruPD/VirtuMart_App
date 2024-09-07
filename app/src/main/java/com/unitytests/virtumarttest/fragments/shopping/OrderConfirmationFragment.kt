@@ -24,6 +24,7 @@ import com.unitytests.virtumarttest.data.orders.OrderStatuses
 import com.unitytests.virtumarttest.databinding.FragmentOrderConfirmationBinding
 import com.unitytests.virtumarttest.util.HorizontalRecyclerStylingClass
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.OrderConfirmationVM
 import com.unitytests.virtumarttest.viewmodel.PlaceOrderVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,6 +62,7 @@ class OrderConfirmationFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showNavBarVisibility()
         setupShippingAddressesRV()
         setupOrderProductsRV()
 
@@ -161,5 +163,10 @@ class OrderConfirmationFragment: Fragment() {
             adapter = OrderProductsAdapter
             addItemDecoration(HorizontalRecyclerStylingClass())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showNavBarVisibility()
     }
 }

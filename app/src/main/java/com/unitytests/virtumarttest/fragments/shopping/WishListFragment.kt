@@ -16,9 +16,11 @@ import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.WishListAdapter
 import com.unitytests.virtumarttest.databinding.FragmentWishlistBinding
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.WishListVM
 import kotlinx.coroutines.flow.collectLatest
+import androidx.recyclerview.widget.ItemTouchHelper
 
 class WishListFragment : Fragment() {
 
@@ -38,18 +40,8 @@ class WishListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideNavBarVisibility()
         setupWishListRV()
-
-        // Setup total price
-        var totalCost = 0f //To be sent to order confirmation page
-//        lifecycleScope.launchWhenStarted {
-//            viewModel.productsCost.collectLatest {cost->
-//                cost?.let{
-//                    totalCost = it
-//                    //binding.txtAmountTotalCartView.text= "Rs. ${String.format("%,.2f",cost)}"
-//                }
-//            }
-//        }
 
         //Go to product view on click
         wishListAdapter.onProductClick = {
@@ -63,25 +55,6 @@ class WishListFragment : Fragment() {
         // Navigate to back
         binding.btnBackWishListView.setOnClickListener {
             findNavController().navigateUp()
-        }
-
-        // Remove product from cart
-        lifecycleScope.launchWhenStarted {
-            viewModel.deleteCartItem.collectLatest {
-                val viewDeleteCartItemDialog = AlertDialog.Builder(requireContext()).apply {
-                    setTitle("Remove product")
-                    setMessage("Do you want to remove the item from the cart?")
-                    setNegativeButton("No") { dialogBox, _ ->
-                        dialogBox.dismiss()
-                    }
-                    setPositiveButton("Yes") { dialogBox, _ ->
-                        //viewModel.deleteCartItem(it)
-                        dialogBox.dismiss()
-                    }
-                }
-                viewDeleteCartItemDialog.create()
-                viewDeleteCartItemDialog.show()
-            }
         }
 
         lifecycleScope.launchWhenStarted {
@@ -139,6 +112,6 @@ class WishListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        showNavBarVisibility()
+        hideNavBarVisibility()
     }
 }

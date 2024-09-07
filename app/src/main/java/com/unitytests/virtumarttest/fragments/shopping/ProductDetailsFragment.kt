@@ -104,16 +104,19 @@ class ProductDetailsFragment: Fragment() {
             viewModel.addToCart.collectLatest {
                 when (it) {
                     is Resource.Loading -> {
-                        binding.btnAddtoCartProductDisplayView.startAnimation()
+                        binding.btnAddToWishlist.isEnabled=false
+                        binding.productDetailsProgressBar.visibility = View.VISIBLE
                     }
 
                     is Resource.Success -> {
-                        binding.btnAddtoCartProductDisplayView.revertAnimation()
+                        binding.btnAddToWishlist.isEnabled=true
+                        binding.productDetailsProgressBar.visibility = View.GONE
                         Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_SHORT).show()
                     }
 
                     is Resource.Error -> {
-                        binding.btnAddtoCartProductDisplayView.revertAnimation()
+                        binding.btnAddToWishlist.isEnabled=true
+                        binding.productDetailsProgressBar.visibility = View.GONE
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
 

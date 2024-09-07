@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
+import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.data.WishListProducts
 import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
 import com.unitytests.virtumarttest.helper.getProductPrice
@@ -31,21 +32,15 @@ class WishListVM @Inject constructor (
     private val _wishListProducts= MutableStateFlow<Resource<List<WishListProducts>>>(Resource.Unspecified())
     val wishList = _wishListProducts.asStateFlow()
 
+    private val _removeFromWishList = MutableStateFlow<Resource<WishListProducts>>(Resource.Unspecified())
+    val removeFromWishList = _removeFromWishList.asStateFlow()
+
+    // Check Product in Wish List
+    private val _isProductInWishList = MutableStateFlow(false)
+    val isProductInWishList = _isProductInWishList.asStateFlow()
+
     private var wishListProductDocuments = emptyList<DocumentSnapshot>()
 
-    // Remove products from cart
-    private val _deleteCartItem = MutableSharedFlow<CartProducts>()
-    val deleteCartItem = _deleteCartItem.asSharedFlow()
-
-
-    fun deleteCartItem(wishListProducts: WishListProducts){
-        val index = wishList.value.data?.indexOf((wishListProducts))
-        if(index !=null && index != -1) {
-            val documentId = wishListProductDocuments[index].id
-            firestore.collection("user").document(auth.uid!!).collection("wishlist")
-                .document(documentId).delete()
-        }
-    }
 
     init{
         getWishListProducts()
@@ -69,5 +64,47 @@ class WishListVM @Inject constructor (
                 }
             }
         }
+    }
+
+    fun removeFromWishList(wishListProducts: WishListProducts) {
+        viewModelScope.launch {
+            _removeFromWishList.emit(Resource.Loading())
+            firestore.collection("user").document(auth.uid!!).collection("wishlist")
+                .whereEqualTo("product.productId", wishListProducts.product.productId)
+                .get()
+                .addOnSuccessListener {
+                    it.documents.let { documents ->
+                        val documentId = documents.first().id
+                        removeProductFromWishList(documentId)
+                    }
+                }
+                .addOnFailureListener {
+                    viewModelScope.launch { _removeFromWishList.emit(Resource.Error(it.message.toString())) }
+                }
+        }
+    }
+
+    private fun removeProductFromWishList(documentId: String) {
+        firestore.collection("user").document(auth.uid!!).collection("wishlist")
+            .document(documentId)
+            .delete()
+            .addOnSuccessListener {
+                viewModelScope.launch {
+                    // Creating a placeholder WishListProducts object
+                    val placeholderWishListProduct = WishListProducts(
+                        product = Product(),
+                        quantity = 0,
+                        selectedColor = 0,
+                        selectedSize = null
+                    )
+                    _removeFromWishList.emit(Resource.Success(placeholderWishListProduct))
+                    _isProductInWishList.value = false
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch {
+                    _removeFromWishList.emit(Resource.Error(it.message.toString()))
+                }
+            }
     }
 }

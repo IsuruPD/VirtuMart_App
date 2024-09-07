@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.adapters.UserAllOrdersAdapter
 import com.unitytests.virtumarttest.databinding.FragmentUserOrdersManagementBinding
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.OrdersVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,7 +38,12 @@ class UserOrderManagementFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideNavBarVisibility()
         setupOrdersRv()
+
+        binding.btnBackAllOrdersView.setOnClickListener{
+            findNavController().navigateUp()
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.allOrders.collectLatest{
@@ -73,5 +79,10 @@ class UserOrderManagementFragment: Fragment() {
             adapter = userAllOrdersAdapter
             layoutManager = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL, false)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
     }
 }

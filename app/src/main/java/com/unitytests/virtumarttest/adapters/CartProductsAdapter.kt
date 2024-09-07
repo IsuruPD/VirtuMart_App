@@ -2,6 +2,7 @@ package com.unitytests.virtumarttest.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -56,15 +57,24 @@ class CartProductsAdapter : RecyclerView.Adapter<CartProductsAdapter.CartProduct
         val cartProducts= differ.currentList[position]
         holder.bind(cartProducts)
 
-        holder.itemView.setOnClickListener{
-            onProductClick?.invoke(cartProducts)
+        if (differ.currentList.isNotEmpty()) {
+            val cartProducts = differ.currentList[position]
+            holder.bind(cartProducts)
+
+            holder.itemView.setOnClickListener{
+                onProductClick?.invoke(cartProducts)
+            }
+            holder.binding.btnProductQuantityIncreaseCartView.setOnClickListener{
+                onProductAddClick?.invoke(cartProducts)
+            }
+            holder.binding.btnProductQuantityDecreaseCartView.setOnClickListener{
+                onProductRemoveClick?.invoke(cartProducts)
+            }
+        } else {
+            // Handle the empty state appropriately
+            Log.d("CartProductsAdapter", "Attempted to bind data from an empty list")
         }
-        holder.binding.btnProductQuantityIncreaseCartView.setOnClickListener{
-            onProductAddClick?.invoke(cartProducts)
-        }
-        holder.binding.btnProductQuantityDecreaseCartView.setOnClickListener{
-            onProductRemoveClick?.invoke(cartProducts)
-        }
+
     }
 
     override fun getItemCount(): Int {

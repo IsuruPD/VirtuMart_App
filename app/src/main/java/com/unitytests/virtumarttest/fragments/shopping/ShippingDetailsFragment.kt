@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.unitytests.virtumarttest.data.ShippingDetails
 import com.unitytests.virtumarttest.databinding.FragmentShippingDetailsBinding
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.ShippingDetailsVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -65,6 +66,12 @@ class ShippingDetailsFragment: Fragment() {
         val shippingDetails = args.shippingDetails
 
 
+        hideNavBarVisibility()
+
+        binding.btnBackShippingView.setOnClickListener{
+            findNavController().navigateUp()
+        }
+
         if(shippingDetails == null){
             binding.btnDeleteShippingView.visibility = View.GONE
             binding.btnUpdateShippingView.visibility = View.GONE
@@ -111,9 +118,10 @@ class ShippingDetailsFragment: Fragment() {
             }
         }
 
+    }
 
-        binding.btnBackShippingView.setOnClickListener{
-            findNavController().navigateUp()
-        }
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
     }
 }

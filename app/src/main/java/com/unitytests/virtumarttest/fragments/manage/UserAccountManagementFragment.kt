@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.unitytests.virtumarttest.data.User
 import com.unitytests.virtumarttest.databinding.FragmentUserAccountManagementBinding
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.ProfileVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -53,6 +54,12 @@ class UserAccountManagementFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        hideNavBarVisibility()
+
+        binding.btnBackProfileView.setOnClickListener{
+            findNavController().navigateUp()
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.user.collectLatest {
@@ -145,4 +152,8 @@ class UserAccountManagementFragment: Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
+    }
 }

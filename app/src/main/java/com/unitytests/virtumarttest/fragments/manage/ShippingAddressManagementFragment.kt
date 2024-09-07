@@ -17,6 +17,7 @@ import com.unitytests.virtumarttest.data.ShippingDetails
 import com.unitytests.virtumarttest.databinding.FragmentShippingDetailsManagementBinding
 import com.unitytests.virtumarttest.util.HorizontalRecyclerStylingClass
 import com.unitytests.virtumarttest.util.Resource
+import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.OrderConfirmationVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,6 +42,7 @@ class ShippingAddressManagementFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        hideNavBarVisibility()
         setupManageAddressesRV()
 
         binding.btnBackManageShippingView.setOnClickListener{
@@ -83,5 +85,10 @@ class ShippingAddressManagementFragment: Fragment() {
             adapter = shippingDetailsManageAdapter
             addItemDecoration(HorizontalRecyclerStylingClass())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideNavBarVisibility()
     }
 }
