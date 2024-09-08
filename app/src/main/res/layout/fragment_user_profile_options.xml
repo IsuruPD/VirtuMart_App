@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bge2">
 
         <ProgressBar
             android:id="@+id/prgbrUserOptions"
@@ -131,7 +132,9 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
+                        android:src="@drawable/ic_heart"
+                        android:layout_marginStart="5dp"
+                        app:tint="@color/g_gray700"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
                         app:backgroundTint="@color/white" />
@@ -165,7 +168,9 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_formatlist"
+                        app:tint="@color/g_gray700"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
                         app:backgroundTint="@color/white" />
@@ -201,7 +206,9 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_inactiveorders"
+                        app:tint="@color/g_gray700"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
                         app:backgroundTint="@color/white" />
@@ -212,7 +219,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="To Be Paid"
+                        android:text="Disputes"
                         android:textColor="@color/g_gray700"
                         android:textStyle="bold"
                         android:layout_marginStart="15dp"
@@ -238,10 +245,12 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/shipping"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
-                        app:backgroundTint="@color/white" />
+                        app:backgroundTint="@color/white"
+                        app:tint="@color/g_gray700" />
 
                     <TextView
                         style="@style/SubTextViewThin"
@@ -296,7 +305,9 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_search"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_notifications"
+                        app:tint="@color/g_gray700"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
                         app:backgroundTint="@color/white" />
@@ -345,9 +356,11 @@
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_marginStart="5dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/settings_items_background"
-                        android:src="@drawable/ic_search"
+                        app:tint="@color/g_gray700"
+                        android:src="@drawable/ic_logout"
                         app:backgroundTint="@color/white"/>
 
                     <TextView
