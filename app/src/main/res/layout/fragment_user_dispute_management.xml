@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarAllOrders"
+        android:id="@+id/toolbarAllDisputes"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +18,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/btnBackAllOrdersView"
+                android:id="@+id/btnBackAllDisputesView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="2dp"
@@ -33,35 +33,35 @@
 
 
             <TextView
-                android:id="@+id/txtTbTitleAllOrdersView"
+                android:id="@+id/txtTbTitleAllDisputesView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="Your Past Orders"
+                android:text="Disputes"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/btnBackAllOrdersView"
-                app:layout_constraintStart_toEndOf="@id/btnBackAllOrdersView"
-                app:layout_constraintTop_toTopOf="@+id/btnBackAllOrdersView" />
+                app:layout_constraintBottom_toBottomOf="@+id/btnBackAllDisputesView"
+                app:layout_constraintStart_toEndOf="@id/btnBackAllDisputesView"
+                app:layout_constraintTop_toTopOf="@+id/btnBackAllDisputesView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAllOrdersView"
+        android:id="@+id/rvAllDisputesView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="70dp"
-        app:layout_constraintEnd_toStartOf="@+id/gdlnVRightAllOrdersView"
-        app:layout_constraintStart_toStartOf="@+id/gdlnVLeftAllOrdersView"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarAllOrders"
+        app:layout_constraintEnd_toStartOf="@+id/gdlnVRightAllDisputesView"
+        app:layout_constraintStart_toStartOf="@+id/gdlnVLeftAllDisputesView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarAllDisputes"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/user_orders_recyclerview_items" />
 
     <ProgressBar
-        android:id="@+id/prgbrAllOrdersView"
+        android:id="@+id/prgbrAllDisputesView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/g_gray700"
@@ -72,12 +72,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtNoItemsAllOrdersView"
+        android:id="@+id/txtNoItemsAllDisputesView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_light"
         android:gravity="center"
-        android:text="You're only few clicks away from \n your first order!"
+        android:text="No disputes to display"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:visibility="gone"
@@ -87,14 +87,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gdlnVLeftAllOrdersView"
+        android:id="@+id/gdlnVLeftAllDisputesView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.04" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gdlnVRightAllOrdersView"
+        android:id="@+id/gdlnVRightAllDisputesView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"

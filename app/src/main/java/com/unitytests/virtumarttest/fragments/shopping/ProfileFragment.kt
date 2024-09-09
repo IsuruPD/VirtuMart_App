@@ -54,8 +54,9 @@ class ProfileFragment: Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_userOrderManagementFragment)
         }
         binding.layoutToBePaidUserOptions.setOnClickListener{
-            val action= ProfileFragmentDirections.actionProfileFragmentToOrderConfirmationFragment(0f, emptyArray())
-            findNavController().navigate(action)
+//            val action= ProfileFragmentDirections.actionProfileFragmentToOrderConfirmationFragment(0f, emptyArray())
+//            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_profileFragment_to_userDisputeManagementFragment)
         }
         binding.layoutShippingUserOptions.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_shippingAddressManagementFragment)

@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_profileFragment_to_wishListFragment"
             app:destination="@id/wishListFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userDisputeManagementFragment"
+            app:destination="@id/userDisputeManagementFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -146,5 +149,14 @@
         <action
             android:id="@+id/action_wishListFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDisputeManagementFragment"
+        android:name="com.unitytests.virtumarttest.fragments.manage.UserDisputeManagementFragment"
+        android:label="UserDisputeManagementFragment"
+        tools:layout="@layout/fragment_user_dispute_management">
+        <action
+            android:id="@+id/action_userDisputeManagementFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
     </fragment>
 </navigation>
