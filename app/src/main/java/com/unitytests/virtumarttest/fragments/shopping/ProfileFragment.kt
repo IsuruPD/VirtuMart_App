@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -61,13 +62,33 @@ class ProfileFragment: Fragment() {
         binding.layoutShippingUserOptions.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_shippingAddressManagementFragment)
         }
-        binding.Logout.setOnClickListener{
-            viewModel.logout()
-            val intent = Intent(requireActivity(), LoginRegisterActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+
+
+        binding.Logout.setOnClickListener {
+            // Inflate the custom layout for the dialog
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_confirm_logout, null)
+
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(true)
+                .setPositiveButton("Yes") { _, _ ->
+                    viewModel.logout()
+                    val intent = Intent(requireActivity(), LoginRegisterActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                .setNegativeButton("No") { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .create()
+            dialog.show()
         }
+
+
+
         binding.txtAppVersion.text= "Version ${BuildConfig.VERSION_CODE}"
+
+
 
         lifecycleScope.launchWhenStarted {
             viewModel.user.collectLatest {
