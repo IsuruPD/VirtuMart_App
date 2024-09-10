@@ -48,4 +48,9 @@ class ShoppingActivity : AppCompatActivity() {
             }
         }
     }
+
+//    override fun onBackPressed() {
+//        // Move the task to the background instead of finishing it (Yet back button from later fragments also takes the user to the background)
+//        moveTaskToBack(true)
+//    }
 }

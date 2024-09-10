@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.activities.ShoppingActivity
 import com.unitytests.virtumarttest.databinding.FragmentLoginBinding
@@ -37,25 +38,29 @@ class loginFragment: Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.loginSubTitle.setOnClickListener{
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment2)
+        // Check if a user is already logged in
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            // User is already logged in, navigate to the ShoppingActivity
+            navigateToMainActivity()
+        } else {
+            // Proceed with the login flow if not logged in
+            setupLoginFlow()
         }
 
-        binding.apply{
-            btnLogin.setOnClickListener{
-                val email=loginEmailEdt.text.toString()
-                val password=loginPasswordEdt.text.toString()
+//        binding.loginSubTitle.setOnClickListener{
+//            findNavController().navigate(R.id.action_loginFragment_to_registerFragment2)
+//        }
+//
+//        binding.apply{
+//            btnLogin.setOnClickListener{
+//                val email=loginEmailEdt.text.toString()
+//                val password=loginPasswordEdt.text.toString()
+//
+//                viewModel.login(email, password)
+//            }
+//        }
 
-                viewModel.login(email, password)
-            }
-        }
-
-        binding.loginForgotPaswordTxt.setOnClickListener{
-            setupBottomSheetDialog { email->
-                viewModel.resetPassword(email)
-
-            }
-        }
         lifecycleScope.launchWhenStarted {
             viewModel.resetPassword.collect{
                 when(it){
@@ -83,7 +88,11 @@ class loginFragment: Fragment(R.layout.fragment_login) {
                         binding.btnLogin.revertAnimation()
                         Toast.makeText(requireContext(), "Logged In!",Toast.LENGTH_LONG).show()
                         Intent(requireActivity(), ShoppingActivity:: class.java).also { intent ->
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) // Clears the backstack for LoginRegisterActivity and thus,
+                                                                                                                   // trying to come back here(Login) from the ShoppingActivity by
+                                                                                                                   // clicking back will not be possible.
+                                                                                                                   // Yet, if the user closes the app by going back, they have to come back through login.
+                                                                                                                   // Minimizing the app will not require this however.
                             startActivity(intent)
                         }
                     }
@@ -93,6 +102,36 @@ class loginFragment: Fragment(R.layout.fragment_login) {
                     }
                     else -> Unit
                 }
+            }
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
+            startActivity(intent)
+            requireActivity().finish()  // To prevent going back to login screen (Already logged in)
+        }
+    }
+
+    private fun setupLoginFlow() {
+
+        // Take the user to login if not logged in already
+        binding.loginSubTitle.setOnClickListener{
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment2)
+        }
+
+        binding.apply {
+            btnLogin.setOnClickListener {
+                val email = loginEmailEdt.text.toString()
+                val password = loginPasswordEdt.text.toString()
+                viewModel.login(email, password)
+            }
+        }
+
+        binding.loginForgotPaswordTxt.setOnClickListener{
+            setupBottomSheetDialog { email->
+                viewModel.resetPassword(email)
+
             }
         }
     }
