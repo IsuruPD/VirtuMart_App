@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import com.unitytests.virtumarttest.VirtuMartApplication
@@ -87,54 +88,93 @@ class ProfileVM @Inject constructor(
 
     }
 
-    fun updateUserDetails(user: User, imageUri: Uri?){
+    fun updateUserDetails(updatedUser: User, imageUri: Uri?) {
+        val inputValidity = validateEmail(updatedUser.email) is RegisterValidation.Success
+                && updatedUser.firstname.trim().isNotEmpty() && updatedUser.lastname.trim().isNotEmpty()
 
-        val inputValidity = validateEmail(user.email) is RegisterValidation.Success
-                && user.firstname.trim().isNotEmpty() && user.lastname.trim().isNotEmpty()
-
-        if(!inputValidity){
-            viewModelScope.launch{
+        if (!inputValidity) {
+            viewModelScope.launch {
                 _user.emit(Resource.Error("Fields cannot be empty!"))
             }
+            return
         }
 
-        viewModelScope.launch{
+        viewModelScope.launch {
             _updateDetails.emit(Resource.Loading())
-        }
 
-        if(imageUri==null){
-            editDetails(user, true)
-        }else{
-            editDetailswithImage(user, imageUri)
+            val userRef = firestore.collection("user").document(auth.uid!!)
+            val currentUserSnapshot = userRef.get().await()
+            val currentUser = currentUserSnapshot.toObject(User::class.java)
+
+            currentUser?.let { currentUserData ->
+                val updates = mutableMapOf<String, Any>()
+
+                // Compare current and new values, only add to updates map if changed
+                if (updatedUser.firstname != currentUserData.firstname) {
+                    updates["firstname"] = updatedUser.firstname
+                }
+                if (updatedUser.lastname != currentUserData.lastname) {
+                    updates["lastname"] = updatedUser.lastname
+                }
+                if (updatedUser.dob != currentUserData.dob) {
+                    updates["dob"] = updatedUser.dob
+                }
+                if (updatedUser.gender != currentUserData.gender) {
+                    updates["gender"] = updatedUser.gender
+                }
+                if (updatedUser.nic != currentUserData.nic) {
+                    updates["nic"] = updatedUser.nic
+                }
+                if (updatedUser.phoneNumber != currentUserData.phoneNumber) {
+                    updates["phoneNumber"] = updatedUser.phoneNumber
+                }
+
+                // Check if the profile image needs updating
+                if (imageUri != null) {
+                    // Update profile image if necessary
+                    uploadProfileImage(updatedUser, imageUri) { newImagePath ->
+                        updates["imagePath"] = newImagePath
+                        applyUpdates(userRef, updates, updatedUser)
+                    }
+                } else {
+                    applyUpdates(userRef, updates, updatedUser)
+                }
+            } ?: run {
+                _updateDetails.emit(Resource.Error("User not found"))
+            }
         }
     }
 
-    private fun editDetails(user: User, retrieveOldImage: Boolean) {
-        firestore.runTransaction { transaction ->
-            val documentRef = firestore.collection("user").document(auth.uid!!)
-            if(retrieveOldImage){
-                val currentUser = transaction.get(documentRef).toObject(User::class.java)
-                val newUser = user.copy(imagePath = currentUser?.imagePath?: "")
-                transaction.set(documentRef, newUser)
-            }else{
-                transaction.set(documentRef, user)
-            }
-        }.addOnSuccessListener {
-            viewModelScope.launch{
-                _updateDetails.emit(Resource.Success(user))
-            }
-        }.addOnFailureListener{
+    private fun applyUpdates(
+        userRef: DocumentReference,
+        updates: Map<String, Any>,
+        updatedUser: User
+    ) {
+        if (updates.isNotEmpty()) {
+            userRef.update(updates)
+                .addOnSuccessListener {
+                    viewModelScope.launch {
+                        _updateDetails.emit(Resource.Success(updatedUser))
+                    }
+                }.addOnFailureListener { error ->
+                    viewModelScope.launch {
+                        _updateDetails.emit(Resource.Error(error.message.toString()))
+                    }
+                }
+        } else {
+            // No changes to update
             viewModelScope.launch {
-                _updateDetails.emit(Resource.Error(it.message.toString()))
+                _updateDetails.emit(Resource.Error("No changes made to the profile"))
             }
         }
     }
 
-    private fun editDetailswithImage(user: User, imageUri: Uri) {
-        viewModelScope.launch{
-            try{
-                val imageBitmap= MediaStore.Images.Media.getBitmap(
-                    getApplication<VirtuMartApplication>().contentResolver, imageUri)
+    private fun uploadProfileImage(user: User, imageUri: Uri, onComplete: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val imageBitmap = MediaStore.Images.Media.getBitmap(
+                    getApplication<VirtuMartApplication>().contentResolver, imageUri
+                )
 
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
@@ -142,16 +182,82 @@ class ProfileVM @Inject constructor(
 
                 val profileImageDirectory =
                     storage.child("userProfileImages/${auth.uid}/${UUID.randomUUID()}")
-                val result= profileImageDirectory.putBytes(imageBytearray).await()
+                val result = profileImageDirectory.putBytes(imageBytearray).await()
                 val imageUri = result.storage.downloadUrl.await().toString()
 
-                editDetails(user.copy(imagePath = imageUri), false)
+                onComplete(imageUri)
 
-            }catch(error: Exception){
-                viewModelScope.launch {
-                    _updateDetails.emit(Resource.Error(error.message.toString()))
-                }
+            } catch (error: Exception) {
+                _updateDetails.emit(Resource.Error(error.message.toString()))
             }
         }
     }
+
+//    fun updateUserDetails(user: User, imageUri: Uri?){
+//
+//        val inputValidity = validateEmail(user.email) is RegisterValidation.Success
+//                && user.firstname.trim().isNotEmpty() && user.lastname.trim().isNotEmpty()
+//
+//        if(!inputValidity){
+//            viewModelScope.launch{
+//                _user.emit(Resource.Error("Fields cannot be empty!"))
+//            }
+//        }
+//
+//        viewModelScope.launch{
+//            _updateDetails.emit(Resource.Loading())
+//        }
+//
+//        if(imageUri==null){
+//            editDetails(user, true)
+//        }else{
+//            editDetailswithImage(user, imageUri)
+//        }
+//    }
+//
+//    private fun editDetails(user: User, retrieveOldImage: Boolean) {
+//        firestore.runTransaction { transaction ->
+//            val documentRef = firestore.collection("user").document(auth.uid!!)
+//            if(retrieveOldImage){
+//                val currentUser = transaction.get(documentRef).toObject(User::class.java)
+//                val newUser = user.copy(imagePath = currentUser?.imagePath?: "")
+//                transaction.set(documentRef, newUser)
+//            }else{
+//                transaction.set(documentRef, user)
+//            }
+//        }.addOnSuccessListener {
+//            viewModelScope.launch{
+//                _updateDetails.emit(Resource.Success(user))
+//            }
+//        }.addOnFailureListener{
+//            viewModelScope.launch {
+//                _updateDetails.emit(Resource.Error(it.message.toString()))
+//            }
+//        }
+//    }
+//
+//    private fun editDetailswithImage(user: User, imageUri: Uri) {
+//        viewModelScope.launch{
+//            try{
+//                val imageBitmap= MediaStore.Images.Media.getBitmap(
+//                    getApplication<VirtuMartApplication>().contentResolver, imageUri)
+//
+//                val byteArrayOutputStream = ByteArrayOutputStream()
+//                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 96, byteArrayOutputStream)
+//                val imageBytearray = byteArrayOutputStream.toByteArray()
+//
+//                val profileImageDirectory =
+//                    storage.child("userProfileImages/${auth.uid}/${UUID.randomUUID()}")
+//                val result= profileImageDirectory.putBytes(imageBytearray).await()
+//                val imageUri = result.storage.downloadUrl.await().toString()
+//
+//                editDetails(user.copy(imagePath = imageUri), false)
+//
+//            }catch(error: Exception){
+//                viewModelScope.launch {
+//                    _updateDetails.emit(Resource.Error(error.message.toString()))
+//                }
+//            }
+//        }
+//    }
 }

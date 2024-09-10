@@ -100,8 +100,7 @@ class ProfileFragment: Fragment() {
                     is Resource.Success ->{
                         binding.prgbrUserOptions.visibility = View.GONE
 
-                        Glide.with(requireView()).load(it.data!!.imagePath).error(ColorDrawable(
-                            Color.DKGRAY)).into(binding.imgProfileUserOptions)
+                        Glide.with(requireView()).load(it.data!!.imagePath).error(R.drawable.noprofileicon).into(binding.imgProfileUserOptions)
                         binding.txtNameUserOptions.text = "${it.data.firstname} ${it.data.lastname}"
                     }
                     is Resource.Error ->{
