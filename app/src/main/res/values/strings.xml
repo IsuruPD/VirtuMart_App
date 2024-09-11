@@ -9,4 +9,6 @@
     <string name="forgotPassTxt">Forgot password</string>
     <string name="registerTxt">Signup Here\,</string>
     <string name="registerLoginNowTxt">Already have an account\? Login Now</string>
+    <string name="login_success_channel_name">Login Notifications</string>
+    <string name="login_success_channel_description">Notifications for successful logins</string>
 </resources>

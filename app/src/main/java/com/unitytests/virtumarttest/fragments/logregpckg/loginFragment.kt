@@ -1,11 +1,19 @@
 package com.unitytests.virtumarttest.fragments.logregpckg
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +25,7 @@ import com.unitytests.virtumarttest.activities.ShoppingActivity
 import com.unitytests.virtumarttest.databinding.FragmentLoginBinding
 import com.unitytests.virtumarttest.databinding.FragmentRegisterBinding
 import com.unitytests.virtumarttest.dialogBoxes.setupBottomSheetDialog
+import com.unitytests.virtumarttest.notifications.AppNotificationManager
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.LoginVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +35,7 @@ import kotlinx.coroutines.flow.collect
 class loginFragment: Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
     private val viewModel by viewModels<LoginVM>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,6 +97,10 @@ class loginFragment: Fragment(R.layout.fragment_login) {
                     is Resource.Success->{
                         binding.btnLogin.revertAnimation()
                         Toast.makeText(requireContext(), "Logged In!",Toast.LENGTH_LONG).show()
+
+                        val notificationManager = AppNotificationManager(requireContext())
+                        notificationManager.showLoginNotification()
+
                         Intent(requireActivity(), ShoppingActivity:: class.java).also { intent ->
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) // Clears the backstack for LoginRegisterActivity and thus,
                                                                                                                    // trying to come back here(Login) from the ShoppingActivity by

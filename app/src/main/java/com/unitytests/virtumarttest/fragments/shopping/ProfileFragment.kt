@@ -1,5 +1,6 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -18,6 +19,7 @@ import com.unitytests.virtumarttest.BuildConfig
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.activities.LoginRegisterActivity
 import com.unitytests.virtumarttest.databinding.FragmentUserProfileOptionsBinding
+import com.unitytests.virtumarttest.notifications.AppNotificationManager
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.UserOptionsVM
@@ -41,6 +43,21 @@ class ProfileFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Load the saved notification preference
+        val isNotificationsEnabled = sharedPreferences.getBoolean("notifications_enabled", true)
+        binding.switchNotification.isChecked = isNotificationsEnabled
+
+        // Set up the notification switch toggle
+        binding.switchNotification.setOnCheckedChangeListener { _, isChecked ->
+            editor.putBoolean("notifications_enabled", isChecked)
+            editor.apply()
+            Toast.makeText(requireContext(), if (isChecked) "Notifications Enabled" else "Notifications Disabled", Toast.LENGTH_SHORT).show()
+        }
+
 
         binding.txtEditProfileUserOptions.setOnClickListener{
             findNavController().navigate(R.id.action_profileFragment_to_userAccountFragment)
@@ -75,6 +92,11 @@ class ProfileFragment: Fragment() {
                     viewModel.logout()
                     val intent = Intent(requireActivity(), LoginRegisterActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    // Notify Logout
+                    val notificationManager = AppNotificationManager(requireContext())
+                    notificationManager.showLogoutNotification()
+
                     startActivity(intent)
                     requireActivity().finish()
                 }
