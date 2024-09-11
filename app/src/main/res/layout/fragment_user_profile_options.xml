@@ -331,8 +331,8 @@
                         android:layout_gravity="center_vertical"
                         android:buttonTint="#4cd964"
                         android:checked="true"/>
-
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

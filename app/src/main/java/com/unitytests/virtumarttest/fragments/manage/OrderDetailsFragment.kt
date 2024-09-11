@@ -19,6 +19,7 @@ import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.data.orders.OrderStatuses
 import com.unitytests.virtumarttest.data.orders.getOrderStatuses
 import com.unitytests.virtumarttest.databinding.FragmentOrderDetailBinding
+import com.unitytests.virtumarttest.notifications.AppNotificationManager
 import com.unitytests.virtumarttest.util.VerticalRecyclerStylingClass
 import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.OrderStatusManagementVM
@@ -156,6 +157,9 @@ class OrderDetailsFragment: Fragment() {
             }
             setPositiveButton("Yes"){dialogBox,_ ->
                 viewModel.updateOrderStatus(orderId, status)
+
+                val notificationManager = AppNotificationManager(requireContext())
+                notificationManager.showOrderUpdateNotification(orderId, status)
                 dialogBox.dismiss()
             }
         }
