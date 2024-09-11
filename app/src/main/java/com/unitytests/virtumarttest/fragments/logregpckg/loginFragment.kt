@@ -26,6 +26,7 @@ import com.unitytests.virtumarttest.databinding.FragmentLoginBinding
 import com.unitytests.virtumarttest.databinding.FragmentRegisterBinding
 import com.unitytests.virtumarttest.dialogBoxes.setupBottomSheetDialog
 import com.unitytests.virtumarttest.notifications.AppNotificationManager
+import com.unitytests.virtumarttest.util.RegisterValidation
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.LoginVM
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,10 +112,27 @@ class loginFragment: Fragment(R.layout.fragment_login) {
                         }
                     }
                     is Resource.Error->{
-                        Toast.makeText(requireContext(),it.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(),"Invalid Credentials!", Toast.LENGTH_LONG).show()
                         binding.btnLogin.revertAnimation()
                     }
                     else -> Unit
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.validateLogin.collect { validation ->
+                if (validation.email is RegisterValidation.Failed) {
+                    binding.loginEmailEdt.apply {
+                        requestFocus()
+                        error = validation.email.message
+                    }
+                }
+                if (validation.password is RegisterValidation.Failed) {
+                    binding.loginPasswordEdt.apply {
+                        requestFocus()
+                        error = validation.password.message
+                    }
                 }
             }
         }
@@ -145,7 +163,6 @@ class loginFragment: Fragment(R.layout.fragment_login) {
         binding.loginForgotPaswordTxt.setOnClickListener{
             setupBottomSheetDialog { email->
                 viewModel.resetPassword(email)
-
             }
         }
     }

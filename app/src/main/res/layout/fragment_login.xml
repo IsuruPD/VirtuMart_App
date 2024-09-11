@@ -137,7 +137,7 @@
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnLogin"
-            style="@style/blueButtonStyle"
+            style="@style/darkPurpleButtonStyle"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"

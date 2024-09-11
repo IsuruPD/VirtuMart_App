@@ -50,20 +50,26 @@ class RegisterFragment : Fragment() {
             val email = binding.regEmailEdt.text.toString().trim()
             val password = binding.regPasswordEdt.text.toString().trim()
 
-            val user = User("", firstname, lastname, email)
+            if (firstname.isEmpty() && lastname.isEmpty()){
+                Toast.makeText(requireContext(), "What do we call you?", Toast.LENGTH_LONG).show()
+            } else if (firstname.isEmpty() || lastname.isEmpty()){
+                Toast.makeText(requireContext(), "Full name is required!", Toast.LENGTH_LONG).show()
+            } else {
+                val user = User("", firstname, lastname, email)
 
-            viewModel.createAccountsWithEmailPass(user, password)
+                viewModel.createAccountsWithEmailPass(user, password)
+            }
         }
 
         lifecycleScope.launchWhenStarted {
             viewModel.register.collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        binding.btnRegister.startAnimation() // Show loading animation
+                        binding.btnRegister.startAnimation()
                     }
                     is Resource.Success -> {
                         Log.d("RegisterFragment", "Registration successful")
-                        binding.btnRegister.revertAnimation() // Revert to original state
+                        binding.btnRegister.revertAnimation()
 
                         Toast.makeText(requireContext(),"Registration Successful!", Toast.LENGTH_LONG).show()
                         clearEditTextFields()
@@ -71,7 +77,7 @@ class RegisterFragment : Fragment() {
                     }
                     is Resource.Error -> {
                         Log.e("RegisterFragment", "Registration error: ${resource.message}")
-                        binding.btnRegister.revertAnimation() // Revert to original state
+                        binding.btnRegister.revertAnimation()
                     }
                     else -> Unit
                 }
