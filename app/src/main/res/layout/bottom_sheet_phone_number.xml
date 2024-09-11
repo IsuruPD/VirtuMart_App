@@ -6,29 +6,35 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/dobTitleDialog"
+        android:id="@+id/phoneNumberTitleDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Date of Birth"
+        android:text="Update contact"
         android:textSize="18sp"
         android:textStyle="bold"
         android:paddingBottom="10dp" />
 
-    <DatePicker
-        android:id="@+id/datePickerDOBDialog"
+    <EditText
+        android:id="@+id/edtPhoneNumberDialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:maxLength="10"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        />
 
     <TextView
-        android:id="@+id/textViewDOBError"
+        android:id="@+id/textViewContactError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/holo_red_dark"
         android:visibility="gone"
-        android:text="Error message" />
+        android:text="Invalid format!" />
 
     <Button
-        android:id="@+id/btnConfirmDOBDialog"
+        android:id="@+id/btnConfirmContactDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirm"

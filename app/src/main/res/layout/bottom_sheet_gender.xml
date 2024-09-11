@@ -15,7 +15,7 @@
         android:paddingBottom="10dp" />
 
     <RadioGroup
-        android:id="@+id/radioGroupGender"
+        android:id="@+id/radioGroupGenderDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -40,7 +40,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/btnConfirmGender"
+        android:id="@+id/btnConfirmGenderDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirm"

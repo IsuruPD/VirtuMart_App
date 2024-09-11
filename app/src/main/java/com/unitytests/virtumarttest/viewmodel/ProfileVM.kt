@@ -16,7 +16,9 @@ import com.unitytests.virtumarttest.util.RegisterValidation
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.validateEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -41,6 +43,9 @@ class ProfileVM @Inject constructor(
 
     private val _updateDetails = MutableStateFlow<Resource<User>>(Resource.Unspecified())
     val updateDetails = _updateDetails.asStateFlow()
+
+    private val _changePassword= MutableSharedFlow<Resource<String>>()
+    val changePassword= _changePassword.asSharedFlow()
 
     init{
         getUser()
@@ -116,18 +121,6 @@ class ProfileVM @Inject constructor(
                 if (updatedUser.lastname != currentUserData.lastname) {
                     updates["lastname"] = updatedUser.lastname
                 }
-                if (updatedUser.dob != currentUserData.dob) {
-                    updates["dob"] = updatedUser.dob
-                }
-                if (updatedUser.gender != currentUserData.gender) {
-                    updates["gender"] = updatedUser.gender
-                }
-                if (updatedUser.nic != currentUserData.nic) {
-                    updates["nic"] = updatedUser.nic
-                }
-                if (updatedUser.phoneNumber != currentUserData.phoneNumber) {
-                    updates["phoneNumber"] = updatedUser.phoneNumber
-                }
 
                 // Check if the profile image needs updating
                 if (imageUri != null) {
@@ -191,6 +184,140 @@ class ProfileVM @Inject constructor(
                 _updateDetails.emit(Resource.Error(error.message.toString()))
             }
         }
+    }
+
+    fun updatePhoneNumber(phoneNumber: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val userRef = firestore.collection("user").document(userId)
+
+        viewModelScope.launch {
+            _updateDetails.value = Resource.Loading()
+
+            auth.currentUser?.let {
+                userRef.update("phoneNumber", phoneNumber)
+                    .addOnSuccessListener {
+                        // Fetch the updated user from Firestore and emit it
+                        userRef.get().addOnSuccessListener { documentSnapshot ->
+                            val updatedUser = documentSnapshot.toObject(User::class.java)
+                            updatedUser?.let {
+                                _updateDetails.value = Resource.Success(it)
+                            } ?: run {
+                                _updateDetails.value = Resource.Error("Failed to fetch updated user")
+                            }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        _updateDetails.value = Resource.Error(e.message ?: "An error occurred")
+                    }
+            } ?: run {
+                _updateDetails.value = Resource.Error("User is not authenticated")
+            }
+        }
+    }
+
+    fun updateNIC(nic: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val userRef = firestore.collection("user").document(userId)
+
+        viewModelScope.launch {
+            _updateDetails.value = Resource.Loading()
+
+            auth.currentUser?.let {
+                userRef.update("nic", nic)
+                    .addOnSuccessListener {
+                        // Fetch the updated user from Firestore and emit it
+                        userRef.get().addOnSuccessListener { documentSnapshot ->
+                            val updatedUser = documentSnapshot.toObject(User::class.java)
+                            updatedUser?.let {
+                                _updateDetails.value = Resource.Success(it)
+                            } ?: run {
+                                _updateDetails.value = Resource.Error("Failed to fetch updated user")
+                            }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        _updateDetails.value = Resource.Error(e.message ?: "An error occurred")
+                    }
+            } ?: run {
+                _updateDetails.value = Resource.Error("User is not authenticated")
+            }
+        }
+    }
+
+    fun updateDOB(dob: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val userRef = firestore.collection("user").document(userId)
+
+        viewModelScope.launch {
+            _updateDetails.value = Resource.Loading()
+
+            auth.currentUser?.let {
+                userRef.update("dob", dob)
+                    .addOnSuccessListener {
+                        // Fetch the updated user from Firestore and emit it
+                        userRef.get().addOnSuccessListener { documentSnapshot ->
+                            val updatedUser = documentSnapshot.toObject(User::class.java)
+                            updatedUser?.let {
+                                _updateDetails.value = Resource.Success(it)
+                            } ?: run {
+                                _updateDetails.value = Resource.Error("Failed to fetch updated user")
+                            }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        _updateDetails.value = Resource.Error(e.message ?: "An error occurred")
+                    }
+            } ?: run {
+                _updateDetails.value = Resource.Error("User is not authenticated")
+            }
+        }
+    }
+
+    fun updateGender(gender: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val userRef = firestore.collection("user").document(userId)
+
+        viewModelScope.launch {
+            _updateDetails.value = Resource.Loading()
+
+            auth.currentUser?.let {
+                userRef.update("gender", gender)
+                    .addOnSuccessListener {
+                        // Fetch the updated user from Firestore and emit it
+                        userRef.get().addOnSuccessListener { documentSnapshot ->
+                            val updatedUser = documentSnapshot.toObject(User::class.java)
+                            updatedUser?.let {
+                                _updateDetails.value = Resource.Success(it)
+                            } ?: run {
+                                _updateDetails.value = Resource.Error("Failed to fetch updated user")
+                            }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        _updateDetails.value = Resource.Error(e.message ?: "An error occurred")
+                    }
+            } ?: run {
+                _updateDetails.value = Resource.Error("User is not authenticated")
+            }
+        }
+    }
+
+    fun resetPassword(email: String){
+        viewModelScope.launch {
+            _changePassword.emit(Resource.Loading())
+        }
+
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                viewModelScope.launch {
+                    _changePassword.emit(Resource.Success(email))
+                }
+            }
+            .addOnFailureListener{
+                viewModelScope.launch {
+                    _changePassword.emit(Resource.Error(it.message.toString()))
+                }
+            }
     }
 
 //    fun updateUserDetails(user: User, imageUri: Uri?){

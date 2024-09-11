@@ -1,7 +1,9 @@
 package com.unitytests.virtumarttest.dialogBoxes
 
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -15,13 +17,19 @@ fun Fragment.setupBottomSheetDialog(onSendClick: (String)->Unit){
     dialog.show()
 
     val edtEmail=view.findViewById<EditText>(R.id.resetPassEdtTxt)
+    val errorEmailReset=view.findViewById<TextView>(R.id.textViewResetPasswordError)
     val btnSend=view.findViewById<Button>(R.id.resetPassSendBtn)
     val btnCancel=view.findViewById<Button>(R.id.resetPassCancelBtn)
 
     btnSend.setOnClickListener{
         val email=edtEmail.text.toString().trim()
-        onSendClick(email)
-        dialog.dismiss()
+        if(email.isEmpty()){
+            errorEmailReset.visibility = View.VISIBLE
+        }else{
+            errorEmailReset.visibility = View.GONE
+            onSendClick(email)
+            dialog.dismiss()
+        }
     }
 
     btnCancel.setOnClickListener {

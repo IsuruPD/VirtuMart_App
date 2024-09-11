@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -20,10 +21,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.data.User
 import com.unitytests.virtumarttest.databinding.FragmentUserAccountManagementBinding
+import com.unitytests.virtumarttest.dialogBoxes.DateOfBirthBottomSheet
+import com.unitytests.virtumarttest.dialogBoxes.GenderBottomSheet
+import com.unitytests.virtumarttest.dialogBoxes.NICBottomSheet
+import com.unitytests.virtumarttest.dialogBoxes.PhoneNumberBottomSheet
+import com.unitytests.virtumarttest.dialogBoxes.setupBottomSheetDialog
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.hideNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.ProfileVM
@@ -38,9 +45,13 @@ class UserAccountManagementFragment: Fragment() {
     private val viewModel by viewModels<ProfileVM>()
     private var imageUri: Uri?= null
     private var gender: String = "Male"
-    private val calendar = Calendar.getInstance()
     private lateinit var dob: String
     private lateinit var imageActivityResultLauncher: ActivityResultLauncher<Intent>
+
+    private var dobDialog: String? = null
+    private var genderDialog: String? = null
+    private var nicDialog: String? = null
+    private var phoneNumberDialog: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,32 +84,16 @@ class UserAccountManagementFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         hideNavBarVisibility()
+        setupClickListeners()
 
         binding.btnBackProfileView.setOnClickListener{
             findNavController().navigateUp()
         }
 
-        // Set Date Picker for Date of Birth
-        binding.btnPickDob.setOnClickListener {
-            val year = calendar.get(Calendar.YEAR)
-            val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                    dob = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                    binding.btnPickDob.text = dob
-                },
-                year, month, day
-            )
-            datePickerDialog.show()
-        }
-
-        // Set Gender Radio Group Listener
-        binding.genderRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-            val radioButton = view.findViewById<RadioButton>(checkedId)
-            gender = radioButton.text.toString()
+        binding.accountManagementChangePasswordTxt.setOnClickListener{
+            setupBottomSheetDialog { email->
+                viewModel.resetPassword(email)
+            }
         }
 
         lifecycleScope.launchWhenStarted {
@@ -126,11 +121,28 @@ class UserAccountManagementFragment: Fragment() {
                     }
                     is Resource.Success ->{
                         binding.btnUpdateProfile.revertAnimation()
-                        findNavController().navigateUp()
+                        Toast.makeText(requireContext(), "Successfully Updated!", Toast.LENGTH_LONG).show()
                     }
                     is Resource.Error ->{
                         binding.btnUpdateProfile.revertAnimation()
-                        Toast.makeText(requireContext(), "Error occurred: ${it.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_LONG).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.changePassword.collect{
+                when(it){
+                    is Resource.Loading ->{
+
+                    }
+                    is Resource.Success->{
+                        Snackbar.make(requireView(), "Check your email for the reset link", Snackbar.LENGTH_LONG).show()
+                    }
+                    is Resource.Error->{
+                        Snackbar.make(requireView(), "Error! ${it.message}", Snackbar.LENGTH_LONG).show()
                     }
                     else -> Unit
                 }
@@ -154,18 +166,12 @@ class UserAccountManagementFragment: Fragment() {
             val email = txtEmailProfileView.text.toString()
             val firstName = profileFirstNameEdt.text.toString().trim()
             val lastName = profileLastNameEdt.text.toString().trim()
-            val nic = edtNic.text.toString().trim()
-            val phoneNumber = edtPhoneNumber.text.toString().trim()
 
             val user = User(
                 id = viewModel.getUserId(),
                 firstname = firstName,
                 lastname = lastName,
-                email = email,
-                dob = dob,
-                gender = gender,
-                nic = nic,
-                phoneNumber = phoneNumber
+                email = email
             )
             viewModel.updateUserDetails(user, imageUri)
         }
@@ -192,20 +198,70 @@ class UserAccountManagementFragment: Fragment() {
             txtEmailProfileView.text = user.email
             profileFirstNameEdt.setText(user.firstname)
             profileLastNameEdt.setText(user.lastname)
-            btnPickDob.text = user.dob
-            edtNic.setText(user.nic)
-            edtPhoneNumber.setText(user.phoneNumber)
+            dobTxt.text= user.dob
+            genderTxt.text= user.gender ?: "Set"
+            nicTxt.text= user.nic
+            contactTxt.text= user.phoneNumber
+
 
             // Set date if not available
             dob = user.dob ?: ""
-            btnPickDob.text = user.dob
 
-            // Set gender selection
-            when (user.gender) {
-                "Male" -> genderRadioGroup.check(R.id.rbMale)
-                "Female" -> genderRadioGroup.check(R.id.rbFemale)
-                "Other" -> genderRadioGroup.check(R.id.rbOther)
+            // Set the class-level variables
+            dobDialog = user.dob ?: ""
+            genderDialog = user.gender ?: ""
+            nicDialog = user.nic ?: ""
+            phoneNumberDialog = user.phoneNumber ?: ""
+
+        }
+    }
+
+    private fun setupClickListeners() {
+        val layoutDOB = view?.findViewById<LinearLayout>(R.id.layoutDOB)
+        layoutDOB?.setOnClickListener {
+            val dobBottomSheet = DateOfBirthBottomSheet.newInstance(dobDialog ?: "") { updatedDOB ->
+                dobDialog = updatedDOB
+                binding.dobTxt.text = updatedDOB
+                // Update the date of birth in Firebase
+                viewModel.updateDOB(updatedDOB)
             }
+            dobBottomSheet.show(parentFragmentManager, "DateOfBirthBottomSheet")
+        }
+
+        val layoutGender = view?.findViewById<LinearLayout>(R.id.layoutGender)
+        layoutGender?.setOnClickListener {
+            val genderBottomSheet = GenderBottomSheet.newInstance(genderDialog ?: "Male") { updatedGender ->
+                genderDialog = updatedGender
+                binding.genderTxt.text = updatedGender
+                // Update the gender in Firebase
+                viewModel.updateGender(updatedGender)
+            }
+            genderBottomSheet.show(parentFragmentManager, "GenderBottomSheet")
+        }
+
+        val layoutID = view?.findViewById<LinearLayout>(R.id.layoutID)
+        layoutID?.setOnClickListener {
+            val layoutID = view?.findViewById<LinearLayout>(R.id.layoutID)
+            layoutID?.setOnClickListener {
+                val nicBottomSheet = NICBottomSheet.newInstance(nicDialog ?: "") { updatedNIC ->
+                    nicDialog = updatedNIC
+                    binding.nicTxt.text = updatedNIC
+                    // Update the NIC in Firebase
+                    viewModel.updateNIC(updatedNIC)
+                }
+                nicBottomSheet.show(parentFragmentManager, "NICBottomSheet")
+            }
+        }
+
+        val layoutPhoneNumber = view?.findViewById<LinearLayout>(R.id.layoutTelephoneNumber)
+        layoutPhoneNumber?.setOnClickListener {
+            val phoneNumberBottomSheet = PhoneNumberBottomSheet.newInstance(phoneNumberDialog ?: "") { updatedPhoneNumber ->
+                phoneNumberDialog = updatedPhoneNumber
+                binding.contactTxt.text = updatedPhoneNumber
+                // Update the phone number in Firebase
+                viewModel.updatePhoneNumber(updatedPhoneNumber)
+            }
+            phoneNumberBottomSheet.show(parentFragmentManager, "ContactBottomSheet")
         }
     }
 
@@ -215,11 +271,17 @@ class UserAccountManagementFragment: Fragment() {
             imgUserProfileView.visibility = View.INVISIBLE
             imgEditImageProfileView.visibility = View.INVISIBLE
             imgEditIconProfileView.visibility = View.INVISIBLE
+            txtPersonalInfoTitle.visibility = View.INVISIBLE
             txtEmailProfileView.visibility = View.INVISIBLE
             profileFirstNameEdt.visibility = View.INVISIBLE
             profileLastNameEdt.visibility = View.INVISIBLE
+            accountManagementChangePasswordTxt.visibility = View.INVISIBLE
+            txtOptionalTitle.visibility = View.INVISIBLE
+            layoutDOB.visibility = View.INVISIBLE
+            layoutGender.visibility = View.INVISIBLE
+            layoutID.visibility = View.INVISIBLE
+            layoutTelephoneNumber.visibility = View.INVISIBLE
             btnUpdateProfile.visibility = View.INVISIBLE
-            txtBtnChangePasswordProfileView.visibility = View.INVISIBLE
         }
     }
 
@@ -229,11 +291,17 @@ class UserAccountManagementFragment: Fragment() {
             imgUserProfileView.visibility = View.VISIBLE
             imgEditImageProfileView.visibility = View.VISIBLE
             imgEditIconProfileView.visibility = View.VISIBLE
+            txtPersonalInfoTitle.visibility = View.VISIBLE
             txtEmailProfileView.visibility = View.VISIBLE
             profileFirstNameEdt.visibility = View.VISIBLE
             profileLastNameEdt.visibility = View.VISIBLE
+            accountManagementChangePasswordTxt.visibility = View.VISIBLE
+            txtOptionalTitle.visibility = View.VISIBLE
+            layoutDOB.visibility = View.VISIBLE
+            layoutGender.visibility = View.VISIBLE
+            layoutID.visibility = View.VISIBLE
+            layoutTelephoneNumber.visibility = View.VISIBLE
             btnUpdateProfile.visibility = View.VISIBLE
-            txtBtnChangePasswordProfileView.visibility = View.VISIBLE
         }
     }
 

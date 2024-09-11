@@ -47,8 +47,7 @@ class LoginVM @Inject constructor(
             _resetPassword.emit(Resource.Loading())
         }
 
-        firebaseAuth
-            .sendPasswordResetEmail(email)
+        firebaseAuth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
                 viewModelScope.launch {
                     _resetPassword.emit(Resource.Success(email))
