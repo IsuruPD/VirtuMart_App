@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +29,7 @@ object AppModule {
     fun provideFirebaseCommonClass(
         firebaseAuth: FirebaseAuth,
         firestore: FirebaseFirestore
-    ) = FirebaseCommonClass(firestore, firebaseAuth)
+    ) = CartHandleFirebase(firestore, firebaseAuth)
 
     @Provides
     @Singleton

@@ -5,27 +5,21 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.unitytests.virtumarttest.data.CartProducts
 import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.data.WishListProducts
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
-import com.unitytests.virtumarttest.helper.getProductPrice
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class WishListVM @Inject constructor (
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val firebaseCommon: FirebaseCommonClass
+    private val firebaseCommon: CartHandleFirebase
     ): ViewModel() {
 
     // Display products in wish list

@@ -1,7 +1,6 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.CartProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentCartBinding
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.CartVM
@@ -77,10 +76,10 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
 
         // Change Quantity
         cartProductsAdapter.onProductAddClick = {
-            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.INCREASE)
+            viewModel.changingQuantity(it, CartHandleFirebase.QuantityChanging.INCREASE)
         }
         cartProductsAdapter.onProductRemoveClick = {
-            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.DECREASE)
+            viewModel.changingQuantity(it, CartHandleFirebase.QuantityChanging.DECREASE)
         }
 
         // Navigate to order confirmation page

@@ -82,7 +82,7 @@ class ChatVM @Inject constructor(
                     pagingInfoChats.page++
                 } else {
                     viewModelScope.launch {
-                        _chatMessages.emit(Resource.Error("Document does not exist"))
+//                        _chatMessages.emit(Resource.Error("Document does not exist"))
                     }
                 }
             }
@@ -93,7 +93,7 @@ class ChatVM @Inject constructor(
 
         if (text.isEmpty()) return
 
-        val customerCareId = "DaMi3g8f9bSEUK6hWn5UWcbi8nv2";
+        val customerCareId = "XbkxdDReZVQOesb0a5ikpDu0lKY2" // The customer care portal user ID
         val chatId = generatedChatId(senderId)
 
         var imgUrl: String? = null
@@ -218,7 +218,6 @@ class ChatVM @Inject constructor(
                         "All Fail",
                         "Data has not been saved in userChats and chats successfully! : ${error.message.toString()}"
                     )
-
                 }
         } catch (e: Exception) {
 

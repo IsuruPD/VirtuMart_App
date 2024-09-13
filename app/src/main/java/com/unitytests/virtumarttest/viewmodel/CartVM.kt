@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.helper.getProductPrice
 import com.unitytests.virtumarttest.helper.getProductSubTotal
 import com.unitytests.virtumarttest.util.Resource
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class CartVM @Inject constructor (
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val firebaseCommon: FirebaseCommonClass
+    private val firebaseCommon: CartHandleFirebase
     ): ViewModel() {
 
     private val _cartProducts
@@ -116,16 +116,16 @@ class CartVM @Inject constructor (
         }
     }
 
-    fun changingQuantity(cartProducts: CartProducts, quantityChanging: FirebaseCommonClass.QuantityChanging){
+    fun changingQuantity(cartProducts: CartProducts, quantityChanging: CartHandleFirebase.QuantityChanging){
         val index = cartProductsSF.value.data?.indexOf((cartProducts))
         if(index !=null && index != -1){
             val documentId = cartProductDocuments[index].id
             when(quantityChanging){
-                FirebaseCommonClass.QuantityChanging.INCREASE ->{
+                CartHandleFirebase.QuantityChanging.INCREASE ->{
                     viewModelScope.launch { _cartProducts.emit(Resource.Loading()) }
                     increaseQuantity(documentId)
                 }
-                FirebaseCommonClass.QuantityChanging.DECREASE ->{
+                CartHandleFirebase.QuantityChanging.DECREASE ->{
                     if(cartProducts.quantity <= 1){
                         viewModelScope.launch {
                             _deleteCartItem.emit(cartProducts)

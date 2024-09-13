@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
 import java.lang.Exception
 
-class FirebaseCommonClass (
+class CartHandleFirebase (
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
     ) {
@@ -13,7 +13,7 @@ class FirebaseCommonClass (
     private val cartCollection = firestore.collection("user").document(auth.uid!!).collection("cart")
 
     fun addProductToCart(cartProducts: CartProducts, onResult: (CartProducts?, Exception?)-> Unit){
-        cartCollection.document().set(cartProducts)
+        cartCollection.add(cartProducts)
             .addOnSuccessListener {
                 onResult(cartProducts, null)
             }.addOnFailureListener {

@@ -3,14 +3,12 @@ package com.unitytests.virtumarttest.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
 import com.unitytests.virtumarttest.data.Product
 import com.unitytests.virtumarttest.data.WishListProducts
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.util.Resource
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +19,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val firebaseCommon: FirebaseCommonClass
+    private val firebaseCommon: CartHandleFirebase
 ): ViewModel() {
     // Add to Cart
     private val _addToCart = MutableStateFlow<Resource<CartProducts>>(Resource.Unspecified())
@@ -45,14 +43,14 @@ class DetailsViewModel @Inject constructor(
             .get()
             .addOnSuccessListener{
                 it.documents.let{
-                    if(it.isEmpty()){ // Add the item to the cart
+                    if (it.isEmpty()){              // Add the item to the cart
                         addNewProduct(cartProducts)
-                    }else{
+                    } else {                        // If the product already exists, then increase the quantity
                         val product =it.first().toObject(CartProducts::class.java)
-                        if(product==cartProducts){ //If the product already exists, then increase the quantity
+                        if (product==cartProducts){
                             val documentId= it.first().id
                             increaseQuantity(documentId, cartProducts)
-                        }else{ //Add a new item to the cart
+                        } else {                   // Add a new item to the cart
                             addNewProduct(cartProducts)
                         }
                     }
