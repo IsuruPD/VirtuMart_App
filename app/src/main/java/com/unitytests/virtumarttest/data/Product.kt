@@ -11,6 +11,7 @@ data class Product(
     val price: Float,
     val offerPercentage: Float?= null,
     val description: String?= null,
+    val quantity: Int=0,
     val colors: List<String>?= null,
     val size: List<String>?= null,
     val modelUrl: String?= null,

@@ -1,5 +1,6 @@
 package com.unitytests.virtumarttest.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -38,20 +39,66 @@ class DetailsViewModel @Inject constructor(
 
     fun addUpdateProductInCart(cartProducts: CartProducts){
         viewModelScope.launch { _addToCart.emit(Resource.Loading()) }
+
         firestore.collection("user").document(auth.uid!!).collection("cart")
             .whereEqualTo("product.productId", cartProducts.product.productId)
             .get()
             .addOnSuccessListener{
                 it.documents.let{
-                    if (it.isEmpty()){              // Add the item to the cart
-                        addNewProduct(cartProducts)
-                    } else {                        // If the product already exists, then increase the quantity
-                        val product =it.first().toObject(CartProducts::class.java)
-                        if (product==cartProducts){
-                            val documentId= it.first().id
-                            increaseQuantity(documentId, cartProducts)
-                        } else {                   // Add a new item to the cart
-                            addNewProduct(cartProducts)
+                    if (it.isEmpty()){
+
+                        Log.d("MatchingItems","Cart Products ID:" + cartProducts.product.productId)
+
+                        // Check stock before adding the item to the cart
+                        firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, error ->
+                            if (isAvailable) {
+                                addNewProduct(cartProducts)
+                            } else {
+                                viewModelScope.launch {
+                                    _addToCart.emit(Resource.Error("Not enough stock available"))
+                                }
+                            }
+                        }
+
+                        Log.d("MatchingItems","it is empty")
+
+                    } else {
+                        // If the product already exists, check stock before increasing the quantity
+                        val product = it.first().toObject(CartProducts::class.java)
+                        if (product != null) {
+                            Log.d("MatchingItems","Fetched Outside  cart:" + cartProducts.product.productId +" fetched:"+ product.product.productId)
+                        } else{
+                            Log.d("MatchingItems","Fetched Outside cart:" + cartProducts.product.productId +" fetched:"+ "Null")
+
+                        }
+                        if (product != null) {
+                            if (product.product.productId == cartProducts.product.productId &&
+                                product.selectedColor == cartProducts.selectedColor) {
+                                // Check if the item variants match
+
+                                Log.d("MatchingItems","Compared Inside cart:" + cartProducts.product.productId +" fetched:"+ product.product.productId)
+                                val documentId = it.first().id
+                                firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, error ->
+                                    if (isAvailable) {
+                                        increaseQuantity(documentId, cartProducts)
+                                    } else {
+                                        viewModelScope.launch {
+                                            _addToCart.emit(Resource.Error("Not enough stock available"))
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Add as a new item variant to the cart
+                                firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, error ->
+                                    if (isAvailable) {
+                                        addNewProduct(cartProducts)
+                                    } else {
+                                        viewModelScope.launch {
+                                            _addToCart.emit(Resource.Error("Not enough stock available"))
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -59,6 +106,8 @@ class DetailsViewModel @Inject constructor(
                 viewModelScope.launch { _addToCart.emit(Resource.Error(it.message.toString())) }
             }
     }
+
+
 
     private fun addNewProduct(cartProducts: CartProducts){
         firebaseCommon.addProductToCart(cartProducts){ addProducts, e->
@@ -72,13 +121,21 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun increaseQuantity(documentId: String, cartProducts: CartProducts){
-        firebaseCommon.increaseQuantity(documentId){ _, e->
-            viewModelScope.launch{
-                if(e== null){
-                    _addToCart.emit(Resource.Success(cartProducts!!))
-                }else{
-                    _addToCart.emit(Resource.Error(e.message.toString()))
+    private fun increaseQuantity(documentId: String, cartProducts: CartProducts) {
+        firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, error ->
+            if (isAvailable) {
+                firebaseCommon.increaseQuantity(documentId) { _, e ->
+                    viewModelScope.launch {
+                        if (e == null) {
+                            _addToCart.emit(Resource.Success(cartProducts!!))
+                        } else {
+                            _addToCart.emit(Resource.Error(e.message.toString()))
+                        }
+                    }
+                }
+            } else {
+                viewModelScope.launch {
+                    _addToCart.emit(Resource.Error("Not enough stock available"))
                 }
             }
         }

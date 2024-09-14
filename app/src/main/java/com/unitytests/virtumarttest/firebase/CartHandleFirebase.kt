@@ -1,5 +1,6 @@
 package com.unitytests.virtumarttest.firebase
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
@@ -57,5 +58,37 @@ class CartHandleFirebase (
 
     enum class QuantityChanging{
         INCREASE, DECREASE
+    }
+
+    // Check available stock before increasing quantity
+    fun checkStockAvailability(cartProduct: CartProducts, onResult: (Boolean, Exception?) -> Unit) {
+        Log.d("QuantityCount","Check stock method called")
+
+        val productRef = FirebaseFirestore.getInstance()
+            .collection("products")
+            .whereEqualTo("productId",cartProduct.product.productId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                Log.d("QuantityCount","Fetched items")
+
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    val availableStock = document.getLong("quantity") ?: 0
+                    Log.d("QuantityCount","Available stock: $availableStock")
+
+                    if (cartProduct.quantity < availableStock) {
+                        onResult(true, null) // Stock is available
+                    } else {
+                        onResult(false, null) // No more stock available
+                    }
+                } else {
+                    Log.d("QuantityCount","Product with productId ${cartProduct.product.productId} not found")
+                    onResult(false, null) // Product not found
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("QuantityCount","Error fetching product: ${exception.message}")
+                onResult(false, exception) // Return error in result
+            }
     }
 }

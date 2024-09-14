@@ -129,6 +129,21 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
                 }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.cartErrorState.collectLatest {
+                when(it){
+                    is Resource.Loading ->{
+                    }
+                    is Resource.Success ->{
+                    }
+                    is Resource.Error ->{
+                        binding.prgbrCartView.visibility = View.INVISIBLE
+                        Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_LONG).show()
+                    } else -> Unit
+                }
+            }
+        }
     }
 
     private fun displayEmptyCartView() {

@@ -1,6 +1,7 @@
 package com.unitytests.virtumarttest.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -27,9 +28,15 @@ class CartVM @Inject constructor (
     private val firebaseCommon: CartHandleFirebase
     ): ViewModel() {
 
-    private val _cartProducts
-        = MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
+    private val _cartProducts= MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
     val cartProductsSF = _cartProducts.asStateFlow()
+
+    private val _cartErrorState = MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
+    val cartErrorState = _cartErrorState.asStateFlow()
+
+    // Remove products from cart
+    private val _deleteCartItem = MutableSharedFlow<CartProducts>()
+    val deleteCartItem = _deleteCartItem.asSharedFlow()
 
     private var cartProductDocuments = emptyList<DocumentSnapshot>()
 
@@ -60,9 +67,6 @@ class CartVM @Inject constructor (
         }
     }
 
-    // Remove products from cart
-    private val _deleteCartItem = MutableSharedFlow<CartProducts>()
-    val deleteCartItem = _deleteCartItem.asSharedFlow()
     fun deleteCartItem(cartProducts: CartProducts){
         val index = cartProductsSF.value.data?.indexOf((cartProducts))
         if(index !=null && index != -1) {
@@ -116,17 +120,40 @@ class CartVM @Inject constructor (
         }
     }
 
-    fun changingQuantity(cartProducts: CartProducts, quantityChanging: CartHandleFirebase.QuantityChanging){
+    fun changingQuantity(cartProducts: CartProducts, quantityChanging: CartHandleFirebase.QuantityChanging) {
         val index = cartProductsSF.value.data?.indexOf((cartProducts))
-        if(index !=null && index != -1){
+        if (index != null && index != -1) {
             val documentId = cartProductDocuments[index].id
-            when(quantityChanging){
-                CartHandleFirebase.QuantityChanging.INCREASE ->{
-                    viewModelScope.launch { _cartProducts.emit(Resource.Loading()) }
-                    increaseQuantity(documentId)
+
+            when (quantityChanging) {
+                CartHandleFirebase.QuantityChanging.INCREASE -> {
+                    Log.d("QuantityCount","Changing quantity method is called")
+
+                    // Check stock availability before increasing quantity
+                    firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, exception ->
+                        if (exception != null) {
+                            viewModelScope.launch {
+                                _cartErrorState.emit(Resource.Error(exception.message.toString()))
+                            }
+                        } else if (isAvailable) {
+                            viewModelScope.launch {
+                                _cartProducts.emit(Resource.Loading())
+                                _cartErrorState.emit(Resource.Loading())
+                            }
+                            increaseQuantity(documentId)
+                        } else {
+                            // Show error message if stock limit is reached
+                            viewModelScope.launch {
+//                                _cartProducts.emit(Resource.Error("Stock limit reached"))
+                                _cartErrorState.emit(Resource.Error("Stock limit reached"))
+
+                            }
+                        }
+                    }
                 }
-                CartHandleFirebase.QuantityChanging.DECREASE ->{
-                    if(cartProducts.quantity <= 1){
+
+                CartHandleFirebase.QuantityChanging.DECREASE -> {
+                    if (cartProducts.quantity <= 1) {
                         viewModelScope.launch {
                             _deleteCartItem.emit(cartProducts)
                         }
@@ -138,6 +165,7 @@ class CartVM @Inject constructor (
             }
         }
     }
+
 
     private fun decreaseQuantity(documentId: String){
         firebaseCommon.decreaseQuantity(documentId){result, exception ->
