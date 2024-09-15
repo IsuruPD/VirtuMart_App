@@ -101,7 +101,7 @@ class OrderConfirmationFragment: Fragment() {
                     }
                     is Resource.Error ->{
                         binding.btnPlaceOrder.revertAnimation()
-                        Toast.makeText(requireContext(), "Error occurred: ${it.message.toString()}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "${it.message.toString()}", Toast.LENGTH_LONG).show()
                     }
                     else -> Unit
                 }

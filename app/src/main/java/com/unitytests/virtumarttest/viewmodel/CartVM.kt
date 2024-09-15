@@ -134,11 +134,13 @@ class CartVM @Inject constructor (
                         if (exception != null) {
                             viewModelScope.launch {
                                 _cartErrorState.emit(Resource.Error(exception.message.toString()))
+                                clearErrorState()
                             }
                         } else if (isAvailable) {
                             viewModelScope.launch {
                                 _cartProducts.emit(Resource.Loading())
                                 _cartErrorState.emit(Resource.Loading())
+                                clearErrorState()
                             }
                             increaseQuantity(documentId)
                         } else {
@@ -146,7 +148,7 @@ class CartVM @Inject constructor (
                             viewModelScope.launch {
 //                                _cartProducts.emit(Resource.Error("Stock limit reached"))
                                 _cartErrorState.emit(Resource.Error("Stock limit reached"))
-
+                                clearErrorState()
                             }
                         }
                     }
@@ -166,6 +168,13 @@ class CartVM @Inject constructor (
         }
     }
 
+    private fun clearErrorState() {
+        // Delay to ensure the message is shown before clearing
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(2000)
+            _cartErrorState.emit(Resource.Unspecified())
+        }
+    }
 
     private fun decreaseQuantity(documentId: String){
         firebaseCommon.decreaseQuantity(documentId){result, exception ->
