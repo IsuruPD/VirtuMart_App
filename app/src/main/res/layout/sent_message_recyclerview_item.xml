@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/sentMessageChatView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/rounded_rectangle_primary"
+        android:fontFamily="@font/poppins_light"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:text="This is a sample text This is a sample textThis is a sample text This is a sample text This is a sample text"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/sentTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/poppins_light"
+        android:textSize="8sp"
+        android:gravity="end"
+        android:text="12:00 pm"
+        android:textStyle="italic" />
+</LinearLayout>

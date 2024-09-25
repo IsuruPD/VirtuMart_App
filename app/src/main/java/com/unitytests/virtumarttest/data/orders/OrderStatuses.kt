@@ -12,3 +12,36 @@ sealed class OrderStatuses(val status: String){
     object Returned: OrderStatuses("Returned")
     object Complete: OrderStatuses("Complete")
 }
+
+fun getOrderStatuses(status: String): OrderStatuses{
+    return when(status){
+        "Ordered" ->{
+            OrderStatuses.Ordered
+        }
+        "Cancelled" ->{
+            OrderStatuses.Cancelled
+        }
+        "Processing" ->{
+            OrderStatuses.Processing
+        }
+        "Shipped" ->{
+            OrderStatuses.Shipped
+        }
+        "Delivered" ->{
+            OrderStatuses.Delivered
+        }
+        "In Dispute" ->{
+            OrderStatuses.InDispute
+        }
+        "Refunded" ->{
+            OrderStatuses.Refunded
+        }
+        "Returned" ->{
+            OrderStatuses.Returned
+        }
+        "Complete" ->{
+            OrderStatuses.Complete
+        }
+        else-> OrderStatuses.Cancelled
+    }
+}

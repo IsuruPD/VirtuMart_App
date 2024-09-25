@@ -13,6 +13,7 @@ import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.viewmodel.CartVM
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import com.unity3d.player.UnityPlayerActivity
 
 @AndroidEntryPoint
 class ShoppingActivity : AppCompatActivity() {
@@ -47,4 +48,9 @@ class ShoppingActivity : AppCompatActivity() {
             }
         }
     }
+
+//    override fun onBackPressed() {
+//        // Move the task to the background instead of finishing it (Yet back button from later fragments also takes the user to the background)
+//        moveTaskToBack(true)
+//    }
 }

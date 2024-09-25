@@ -19,4 +19,5 @@
     <color name="g_gray500">#969899</color>
     <color name="g_light_gray">#DADADA</color>
     <color name="g_orange_yellow">#F8BA00</color>
+    <color name="g_green">#36F800</color>
 </resources>

@@ -97,6 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/facebook_login"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/reglog_guide_vl"
             app:layout_constraintTop_toBottomOf="@id/reglog_guide_hb2"
             />
@@ -107,6 +108,7 @@
             android:layout_height="wrap_content"
             android:text="Facebook"
             android:textColor="#017EFB"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/loginFacebook"
             app:layout_constraintEnd_toEndOf="@+id/loginFacebook"
             app:layout_constraintTop_toTopOf="@+id/loginFacebook"
@@ -117,6 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/google_login"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@id/reglog_guide_vr"
             app:layout_constraintTop_toBottomOf="@id/reglog_guide_hb2"
             />
@@ -125,6 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Google"
+            android:visibility="invisible"
             android:textColor="#EA4335"
             app:layout_constraintStart_toStartOf="@+id/loginGoogle"
             app:layout_constraintEnd_toEndOf="@+id/loginGoogle"
@@ -133,7 +137,7 @@
 
         <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
             android:id="@+id/btnLogin"
-            style="@style/blueButtonStyle"
+            style="@style/darkPurpleButtonStyle"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"

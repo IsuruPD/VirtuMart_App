@@ -18,7 +18,7 @@ import com.unitytests.virtumarttest.util.showNavBarVisibility
 
 open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
 
-    private lateinit var binding: FragmentBaseCategoryBinding
+    lateinit var bindingBase: FragmentBaseCategoryBinding
     protected val topBaseAdapter: TopProductsAdapter by lazy{TopProductsAdapter()}
     protected val catalogBaseAdapter: GalleryProductsAdapter by lazy{GalleryProductsAdapter()}
 
@@ -27,8 +27,8 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= FragmentBaseCategoryBinding.inflate(inflater)
-        return binding.root
+        bindingBase= FragmentBaseCategoryBinding.inflate(inflater)
+        return bindingBase.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
         }
 
         // Top products base end reach
-        binding.rvTopProductsBaseCategory.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        bindingBase.rvTopProductsBaseCategory.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView,dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if(!recyclerView.canScrollVertically(1) && dx != 0){
@@ -58,7 +58,7 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
             }
         })
         // Gallery products base bottom reach
-        binding.nestedScrollBaseCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{v,_, scrollY,_,_ ->
+        bindingBase.nestedScrollBaseCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{v,_, scrollY,_,_ ->
             //Check if the end of the page is reached
             if(v.getChildAt(0).bottom <= v.height+scrollY){
                 //if yes fetch the next batch of products from firebase
@@ -69,19 +69,19 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
 
 
     fun showTopBasePrgBrLoading(){
-        binding.prgbrTopUpdateBaseCategory.visibility=View.VISIBLE
+        bindingBase.prgbrTopUpdateBaseCategory.visibility=View.VISIBLE
     }
 
     fun showGalleryBasePrgBrLoading(){
-        binding.prgbrGalleryUpdateBaseCategory.visibility=View.VISIBLE
+        bindingBase.prgbrGalleryUpdateBaseCategory.visibility=View.VISIBLE
     }
 
     fun hideTopBasePrgBrLoading(){
-        binding.prgbrTopUpdateBaseCategory.visibility =View.GONE
+        bindingBase.prgbrTopUpdateBaseCategory.visibility =View.GONE
     }
 
     fun hideGalleryBasePrgBrLoading(){
-        binding.prgbrGalleryUpdateBaseCategory.visibility=View.GONE
+        bindingBase.prgbrGalleryUpdateBaseCategory.visibility=View.GONE
     }
 
     open fun onTopBasePagingRequest(){
@@ -93,14 +93,14 @@ open class BaseCategoryFragment: Fragment(R.layout.fragment_base_category) {
     }
 
     private fun setupRvTopProductsBase() {
-        binding.rvTopProductsBaseCategory.apply{
+        bindingBase.rvTopProductsBaseCategory.apply{
             layoutManager= LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter=topBaseAdapter
         }
     }
 
     private fun setupRvCategoryBase() {
-        binding.rvProductsCatalogueBaseCategory.apply{
+        bindingBase.rvProductsCatalogueBaseCategory.apply{
             layoutManager= GridLayoutManager(requireContext(),2, GridLayoutManager.VERTICAL, false)
             adapter=catalogBaseAdapter
         }

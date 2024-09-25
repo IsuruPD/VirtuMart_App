@@ -38,7 +38,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="15dp"
-                    android:src="@drawable/ic_chat_thick"/>
+                    android:src="@drawable/ic_chat_thick"
+                    android:visibility="invisible"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.Toolbar>
@@ -75,6 +76,7 @@
             android:id="@+id/rvProductItemsCartView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="72dp"
             tools:listitem="@layout/cart_product_recyclerview_items"
             app:layout_constraintStart_toEndOf="@id/gdlnLeftVCartView"
             app:layout_constraintEnd_toStartOf="@id/gdlnRightVCartView"
@@ -114,113 +116,161 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.98"/>
 
-            <TextView
-                android:id="@+id/txtSummaryCartView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/checkoutCardTitle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Summary"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                app:layout_constraintStart_toEndOf="@+id/gdlnLeftSummaryVCartView"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/txtSubtotalCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Subtotal"
-                android:textSize="12sp"
-                android:layout_marginTop="15dp"
-                app:layout_constraintStart_toStartOf="@+id/gdlnLeftSummaryVCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtSummaryCartView"
-                />
-            <TextView
-                android:id="@+id/txtAmountSubtotalCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rs. 9.999,999.99"
-                android:textSize="12sp"
-                android:layout_marginTop="15dp"
-                app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtSummaryCartView"/>
-
-
-            <TextView
-                android:id="@+id/txtShippingFeeCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="Shipping fee"
-                android:layout_marginTop="2dp"
-                app:layout_constraintStart_toStartOf="@+id/gdlnLeftSummaryVCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtSubtotalCartView"/>
-            <TextView
-                android:id="@+id/txtAmountShippingCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rs. 9.999,999.99"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtAmountSubtotalCartView"/>
-
-            <TextView
-                android:id="@+id/txtDiscountCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="Discount"
-                android:layout_marginTop="2dp"
-                app:layout_constraintStart_toStartOf="@+id/gdlnLeftSummaryVCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtShippingFeeCartView"/>
-            <TextView
-                android:id="@+id/txtAmountDiscountCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rs. 9.999,999.99"
-                android:textSize="12sp"
-                android:layout_marginTop="2dp"
-                app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"
-                app:layout_constraintTop_toBottomOf="@+id/txtAmountShippingCartView"/>
-
-            <TextView
-                android:id="@+id/txtTotalCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="Total"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintStart_toEndOf="@id/gdlnLeftSummaryVCartView"
-                app:layout_constraintTop_toBottomOf="@id/txtDiscountCartView"/>
-            <TextView
-                android:id="@+id/txtAmountTotalCartView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:text="Rs. 9.999,999.99"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"
-                app:layout_constraintTop_toBottomOf="@id/txtAmountDiscountCartView"/>
-
-            <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/btnCheckoutCartView"
-                style="@style/darkWhiteButtonStyle"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:text="Checkout"
-                android:textSize="10sp"
-                android:textColor="@color/g_black"
-                app:spinning_bar_color="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/txtAmountSubtotalCartView"
-                app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
+                <TextView
+                    android:id="@+id/txtSummaryCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Summary"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    />
+
+                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                    android:id="@+id/btnCheckoutCartView"
+                    style="@style/darkPurpleButtonStyle"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Checkout"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    app:spinning_bar_color="@color/g_gray700"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/checkoutCardSubTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/checkoutCardTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:id="@+id/txtSubtotalCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subtotal"
+                    android:textSize="12sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/txtAmountSubtotalCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs. 9.999,999.99"
+                    android:textSize="12sp"
+                    android:layout_marginTop="15dp"/>
+            </LinearLayout>
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/checkoutCardShipping"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/checkoutCardSubTotal"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:paddingStart="10dp"-->
+<!--                android:paddingEnd="10dp">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/txtShippingFeeCartView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:text="Shipping fee"-->
+<!--                    android:layout_marginTop="2dp"-->
+<!--                    android:layout_weight="1"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/txtAmountShippingCartView"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Rs. 9.999,999.99"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_marginTop="2dp"/>-->
+<!--            </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/checkoutCardDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/checkoutCardSubTotal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:id="@+id/txtDiscountCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:text="Discount"
+                    android:layout_marginTop="2dp"
+                    app:layout_constraintStart_toStartOf="@+id/gdlnLeftSummaryVCartView"
+                    app:layout_constraintTop_toBottomOf="@+id/txtShippingFeeCartView"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/txtAmountDiscountCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs. 9.999,999.99"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"
+                    app:layout_constraintEnd_toEndOf="@id/gdlnRightVSummaryCartView"
+                    app:layout_constraintTop_toBottomOf="@+id/txtAmountShippingCartView"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/checkoutCardTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/checkoutCardDiscount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:id="@+id/txtTotalCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:text="Total"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/txtAmountTotalCartView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:text="Rs. 9.999,999.99"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/emptyCartDisplayCartView"
             android:layout_width="match_parent"

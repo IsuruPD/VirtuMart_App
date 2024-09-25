@@ -1,13 +1,16 @@
 package com.unitytests.virtumarttest.viewmodel
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.unitytests.virtumarttest.data.CartProducts
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.helper.getProductPrice
+import com.unitytests.virtumarttest.helper.getProductSubTotal
 import com.unitytests.virtumarttest.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,12 +25,18 @@ import javax.inject.Inject
 class CartVM @Inject constructor (
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val firebaseCommon: FirebaseCommonClass
+    private val firebaseCommon: CartHandleFirebase
     ): ViewModel() {
 
-    private val _cartProducts
-        = MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
+    private val _cartProducts= MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
     val cartProductsSF = _cartProducts.asStateFlow()
+
+    private val _cartErrorState = MutableStateFlow<Resource<List<CartProducts>>>(Resource.Unspecified())
+    val cartErrorState = _cartErrorState.asStateFlow()
+
+    // Remove products from cart
+    private val _deleteCartItem = MutableSharedFlow<CartProducts>()
+    val deleteCartItem = _deleteCartItem.asSharedFlow()
 
     private var cartProductDocuments = emptyList<DocumentSnapshot>()
 
@@ -40,9 +49,24 @@ class CartVM @Inject constructor (
         }
     }
 
-    // Remove products from cart
-    private val _deleteCartItem = MutableSharedFlow<CartProducts>()
-    val deleteCartItem = _deleteCartItem.asSharedFlow()
+    val productsDiscount = cartProductsSF.map{
+        when(it){
+            is Resource.Success ->{
+                calculateDiscounts(it.data!!)
+            }
+            else -> null
+        }
+    }
+
+    val productsSubTotal = cartProductsSF.map{
+        when(it){
+            is Resource.Success ->{
+                calculateSubTotal(it.data!!)
+            }
+            else -> null
+        }
+    }
+
     fun deleteCartItem(cartProducts: CartProducts){
         val index = cartProductsSF.value.data?.indexOf((cartProducts))
         if(index !=null && index != -1) {
@@ -51,12 +75,25 @@ class CartVM @Inject constructor (
                 .document(documentId).delete()
         }
     }
+    private fun calculateSubTotal(data: List<CartProducts>): Float {
+        return data.sumByDouble { cartProducts ->
+            (cartProducts.product.offerPercentage.getProductSubTotal(cartProducts.product.price)*cartProducts.quantity).toDouble()
+        }.toFloat()
+    }
+
+    private fun calculateDiscounts(data: List<CartProducts>): Float {
+        return data.sumByDouble { cartProducts ->
+            ((cartProducts.product.offerPercentage.getProductSubTotal(cartProducts.product.price)*cartProducts.quantity).toDouble()
+                -(cartProducts.product.offerPercentage.getProductPrice(cartProducts.product.price)*cartProducts.quantity).toDouble())
+        }.toFloat()
+    }
 
     private fun calculateCost(data: List<CartProducts>): Float {
         return data.sumByDouble { cartProducts ->
             (cartProducts.product.offerPercentage.getProductPrice(cartProducts.product.price)*cartProducts.quantity).toDouble()
         }.toFloat()
     }
+
 
     init{
         getCartProducts()
@@ -75,6 +112,7 @@ class CartVM @Inject constructor (
             }else{
                 cartProductDocuments = value.documents
                 val cartProducts = value.toObjects(CartProducts::class.java)
+                Log.d("CartVM", "Cart Products: $cartProducts")
                 viewModelScope.launch{
                     _cartProducts.emit(Resource.Success(cartProducts))
                 }
@@ -82,17 +120,42 @@ class CartVM @Inject constructor (
         }
     }
 
-    fun changingQuantity(cartProducts: CartProducts, quantityChanging: FirebaseCommonClass.QuantityChanging){
+    fun changingQuantity(cartProducts: CartProducts, quantityChanging: CartHandleFirebase.QuantityChanging) {
         val index = cartProductsSF.value.data?.indexOf((cartProducts))
-        if(index !=null && index != -1){
+        if (index != null && index != -1) {
             val documentId = cartProductDocuments[index].id
-            when(quantityChanging){
-                FirebaseCommonClass.QuantityChanging.INCREASE ->{
-                    viewModelScope.launch { _cartProducts.emit(Resource.Loading()) }
-                    increaseQuantity(documentId)
+
+            when (quantityChanging) {
+                CartHandleFirebase.QuantityChanging.INCREASE -> {
+                    Log.d("QuantityCount","Changing quantity method is called")
+
+                    // Check stock availability before increasing quantity
+                    firebaseCommon.checkStockAvailability(cartProducts) { isAvailable, exception ->
+                        if (exception != null) {
+                            viewModelScope.launch {
+                                _cartErrorState.emit(Resource.Error(exception.message.toString()))
+                                clearErrorState()
+                            }
+                        } else if (isAvailable) {
+                            viewModelScope.launch {
+                                _cartProducts.emit(Resource.Loading())
+                                _cartErrorState.emit(Resource.Loading())
+                                clearErrorState()
+                            }
+                            increaseQuantity(documentId)
+                        } else {
+                            // Show error message if stock limit is reached
+                            viewModelScope.launch {
+//                                _cartProducts.emit(Resource.Error("Stock limit reached"))
+                                _cartErrorState.emit(Resource.Error("Stock limit reached"))
+                                clearErrorState()
+                            }
+                        }
+                    }
                 }
-                FirebaseCommonClass.QuantityChanging.DECREASE ->{
-                    if(cartProducts.quantity <= 1){
+
+                CartHandleFirebase.QuantityChanging.DECREASE -> {
+                    if (cartProducts.quantity <= 1) {
                         viewModelScope.launch {
                             _deleteCartItem.emit(cartProducts)
                         }
@@ -102,6 +165,14 @@ class CartVM @Inject constructor (
                     decreaseQuantity(documentId)
                 }
             }
+        }
+    }
+
+    private fun clearErrorState() {
+        // Delay to ensure the message is shown before clearing
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(2000)
+            _cartErrorState.emit(Resource.Unspecified())
         }
     }
 

@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ShippingDetails(
+    val id: String?,
     val addressAlias: String,
     val receiverName: String,
     val address: String,
@@ -12,5 +13,5 @@ data class ShippingDetails(
     val district: String,
     val contact: String,
 ): Parcelable{
-    constructor(): this("", "", "", "", "", "")
+    constructor(): this(null,"", "", "", "", "", "")
 }

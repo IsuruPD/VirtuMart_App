@@ -66,7 +66,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnIntro"
-        style="@style/blueButtonStyle"
+        style="@style/darkPurpleButtonStyle"
         android:layout_width="130dp"
         android:layout_height="55dp"
         android:text="Shop Now"

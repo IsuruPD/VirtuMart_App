@@ -1,7 +1,6 @@
 package com.unitytests.virtumarttest.fragments.shopping
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.unitytests.virtumarttest.R
 import com.unitytests.virtumarttest.adapters.CartProductsAdapter
 import com.unitytests.virtumarttest.databinding.FragmentCartBinding
-import com.unitytests.virtumarttest.firebase.FirebaseCommonClass
+import com.unitytests.virtumarttest.firebase.CartHandleFirebase
 import com.unitytests.virtumarttest.util.Resource
 import com.unitytests.virtumarttest.util.showNavBarVisibility
 import com.unitytests.virtumarttest.viewmodel.CartVM
@@ -53,6 +52,22 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.productsSubTotal.collectLatest {cost->
+                cost?.let{
+                    binding.txtAmountSubtotalCartView.text= "Rs. ${String.format("%,.2f",cost)}"
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.productsDiscount.collectLatest {cost->
+                cost?.let{
+                    binding.txtAmountDiscountCartView.text= "Rs. ${String.format("%,.2f",cost)}"
+                }
+            }
+        }
+
         //Go to product view on click
         cartProductsAdapter.onProductClick = {
             val bundle = Bundle().apply { putParcelable("product", it.product) }
@@ -61,10 +76,10 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
 
         // Change Quantity
         cartProductsAdapter.onProductAddClick = {
-            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.INCREASE)
+            viewModel.changingQuantity(it, CartHandleFirebase.QuantityChanging.INCREASE)
         }
         cartProductsAdapter.onProductRemoveClick = {
-            viewModel.changingQuantity(it, FirebaseCommonClass.QuantityChanging.DECREASE)
+            viewModel.changingQuantity(it, CartHandleFirebase.QuantityChanging.DECREASE)
         }
 
         // Navigate to order confirmation page
@@ -111,6 +126,22 @@ class CartFragment: Fragment(R.layout.fragment_cart) {
                         binding.prgbrCartView.visibility = View.INVISIBLE
                         Toast.makeText(requireContext(), "Error occurred: ${it.message}", Toast.LENGTH_LONG).show()
                     }else -> Unit
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.cartErrorState.collectLatest {
+                when(it){
+                    is Resource.Loading ->{
+                    }
+                    is Resource.Error ->{
+                        binding.prgbrCartView.visibility = View.INVISIBLE
+                        Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_LONG).show()
+                    }
+                    is Resource.Unspecified -> {
+                    }
+                    else -> Unit
                 }
             }
         }

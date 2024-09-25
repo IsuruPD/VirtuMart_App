@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardManageShipping"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="5dp"
+    app:cardBackgroundColor="@color/dark_white_background"
+    app:cardUseCompatPadding="true"
+    >
+<!--Check if the card background colour suits. If not change it to white-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:id="@+id/txtAliasManageShipping"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_thin"
+            android:maxLines="1"
+            android:text="Address Alias"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="275dp"
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@id/txtAliasManageShipping"
+            app:layout_constraintTop_toBottomOf="@id/txtAliasManageShipping">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Receiver: "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+
+                <TextView
+                    android:id="@+id/txtReceiverManageShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="The Person Name"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Address: "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+
+                <TextView
+                    android:id="@+id/txtAddressManageShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address Line 01, Address Line 02, Address Line 03, Address Line 04 "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:maxLines="3"
+                    android:fontFamily="@font/sf_pro_display" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="City: "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+
+                <TextView
+                    android:id="@+id/txtCityManageShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="The City Name"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="District: "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+
+                <TextView
+                    android:id="@+id/txtDistrictManageShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="The District Name"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="1dp">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Contact: "
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+
+                <TextView
+                    android:id="@+id/txtContactManageShipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="011-2345678"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/sf_pro_display" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

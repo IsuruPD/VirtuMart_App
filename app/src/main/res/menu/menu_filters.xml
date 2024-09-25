@@ -1,0 +1,45 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group >
+        <item android:id="@+id/navProduct_category"
+            android:title="Category">
+                <menu android:checkableBehavior="all">
+                    <!--Categories are dynamically added here-->
+                </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/navShipping"
+            android:title="Free Shipping"
+            android:checkable="true" />
+        <item
+            android:id="@+id/navFeatured"
+            android:title="Featured"
+            android:checkable="true" />
+        <item
+            android:id="@+id/navDeals"
+            android:title="Deals"
+            android:checkable="true" />
+    </group>
+
+    <group>
+        <item
+            android:id="@+id/navToggle_sort_price"
+            android:title="Sort by Price">
+        </item>
+    </group>
+
+    <group>
+        <item android:title="Filter Products">
+            <menu>
+                <item
+                    android:id="@+id/nav_action_buttons"
+                    android:title=""
+                    android:enabled="false"
+                    android:checkable="false" />
+            </menu>
+        </item>
+    </group>
+</menu>

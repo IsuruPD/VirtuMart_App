@@ -38,8 +38,8 @@
                         android:id="@+id/btnBackProductDisplay"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="8dp"
                         android:elevation="1dp"
                         android:padding="5dp"
                         android:src="@drawable/ic_back_arrow"
@@ -51,18 +51,33 @@
                         android:layout_weight="1">
 
                     </View>
-                    <ImageView
-                        android:id="@+id/btnChatProductDisplay"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginTop="3dp"
-                        android:elevation="1dp"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_chat"
-                        app:tint="@color/black" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/btnAddToWishlist"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:elevation="1dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/imgCardProductDisplay"/>
+
+            <ProgressBar
+                android:id="@+id/prgbrAddtoWishListDetailsView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="@id/btnAddToWishlist"
+                app:layout_constraintEnd_toEndOf="@id/btnAddToWishlist"
+                app:layout_constraintStart_toStartOf="@id/btnAddToWishlist"
+                app:layout_constraintBottom_toBottomOf="@id/btnAddToWishlist"/>
+
 
             <LinearLayout
                 android:id="@+id/layoutHTitleContentProductDisplay"
@@ -215,6 +230,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="75dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -222,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/sf_pro_display"
-                        android:text="Size"
+                        android:text="Model"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -238,28 +254,48 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btnAddtoCartProductDisplayView"
-        style="@style/darkWhiteButtonStyle"
-        android:layout_width="200dp"
+        style="@style/whitePurchaseButtonStyle"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:layout_marginRight="0dp"
         android:text="Add to Cart"
         android:textColor="@color/g_black"
         app:spinning_bar_color="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        />
 
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btnViewARProductDisplayView"
-        style="@style/darkWhiteButtonStyle"
-        android:layout_width="200dp"
+        style="@style/blackPurchaseARButtonStyle"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="0dp"
         android:text="View in AR"
-        android:textColor="@color/g_black"
-        app:spinning_bar_color="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:textColor="@color/white"
+        app:spinning_bar_color="@color/white"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/productDetailsProgressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

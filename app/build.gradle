@@ -184,6 +184,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
+    id 'kotlinx-serialization'
     id 'androidx.navigation.safeargs.kotlin'
     id 'dagger.hilt.android.plugin'
 }
@@ -194,7 +195,7 @@ android {
 
     defaultConfig {
         applicationId 'com.unitytests.virtumarttest'
-        minSdk 21
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -236,6 +237,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation files('libs/arcore_client.aar')
+    implementation files('libs/ARPresto.aar')
+    implementation files('libs/launcher-debug.aar')
+    implementation files('libs/unityandroidpermissions.aar')
+    implementation files('libs/UnityARCore.aar')
+    implementation files('libs/unityLibrary-debug.aar')
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -258,6 +265,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-common-ktx:20.0.0'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
+
+    //Serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0"
 
     //Google Play Services
     implementation 'com.google.android.gms:play-services-auth:20.1.0'

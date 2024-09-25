@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/dark_white_background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBarWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/btnBackWishListView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="3dp"
+                    android:elevation="1dp"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_back_arrow"
+                    app:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+                <TextView
+                    android:id="@+id/txtTbWishListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Wish List"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnBackWishListView"
+                    app:layout_constraintStart_toEndOf="@id/btnBackWishListView"
+                    app:layout_constraintTop_toTopOf="@+id/btnBackWishListView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/wishListOptionsLayout"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/gdlnLeftVWishListView"
+            app:layout_constraintEnd_toStartOf="@id/gdlnRightVWishListView"
+            app:layout_constraintTop_toBottomOf="@id/toolBarWishListView">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Items"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/wishListItemCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginStart="5dp"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductItemsWishListView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="0dp"
+            tools:listitem="@layout/wishlist_recyclerview_items"
+            app:layout_constraintStart_toEndOf="@id/gdlnLeftVWishListView"
+            app:layout_constraintEnd_toStartOf="@id/gdlnRightVWishListView"
+            app:layout_constraintTop_toBottomOf="@id/wishListOptionsLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <ProgressBar
+            android:id="@+id/prgbrWishListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/gdlnLeftVWishListView"
+            app:layout_constraintEnd_toStartOf="@id/gdlnRightVWishListView"
+            app:layout_constraintTop_toBottomOf="@id/toolBarWishListView"
+            app:layout_constraintBottom_toTopOf="@id/gdlnBottomHWishListView"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/emptyWishListDisplayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgEmptyWishList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_empty_box"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wish List is empty!"
+                android:fontFamily="@font/poppins_thin"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#DADADA"
+                app:layout_constraintStart_toStartOf="@+id/imgEmptyWishList"
+                app:layout_constraintEnd_toEndOf="@+id/imgEmptyWishList"
+                app:layout_constraintTop_toBottomOf="@+id/imgEmptyWishList"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnBottomHWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="117dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnTopHWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnLeftVWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.01"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gdlnRightVWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.99"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

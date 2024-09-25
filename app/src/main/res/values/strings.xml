@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VirtuMartTest</string>
+    <string name="app_name">VirtuMart</string>
     <string name="introTitle">AR Integrated \nDomestic Appliance Shopping</string>
     <string name="introSubTitle">Where you experience your products \nright at home\!</string>
     <string name="accopTitleTxt">Your AR Marketplace</string>
@@ -9,4 +9,6 @@
     <string name="forgotPassTxt">Forgot password</string>
     <string name="registerTxt">Signup Here\,</string>
     <string name="registerLoginNowTxt">Already have an account\? Login Now</string>
+    <string name="login_success_channel_name">Login Notifications</string>
+    <string name="login_success_channel_description">Notifications for successful logins</string>
 </resources>

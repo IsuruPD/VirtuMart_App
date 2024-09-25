@@ -70,7 +70,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="0dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_heart"
+                android:src="@drawable/ic_cart"
                 app:tint="@color/g_blue_gray200" />
         </LinearLayout>
         <LinearLayout

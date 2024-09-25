@@ -20,8 +20,8 @@ fun validatePassword(password: String): RegisterValidation{
     } else if((password.length<6)) {
         return RegisterValidation.Failed("Password should be more than 6 characters long!")
     }
-    //Remove the comments when running
-    /*else if(!(password.contains("[A-Z]".toRegex()))) {
+
+    else if(!(password.contains("[A-Z]".toRegex()))) {
         return RegisterValidation.Failed("The password should have at least one uppercase letter!")
     }else if(!(password.contains("[a-z]".toRegex()))) {
         return RegisterValidation.Failed("The password should have at least one lowercase letter!")
@@ -30,34 +30,23 @@ fun validatePassword(password: String): RegisterValidation{
     }else if(!(password.contains("[!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex()))) {
         return RegisterValidation.Failed("The password should have at least one special character!")
     }
-    */else{
+    else{
         return RegisterValidation.Success
     }
 }
 
-/*if(!checkPasswordStrength(password))
-        return RegisterValidation.Failed("Password should have a lowercase letter, uppercase letter, a number and a special character!")*/
-/*
-fun checkPasswordStrength(password: String): Boolean{
-    var hasUpper= false
-    var hasLower= false
-    var hasNumber= false
-    var hasSpecial= false
-
-    for(char in password) {
-        if (Character.isLowerCase(char)){
-            hasLower = true
-        }
-        if (Character.isUpperCase(char)) {
-            hasUpper = true
-        }
-        if (Character.isDigit(char)) {
-            hasNumber = true
-        }
-        if (!Character.isLetterOrDigit(char)) {
-            hasSpecial = true
-        }
+fun validateLoginEmail(email: String): RegisterValidation {
+    if (email.isEmpty()) {
+        return RegisterValidation.Failed("Email cannot be empty!")
+    } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        return RegisterValidation.Failed("Invalid email format!")
     }
-    return (hasLower && hasUpper && hasNumber && hasSpecial)
+    return RegisterValidation.Success
 }
-*/
+
+fun validateLoginPassword(password: String): RegisterValidation {
+    if (password.isEmpty()) {
+        return RegisterValidation.Failed("Password cannot be empty!")
+    }
+    return RegisterValidation.Success
+}
